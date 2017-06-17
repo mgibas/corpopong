@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="fragment-layout">
+  <template>
+    <style>
+    [hidden] {
+      display: none !important;
+    }
+    </style>
+    <app-header-layout>
+      <app-header slot="header" fixed effects="waterfall">
+        <app-toolbar>
+          <paper-icon-button hidden$=[[!backButton]] icon="arrow-back"></paper-icon-button>
+          <div main-title>[[title]]</div>
+        </app-toolbar>
+      </app-header>
+      <slot></slot>
+    </app-header-layout>
+  </template>
+  <script>
+    class FragmentLayout extends Polymer.Element {
+      static get is() { return 'fragment-layout'; }
+      static get properties() {
+        return {
+          title: String,
+          backButton: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+    }
+
+    window.customElements.define(FragmentLayout.is, FragmentLayout);
+  </script>
+</dom-module>

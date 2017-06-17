@@ -1,0 +1,7 @@
+{
+  "name": "corpopong",
+  "short_name": "corpopong",
+  "description": "Ping-pong app",
+  "start_url": "/",
+  "display": "standalone"
+}

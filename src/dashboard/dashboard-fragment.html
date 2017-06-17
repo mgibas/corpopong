@@ -1,0 +1,19 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../layouts/fragment-layout.html">
+
+<dom-module id="dashboard-fragment">
+  <template>
+    <fragment-layout title="CorpoPong">
+      <dashboard-leaderboard></dashboard-leaderboard>
+      <dashboard-challenges></dashboard-challenges>
+      <dashboard-latest-results></dashboard-latest-results>
+    </fragment-layout>
+  </template>
+  <script>
+    class DashboardFragment extends Polymer.Element {
+      static get is() { return 'dashboard-fragment'; }
+    }
+
+    window.customElements.define(DashboardFragment.is, DashboardFragment);
+  </script>
+</dom-module>

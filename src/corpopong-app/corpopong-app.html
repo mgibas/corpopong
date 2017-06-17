@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/render-status.html">
+<link rel="import" href="../../bower_components/lazy-imports/lazy-imports-mixin.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../corpopong-app/login-component.html">
+
+<dom-module id="corpopong-app">
+  <link rel="lazy-import" group="lazy" href="../dashboard/dashboard-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../challenge/challenge-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../challenge/challenge-create-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../player/player-fragment.html">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <firebase-app
+      auth-domain="corpopong.firebaseapp.com"
+      database-url="https://corpopong.firebaseio.com"
+      api-key="AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U"
+      storage-bucket="corpopong.appspot.com"
+      messaging-sender-id="182128657968">
+    </firebase-app>
+    <app-location route="{{route}}"></app-location>
+    <login-component></login-component>
+
+    <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
+      <app-route route="[[route]]" pattern="/challenge/create"></app-route>
+      <app-route route="[[route]]" pattern="/challenge/:id"></app-route>
+      <app-route route="[[route]]" pattern="/player/:id"></app-route>
+    </app-active-route>
+
+    <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern">
+      <dashboard-fragment for-pattern="/"></dashboard-fragment>
+      <challenge-create-fragment for-pattern="/challenge/create"></challenge-create-fragment>
+      <challenge-fragment for-pattern="/challenge/:id"></challenge-fragment>
+      <player-fragment for-pattern="/player/:id"></player-fragment>
+    </iron-pages>
+
+  </template>
+
+  <script>
+    class CorpopongApp extends Polymer.LazyImportsMixin(Polymer.Element) {
+      static get is() { return 'corpopong-app'; }
+      ready(){
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, ()=>{
+          this.importLazyGroup('lazy');
+        });
+      }
+    }
+    window.customElements.define(CorpopongApp.is, CorpopongApp);
+  </script>
+</dom-module>

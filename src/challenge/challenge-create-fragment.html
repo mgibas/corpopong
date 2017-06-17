@@ -1,0 +1,17 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../layouts/fragment-layout.html">
+
+<dom-module id="challenge-create-fragment">
+  <template>
+    <fragment-layout title="Create Challenge" back-button>
+      Challenge create
+    </fragment-layout>
+  </template>
+  <script>
+    class ChallengeCreateFragment extends Polymer.Element {
+      static get is() { return 'challenge-create-fragment'; }
+    }
+
+    window.customElements.define(ChallengeCreateFragment.is, ChallengeCreateFragment);
+  </script>
+</dom-module>

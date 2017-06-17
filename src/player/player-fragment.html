@@ -1,0 +1,17 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../layouts/fragment-layout.html">
+
+<dom-module id="player-fragment">
+  <template>
+    <fragment-layout title="Player" back-button>
+      Player
+    </fragment-layout>
+  </template>
+  <script>
+    class PlayerFragment extends Polymer.Element {
+      static get is() { return 'player-fragment'; }
+    }
+
+    window.customElements.define(PlayerFragment.is, PlayerFragment);
+  </script>
+</dom-module>
