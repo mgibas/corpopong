@@ -1,7 +1,22 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/corpopong-app/corpopong-app.html",
+  "fragments": [
+    "src/dashboard/dashboard-fragment.html",
+    "src/challenge/challenge-fragment.html",
+    "src/challenge/challenge-create-fragment.html",
+    "src/player/player-fragment.html"
+  ],
   "lint": {
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "builds": [{
+    "addServiceWorker": true,
+    "bundle": true,
+    "js": {"minify": true, "compile": true},
+    "css": {"minify": true},
+    "html": {"minify": true}
+  }]
 }
