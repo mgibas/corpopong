@@ -1,0 +1,45 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+
+<dom-module id="players-list">
+  <template>
+    <style>
+    iron-image {
+      height: 50px;
+      width:50px;
+      border-radius: 50%;
+    }
+    </style>
+    <firebase-query
+      path="/players"
+      data="{{players}}">
+    </firebase-query>
+    <paper-listbox attr-for-selected="uid" selected="{{selectedUid}}">
+      <template is="dom-repeat" items="{{players}}">
+        <paper-icon-item uid="[[item.$key]]">
+          <iron-image src="[[item.photoURL]]" sizing="cover" slot="item-icon"></iron-image>
+          [[item.email]]
+        </paper-icon-item>
+      </template>
+    </paper-listbox>
+
+  </template>
+  <script>
+    class PlayersList extends Polymer.Element {
+      static get is() { return 'players-list'; }
+      static get properties() {
+        return {
+          selectedUid:{
+            type: String,
+            notify: true
+          }
+        };
+      }
+    }
+
+    window.customElements.define(PlayersList.is, PlayersList);
+  </script>
+</dom-module>

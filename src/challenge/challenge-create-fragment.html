@@ -1,15 +1,47 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../layouts/fragment-layout.html">
+<link rel="import" href="../challenge/players-list.html">
+
 
 <dom-module id="challenge-create-fragment">
   <template>
+    <style>
+    paper-fab {
+      position:fixed;
+      right: 2rem;
+      bottom: 2rem;
+    }
+    </style>
+
+    <firebase-document id="fb" data="{{challenge}}">
+    </firebase-document>
+
     <fragment-layout title="Create Challenge" back-button>
-      Challenge create
+      <players-list selected-uid="{{challenge.playerUid}}"></players-list>
     </fragment-layout>
+    <paper-fab disabled$="[[!challenge.playerUid]]" icon="done" on-tap="_create"></paper-fab>
   </template>
   <script>
     class ChallengeCreateFragment extends Polymer.Element {
       static get is() { return 'challenge-create-fragment'; }
+      static get properties() {
+        return {
+          challenge: {
+            type: Object,
+            value: () => { return {}; }
+          }
+        };
+      }
+      _create() {
+        this.$.fb.saveValue(`/users/${this.userUid}/challenges`)
+          .then(() => {
+            this.$.fb.reset();
+            window.history.pushState({}, null, '/');
+            window.dispatchEvent(new CustomEvent('location-changed'));
+          })
+      }
     }
 
     window.customElements.define(ChallengeCreateFragment.is, ChallengeCreateFragment);

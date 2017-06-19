@@ -32,7 +32,7 @@
     }
     </style>
 
-    <firebase-auth id="auth" user="{{_user}}" provider="google" on-error="handleError">
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
 
     <section>
@@ -49,11 +49,12 @@
         return {
           authenticated: {
             type: Boolean,
-            computed: '_computeAuthenticated(_user)',
+            computed: '_computeAuthenticated(user)',
             reflectToAttribute: true
           },
-          _user: {
-            type: Object
+          user: {
+            type: Object,
+            notify: true
           }
         };
       }

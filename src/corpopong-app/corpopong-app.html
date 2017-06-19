@@ -27,7 +27,7 @@
       messaging-sender-id="182128657968">
     </firebase-app>
     <app-location route="{{route}}"></app-location>
-    <login-component></login-component>
+    <login-component user="{{user}}"></login-component>
 
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/challenge/create"></app-route>
@@ -37,7 +37,7 @@
 
     <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern">
       <dashboard-fragment for-pattern="/"></dashboard-fragment>
-      <challenge-create-fragment for-pattern="/challenge/create"></challenge-create-fragment>
+      <challenge-create-fragment for-pattern="/challenge/create" user-uid="[[user.uid]]"></challenge-create-fragment>
       <challenge-fragment for-pattern="/challenge/:id"></challenge-fragment>
       <player-fragment for-pattern="/player/:id"></player-fragment>
     </iron-pages>

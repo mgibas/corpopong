@@ -1,0 +1,24 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<dom-module id="dashboard-leaderboard">
+  <template>
+    <firebase-query
+      path="/players"
+      data="{{players}}">
+    </firebase-query>
+
+    <template is="dom-repeat" items="{{players}}">
+      <p>
+        [[item.email]]
+      </p>
+    </template>
+  </template>
+  <script>
+    class DashboardLeaderboard extends Polymer.Element {
+      static get is() { return 'dashboard-leaderboard'; }
+    }
+
+    window.customElements.define(DashboardLeaderboard.is, DashboardLeaderboard);
+  </script>
+</dom-module>
