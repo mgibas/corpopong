@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
-<dom-module id="challenge-details">
+<dom-module id="match-details">
   <template>
     <style>
     paper-input {
@@ -17,61 +17,61 @@
     </style>
     <firebase-document
       id="fb"
-      data="{{challenge}}"
-      path="/users/[[userUid]]/challenges/[[challengeUid]]">
+      data="{{match}}"
+      path="/users/[[userUid]]/matches/[[matchUid]]">
     </firebase-document>
-    <h1>[[challenge.player1Uid]] : [[challenge.player2Uid]]</h1>
+    <h1>[[match.player1Uid]] : [[match.player2Uid]]</h1>
     <paper-input
       type="number"
       min="0"
       max="21"
       label="Final Score"
-      value="{{challenge.player1Score}}">
+      value="{{match.player1Score}}">
     </paper-input>
     <paper-input
       type="number"
       min="0"
       max="21"
       label="Final Score"
-      value="{{challenge.player2Score}}">
+      value="{{match.player2Score}}">
     </paper-input>
 
     <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
     <paper-button on-tap="_accept" disabled="[[_accepted]]">Accept Score</paper-button>
   </template>
   <script>
-    class ChallengeDetails extends Polymer.Element {
-      static get is() { return 'challenge-details'; }
+    class MatchDetails extends Polymer.Element {
+      static get is() { return 'match-details'; }
       static get properties() {
         return {
           _accepted: {
             type: Boolean,
-            computed: '_computedAccepted(userUid, challenge.*)'
+            computed: '_computedAccepted(userUid, match.*)'
           },
           _canReject: {
             type: Boolean,
-            computed: '_computedCanReject(userUid, challenge)'
+            computed: '_computedCanReject(userUid, match)'
           }
         };
       }
       _accept(){
-        if(this.userUid == this.challenge.player1Uid)
-          this.set('challenge.player1Accepted', true);
+        if(this.userUid == this.match.player1Uid)
+          this.set('match.player1Accepted', true);
         else
-          this.set('challenge.player2Accepted', true);
+          this.set('match.player2Accepted', true);
       }
       _computedAccepted(userUid){
-        if(!userUid || !this.challenge) return;
-        if(userUid == this.challenge.player1Uid)
-          return this.challenge.player1Accepted;
-        return this.challenge.player2Accepted
+        if(!userUid || !this.match) return;
+        if(userUid == this.match.player1Uid)
+          return this.match.player1Accepted;
+        return this.match.player2Accepted
       }
-      _computedCanReject(userUid, challenge) {
-        if(!userUid || !challenge) return;
-        return userUid == this.challenge.player2Uid;
+      _computedCanReject(userUid, match) {
+        if(!userUid || !match) return;
+        return userUid == this.match.player2Uid;
       }
     }
 
-    window.customElements.define(ChallengeDetails.is, ChallengeDetails);
+    window.customElements.define(MatchDetails.is, MatchDetails);
   </script>
 </dom-module>

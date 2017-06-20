@@ -15,114 +15,81 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
     })
 });
 
-exports.createChallenge = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
-    .onWrite(event => {
-      if(event.auth.admin) return;
-
-      let challenge = event.data.val();
-      if (event.data.previous.exists() || !event.data.exists() ||
-        challenge.player1Uid === challenge.player2Uid) {
-        return;
-      }
-
-      challenge.createdDate = new Date();
-      return admin.database()
-          .ref(`/users/${challenge.player2Uid}/challenges`)
-          .child(event.params.challengeUid)
-          .set(challenge);
-    });
-
-exports.syncScores = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
-    .onWrite(event => {
-      if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
-        return;
-
-      let challenge = event.data.val();
-      let previousChallenge = event.data.previous.val();
-
-      if(challenge.player1Score === previousChallenge.player1Score &&
-        challenge.player2Score === previousChallenge.player2Score)
-        return;
-
-      challenge.player1Accepted = challenge.player2Accepted = false;
-      return Promise.all([
-        admin.database()
-          .ref(`/users/${challenge.player1Uid}/challenges`)
-          .child(event.params.challengeUid)
-          .set(challenge),
-        admin.database()
-          .ref(`/users/${challenge.player2Uid}/challenges`)
-          .child(event.params.challengeUid)
-          .set(challenge)]);
-    });
-
-exports.syncAcceptances = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
+exports.createMatch = functions.database.ref('/users/{userUid}/matches/{matchUid}')
   .onWrite(event => {
-    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
-      return;
-
-    let challenge = event.data.val();
-    let previousChallenge = event.data.previous.val();
-
-    if(challenge.player1Accepted === previousChallenge.player1Accepted &&
-      challenge.player2Accepted === previousChallenge.player2Accepted)
-      return;
-
-    return Promise.all([
-      admin.database()
-        .ref(`/users/${challenge.player1Uid}/challenges`)
-        .child(event.params.challengeUid)
-        .set(challenge),
-      admin.database()
-        .ref(`/users/${challenge.player2Uid}/challenges`)
-        .child(event.params.challengeUid)
-        .set(challenge)]);
-  });
-
-exports.closeChallenge = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
-  .onWrite(event => {
-    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
-      return;
-
-    let challenge = event.data.val();
-    if(!challenge.player1Accepted || !challenge.player2Accepted)
-      return;
-
-    let match = {
-      createdDate: new Date(),
-      player1Uid: challenge.player1Uid,
-      player2Uid: challenge.player2Uid,
-      player1Score: challenge.player1Score,
-      player2Score: challenge.player2Score,
-    }
-
-    return Promise.all([
-      admin.database().ref(`/matches`).push(match),
-      admin.database()
-        .ref(`/users/${challenge.player1Uid}/challenges`)
-        .child(event.params.challengeUid)
-        .remove(),
-      admin.database()
-        .ref(`/users/${challenge.player2Uid}/challenges`)
-        .child(event.params.challengeUid)
-        .remove(),
-    ]);
-  });
-
-exports.syncMatches = functions.database.ref('/matches/{matchUid}')
-  .onWrite(event => {
-    if (event.data.previous.exists() || !event.data.exists())
+    if (event.auth.admin || event.data.previous.exists() || !event.data.exists())
       return;
 
     let match = event.data.val();
+    if(match.final || match.player1Uid === match.player2Uid)
+      return;
+
+    match.createdDate = new Date();
+    return admin.database()
+        .ref(`/users/${match.player2Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match);
+  });
+
+exports.syncScores = functions.database.ref('/users/{userUid}/matches/{matchUid}')
+  .onWrite(event => {
+    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+      return;
+
+    let match = event.data.val();
+    let previousMatch = event.data.previous.val();
+
+    if(match.final)
+      return;
+    if(match.player1Score === previousMatch.player1Score &&
+      match.player2Score === previousMatch.player2Score)
+      return;
+
+    match.player1Accepted = match.player2Accepted = false;
     return Promise.all([
       admin.database()
-        .ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}`)
-        .push(match),
+        .ref(`/users/${match.player1Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match),
       admin.database()
-        .ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}`)
-        .push(match)
-    ]);
+        .ref(`/users/${match.player2Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match)]);
+  });
+
+exports.syncAcceptances = functions.database.ref('/users/{userUid}/matches/{matchUid}')
+  .onWrite(event => {
+    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+      return;
+
+    let match = event.data.val();
+    let previousMatch = event.data.previous.val();
+
+    if(match.final)
+      return
+    if(match.player1Accepted === previousMatch.player1Accepted &&
+      match.player2Accepted === previousMatch.player2Accepted)
+      return;
+
+    if(match.player1Accepted && match.player2Accepted)
+    {
+      match.final = true;
+      match.finalizedDate = new Date();
+      delete match.player1Accepted;
+      delete match.player2Accepted;
+    }
+
+    return Promise.all([
+      match.final ? admin.database().ref(`/matches/${event.params.matchUid}`).set(match) : Promise.resolve(),
+      admin.database()
+        .ref(`/users/${match.player1Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match),
+      admin.database()
+        .ref(`/users/${match.player2Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match)
+      ]);
   });
 
 exports.updateRating = functions.database.ref('/matches/{matchUid}')
