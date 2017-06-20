@@ -16,7 +16,8 @@
     "paper-fab": "polymerelements/paper-fab#^2.0.0",
     "paper-listbox": "polymerelements/paper-listbox#^2.0.0",
     "paper-item": "polymerelements/paper-item#^2.0.0",
-    "iron-image": "polymerelements/iron-image#^2.1.1"
+    "iron-image": "polymerelements/iron-image#^2.1.1",
+    "paper-input": "polymerelements/paper-input#^2.0.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

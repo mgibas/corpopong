@@ -1,11 +1,46 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="challenge-details">
   <template>
+    <style>
+    paper-input {
+      --paper-input-container-input: {
+        font-size: 4rem;
+      };
+    }
+    </style>
+    <firebase-document
+      id="fb"
+      data="{{challenge}}"
+      path="/users/[[userUid]]/challenges/[[challengeUid]]">
+    </firebase-document>
+    <h1>[[challenge.player1Uid]] : [[challenge.player2Uid]]</h1>
+    <paper-input
+      type="number"
+      min="0"
+      max="21"
+      label="Final Score"
+      value="{{challenge.player1Score}}">
+    </paper-input>
+    <paper-input
+      type="number"
+      min="0"
+      max="21"
+      label="Final Score"
+      value="{{challenge.player2Score}}">
+    </paper-input>
+
   </template>
   <script>
     class ChallengeDetails extends Polymer.Element {
       static get is() { return 'challenge-details'; }
+      static get properties() {
+        return {
+
+        };
+      }
     }
 
     window.customElements.define(ChallengeDetails.is, ChallengeDetails);

@@ -1,0 +1,24 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<dom-module id="dashboard-challenges">
+  <template>
+    <firebase-query
+      path="/users/[[userUid]]/challenges"
+      data="{{challenges}}">
+    </firebase-query>
+
+    <template is="dom-repeat" items="{{challenges}}">
+      <a href="/challenges/[[item.$key]]">
+        [[item.player1Uid]] : [[item.player2Uid]]
+      </a>
+    </template>
+  </template>
+  <script>
+    class DashboardChallenges extends Polymer.Element {
+      static get is() { return 'dashboard-challenges'; }
+    }
+
+    window.customElements.define(DashboardChallenges.is, DashboardChallenges);
+  </script>
+</dom-module>

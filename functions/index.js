@@ -16,25 +16,34 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
 
 exports.createChallenge = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
     .onWrite(event => {
-      let creatorUid = event.params.userUid;
-      let challengeUid = event.params.challengeUid;
       let challenge = event.data.val();
       if (event.data.previous.exists() || !event.data.exists() ||
-        challenge.creatorUid || challenge.playerUid === creatorUid) {
+        challenge.createdDate || challenge.player1Uid === challenge.player2Uid) {
         return;
       }
 
       challenge.createdDate = new Date();
-      challenge.creatorUid = creatorUid;
+      return admin.database()
+          .ref(`/users/${challenge.player2Uid}/challenges`)
+          .child(event.params.challengeUid)
+          .set(challenge);
+    });
 
-      return Promise.all([
-        admin.database()
-          .ref(`/users/${challenge.playerUid}/challenges`)
-          .child(challengeUid)
-          .set(challenge),
-        admin.database()
-          .ref(`/users/${creatorUid}/challenges`)
-          .child(challengeUid)
-          .set(challenge)
-      ]);
+exports.syncScores = functions.database.ref('/users/{userUid}/challenges/{challengeUid}')
+    .onWrite(event => {
+      if (!event.data.previous.exists() || !event.data.exists())
+        return;
+        
+      let challenge = event.data.val();
+      let previousChallenge = event.data.previous.val();
+
+      if(challenge.player1Score === previousChallenge.player1Score &&
+        challenge.player2Score === previousChallenge.player2Score)
+        return;
+
+      return admin.database()
+          .ref('/users')
+          .child(event.params.userUid === challenge.player1Uid ? challenge.player2Uid : challenge.player1Uid)
+          .child(`/challenges/${event.params.challengeUid}`)
+          .set(challenge);
     });

@@ -4,7 +4,6 @@
 <link rel="import" href="../layouts/fragment-layout.html">
 <link rel="import" href="../challenge/players-list.html">
 
-
 <dom-module id="challenge-create-fragment">
   <template>
     <style>
@@ -15,13 +14,12 @@
     }
     </style>
 
-    <firebase-document id="fb" data="{{challenge}}">
-    </firebase-document>
+    <firebase-document id="fb" data="{{challenge}}"></firebase-document>
 
     <fragment-layout title="Create Challenge" back-button>
-      <players-list selected-uid="{{challenge.playerUid}}"></players-list>
+      <players-list selected-uid="{{challenge.player2Uid}}"></players-list>
     </fragment-layout>
-    <paper-fab disabled$="[[!challenge.playerUid]]" icon="done" on-tap="_create"></paper-fab>
+    <paper-fab disabled="[[!challenge.player2Uid]]"  icon="done" on-tap="_create"></paper-fab>
   </template>
   <script>
     class ChallengeCreateFragment extends Polymer.Element {
@@ -30,11 +28,12 @@
         return {
           challenge: {
             type: Object,
-            value: () => { return {}; }
+            value: {}
           }
         };
       }
       _create() {
+        this.challenge.player1Uid = this.userUid;
         this.$.fb.saveValue(`/users/${this.userUid}/challenges`)
           .then(() => {
             this.$.fb.reset();

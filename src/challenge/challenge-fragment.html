@@ -1,10 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../layouts/fragment-layout.html">
+<link rel="import" href="../challenge/challenge-details.html">
 
 <dom-module id="challenge-fragment">
   <template>
     <fragment-layout title="Challenge" back-button>
-      Challenge
+      <challenge-details user-uid="[[userUid]]" challenge-uid="[[challengeUid]]"></challenge-details>
     </fragment-layout>
   </template>
   <script>
