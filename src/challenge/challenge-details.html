@@ -10,6 +10,10 @@
         font-size: 4rem;
       };
     }
+    paper-button.danger {
+      background-color: var(--paper-red-600);
+      color: var(--text-primary-color);
+    }
     </style>
     <firebase-document
       id="fb"
@@ -32,14 +36,39 @@
       value="{{challenge.player2Score}}">
     </paper-input>
 
+    <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
+    <paper-button on-tap="_accept" disabled="[[_accepted]]">Accept Score</paper-button>
   </template>
   <script>
     class ChallengeDetails extends Polymer.Element {
       static get is() { return 'challenge-details'; }
       static get properties() {
         return {
-
+          _accepted: {
+            type: Boolean,
+            computed: '_computedAccepted(userUid, challenge.*)'
+          },
+          _canReject: {
+            type: Boolean,
+            computed: '_computedCanReject(userUid, challenge)'
+          }
         };
+      }
+      _accept(){
+        if(this.userUid == this.challenge.player1Uid)
+          this.set('challenge.player1Accepted', true);
+        else
+          this.set('challenge.player2Accepted', true);
+      }
+      _computedAccepted(userUid){
+        if(!userUid || !this.challenge) return;
+        if(userUid == this.challenge.player1Uid)
+          return this.challenge.player1Accepted;
+        return this.challenge.player2Accepted
+      }
+      _computedCanReject(userUid, challenge) {
+        if(!userUid || !challenge) return;
+        return userUid == this.challenge.player2Uid;
       }
     }
 
