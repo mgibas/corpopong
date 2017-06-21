@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -53,24 +54,26 @@
             <h1>[[player1.displayName]]</h1>
           </div>
           <paper-input
+            id="player1Score"
             hidden="[[match.final]]"
             type="number"
             min="0"
-            max="21"
+            max="99"
             label="Final Score"
-            value="{{match.player1Score}}">
+            on-change="_updateScores">
           </paper-input>
           <p hidden="[[!match.final]]">[[match.player1Score]]</p>
         </div>
         <p>:</p>
         <div class="flex layout horizontal center-center">
           <paper-input
+            id="player2Score"
             hidden="[[match.final]]"
             type="number"
             min="0"
-            max="21"
+            max="99"
             label="Final Score"
-            value="{{match.player2Score}}">
+            on-change="_updateScores">
           </paper-input>
           <p hidden="[[!match.final]]">[[match.player2Score]]</p>
           <div class="player-info">
@@ -101,6 +104,9 @@
           }
         };
       }
+      static get observers() {
+        return ['_updateInputs(match.player1Score, match.player2Score)']
+      }
       _accept(){
         if(this.userUid == this.match.player1Uid)
           this.set('match.player1Accepted', true);
@@ -116,6 +122,22 @@
       _computedCanReject(userUid, match) {
         if(!userUid || !match) return;
         return userUid == this.match.player2Uid && !this.match.final;
+      }
+      _updateInputs(player1Score, player2Score){
+        console.log('updating inputs')
+        this.$.player1Score.value = player1Score;
+        this.$.player2Score.value= player2Score;
+      }
+      _updateScores() {
+        this._ScoresDebouncer = Polymer.Debouncer.debounce(
+          this._ScoresDebouncer,
+          Polymer.Async.timeOut.after(200),
+          () => {
+            console.log('updating match scores')
+            this.set('match.player1Score', this.$.player1Score.value);
+            this.set('match.player2Score', this.$.player2Score.value);
+          }
+        );
       }
     }
 
