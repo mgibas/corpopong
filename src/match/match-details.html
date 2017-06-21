@@ -1,43 +1,90 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../player/player-avatar.html">
 
 <dom-module id="match-details">
   <template>
+    <style include="iron-flex"></style>
     <style>
     paper-input {
+      margin: 1rem;
       --paper-input-container-input: {
         font-size: 4rem;
       };
+    }
+    p {
+      font-size: 4rem;
+    }
+    .player-info {
+      margin: 1rem;
+      text-align: center;
     }
     paper-button.danger {
       background-color: var(--paper-red-600);
       color: var(--text-primary-color);
     }
+    section > .buttons {
+      @apply --layout-horizontal;
+      @apply --layout-end-justified;
+    }
     </style>
+
     <firebase-document
-      id="fb"
       data="{{match}}"
       path="/users/[[userUid]]/matches/[[matchUid]]">
     </firebase-document>
-    <h1>[[match.player1Uid]] : [[match.player2Uid]]</h1>
-    <paper-input
-      type="number"
-      min="0"
-      max="21"
-      label="Final Score"
-      value="{{match.player1Score}}">
-    </paper-input>
-    <paper-input
-      type="number"
-      min="0"
-      max="21"
-      label="Final Score"
-      value="{{match.player2Score}}">
-    </paper-input>
+    <firebase-document
+      data="{{player1}}"
+      path="/players/[[match.player1Uid]]">
+    </firebase-document>
+    <firebase-document
+      data="{{player2}}"
+      path="/players/[[match.player2Uid]]">
+    </firebase-document>
 
-    <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
-    <paper-button on-tap="_accept" disabled="[[_accepted]]">Accept Score</paper-button>
+    <section>
+      <div class="layout horizontal  center-center">
+        <div class="flex layout horizontal center-center">
+          <div class="player-info">
+            <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+            <h1>[[player1.displayName]]</h1>
+          </div>
+          <paper-input
+            hidden="[[match.final]]"
+            type="number"
+            min="0"
+            max="21"
+            label="Final Score"
+            value="{{match.player1Score}}">
+          </paper-input>
+          <p hidden="[[!match.final]]">[[match.player1Score]]</p>
+        </div>
+        <p>:</p>
+        <div class="flex layout horizontal center-center">
+          <paper-input
+            hidden="[[match.final]]"
+            type="number"
+            min="0"
+            max="21"
+            label="Final Score"
+            value="{{match.player2Score}}">
+          </paper-input>
+          <p hidden="[[!match.final]]">[[match.player2Score]]</p>
+          <div class="player-info">
+            <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+            <h1>[[player2.displayName]]</h1>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
+        <paper-button on-tap="_accept" disabled="[[_accepted]]" hidden="[[match.final]]">Accept Score</paper-button>
+      </div>
+    </section>
+
   </template>
   <script>
     class MatchDetails extends Polymer.Element {
@@ -68,7 +115,7 @@
       }
       _computedCanReject(userUid, match) {
         if(!userUid || !match) return;
-        return userUid == this.match.player2Uid;
+        return userUid == this.match.player2Uid && !this.match.final;
       }
     }
 

@@ -15,7 +15,7 @@
     <app-header-layout>
       <app-header slot="header" fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button hidden$=[[!backButton]] icon="arrow-back"></paper-icon-button>
+          <paper-icon-button hidden$=[[!backButton]] icon="arrow-back" on-tap="_back"></paper-icon-button>
           <div main-title>[[title]]</div>
         </app-toolbar>
       </app-header>
@@ -33,6 +33,9 @@
             value: false
           }
         };
+      }
+      _back() {
+        window.history.back();
       }
     }
 

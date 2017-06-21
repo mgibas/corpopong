@@ -105,16 +105,19 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       let elo = new EloRank();
       let player1Rating = playerRefs[0].val().rating || 0;
       let player2Rating = playerRefs[1].val().rating || 0;
+      let player1Result = Number(match.player1Score) > Number(match.player2Score) ? 1 : 0;
+      let player2Result = Number(match.player2Score) > Number(match.player1Score) ? 1 : 0;
       let player1ExpectedScore = elo.getExpected(player1Rating, player2Rating);
       let player2ExpectedScore = elo.getExpected(player2Rating, player1Rating);
+
       let player1NewRating = elo.updateRating(
         player1ExpectedScore,
-        (match.player1Score > match.player2Score) * 1,
+        player1Result,
         player1Rating
       );
       let player2NewRating = elo.updateRating(
         player2ExpectedScore,
-        (match.player2Score > match.player1Score) * 1,
+        player2Result,
         player2Rating
       );
       player1NewRating = player1NewRating > 0 ? player1NewRating : 0;
