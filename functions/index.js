@@ -24,11 +24,20 @@ exports.createMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
     if(match.final || match.player1Uid === match.player2Uid)
       return;
 
-    match.createdDate = new Date();
-    return admin.database()
+    match.createdDate = new Date().toISOString();
+    match.final = false;
+
+    return Promise.all([
+      admin.database()
+        .ref(`/users/${match.player1Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(match),
+      admin.database()
         .ref(`/users/${match.player2Uid}/matches`)
         .child(event.params.matchUid)
-        .set(match);
+        .set(match)
+    ]);
+
   });
 
 exports.syncScores = functions.database.ref('/users/{userUid}/matches/{matchUid}')
@@ -74,7 +83,7 @@ exports.syncAcceptances = functions.database.ref('/users/{userUid}/matches/{matc
     if(match.player1Accepted && match.player2Accepted)
     {
       match.final = true;
-      match.finalizedDate = new Date();
+      match.finalizedDate = new Date().toISOString();
       delete match.player1Accepted;
       delete match.player2Accepted;
     }

@@ -15,7 +15,7 @@
     </firebase-query>
 
     <paper-listbox>
-      <template is="dom-repeat" items="{{players}}" sort="_sort">
+      <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
         <paper-icon-item>
           <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
           <div class="flex layout horizontal">

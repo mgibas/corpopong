@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../dashboard/dashboard-match-item.html">
+
+<dom-module id="dashboard-latest-matches">
+  <template>
+    <style include="iron-flex"></style>
+    <firebase-query
+      path="/matches"
+      data="{{matches}}"
+      limit-to-last="2">
+    </firebase-query>
+
+    <h2>Latest Matches</h2>
+    <paper-listbox>
+      <template is="dom-repeat" items="{{matches}}" sort="_sort">
+        <paper-item>
+          <dashboard-match-item match="[[item]]"></dashboard-match-item>
+        </paper-item>
+      </template>
+    </paper-listbox>
+  </template>
+  <script>
+    class DashboardLatestMatches extends Polymer.Element {
+      static get is() { return 'dashboard-latest-matches'; }
+      _sort(a, b) {
+        return a.finalizedDate > b.finalizedDate ? -1 : 1;
+      }
+    }
+
+    window.customElements.define(DashboardLatestMatches.is, DashboardLatestMatches);
+  </script>
+</dom-module>

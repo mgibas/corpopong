@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<dom-module id="dashboard-match-item">
+  <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+    <firebase-document
+      data="{{player1}}"
+      path="/players/[[match.player1Uid]]">
+    </firebase-document>
+    <firebase-document
+      data="{{player2}}"
+      path="/players/[[match.player2Uid]]">
+    </firebase-document>
+
+    <div class="flex layout horizontal">
+      <div class="flex layout horizontal start-justified">
+        <player-avatar src="[[player1.photoURL]]"></player-avatar>
+        <div>
+          <p>[[player1.displayName]]</p>
+          <i>[[player1.rating]]</i>
+        </div>
+      </div>
+      <p>[[match.player1Score]]:[[match.player2Score]]</p>
+      <div class="flex layout horizontal end-justified">
+        <div>
+          <p>[[player2.displayName]]</p>
+          <i>[[player2.rating]]</i>
+        </div>
+        <player-avatar src="[[player2.photoURL]]"></player-avatar>
+      </div>
+    </div>
+  </template>
+  <script>
+    class DashboardMatchItem extends Polymer.Element {
+      static get is() { return 'dashboard-match-item'; }
+      static get properties() {
+        return {
+          match: Object
+        };
+      }
+    }
+
+    window.customElements.define(DashboardMatchItem.is, DashboardMatchItem);
+  </script>
+</dom-module>
