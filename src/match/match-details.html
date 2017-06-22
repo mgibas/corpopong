@@ -1,14 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="match-details">
   <template>
-    <style include="iron-flex"></style>
+    <style include="app-styles"></style>
     <style>
     paper-input {
       margin: 1rem;
@@ -27,10 +26,7 @@
       background-color: var(--paper-red-600);
       color: var(--text-primary-color);
     }
-    section > .buttons {
-      @apply --layout-horizontal;
-      @apply --layout-end-justified;
-    }
+
     </style>
 
     <firebase-document
@@ -46,7 +42,7 @@
       path="/players/[[match.player2Uid]]">
     </firebase-document>
 
-    <section>
+    <section class="paper-material">
       <div class="layout horizontal  center-center">
         <div class="flex layout horizontal center-center">
           <div class="player-info">
@@ -59,7 +55,7 @@
             type="number"
             min="0"
             max="99"
-            label="Final Score"
+            label="Score"
             on-change="_updateScores">
           </paper-input>
           <p hidden="[[!match.final]]">[[match.player1Score]]</p>
@@ -72,7 +68,7 @@
             type="number"
             min="0"
             max="99"
-            label="Final Score"
+            label="Score"
             on-change="_updateScores">
           </paper-input>
           <p hidden="[[!match.final]]">[[match.player2Score]]</p>
@@ -84,7 +80,7 @@
       </div>
       <div class="buttons">
         <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
-        <paper-button on-tap="_accept" disabled="[[_accepted]]" hidden="[[match.final]]">Accept Score</paper-button>
+        <paper-button raised on-tap="_accept" disabled="[[_accepted]]" hidden="[[match.final]]">Accept Score</paper-button>
       </div>
     </section>
 

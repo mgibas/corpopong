@@ -1,0 +1,25 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+
+<dom-module id="app-styles">
+  <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+    <style include="paper-material-styles"></style>
+    <style>
+      a {
+        color: initial;
+        text-decoration: initial;
+      }
+      .paper-material {
+        background-color: var(--primary-background-color);
+        padding: 1rem;
+      }
+      .paper-material > .buttons {
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
+      }
+    </style>
+  </template>
+</dom-module>

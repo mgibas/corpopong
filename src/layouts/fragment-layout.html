@@ -2,14 +2,32 @@
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="fragment-layout">
   <template>
+    <style include="app-styles"></style>
     <style>
+    .content {
+      padding: 1rem;
+    }
     [hidden] {
       display: none !important;
+    }
+    app-header * {
+      color: var(--text-primary-color);
+    }
+
+    app-header,
+    app-header a {
+      background-color: var(--primary-color)
+    }
+
+    app-header paper-icon-button {
+      --paper-icon-button-ink-color: var(--text-primary-color);
     }
     </style>
     <app-header-layout>
@@ -21,7 +39,9 @@
           <div main-title>[[title]]</div>
         </app-toolbar>
       </app-header>
-      <slot></slot>
+      <div class="content">
+        <slot></slot>
+      </div>
     </app-header-layout>
   </template>
   <script>

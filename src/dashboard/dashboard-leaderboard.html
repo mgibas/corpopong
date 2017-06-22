@@ -1,34 +1,39 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 
 <dom-module id="dashboard-leaderboard">
   <template>
-    <style include="iron-flex"></style>
+    <style include="app-styles"></style>
     <firebase-query
       path="/players"
       data="{{players}}">
     </firebase-query>
 
-    <paper-listbox>
-      <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
-        <paper-icon-item>
-          <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
-          <div class="flex layout horizontal">
-            <p class="flex">
-              [[item.displayName]]
-            </p>
-            <p>
-              [[item.rating]]
-            </p>
-          </div>
-        </paper-icon-item>
-      </template>
-    </paper-listbox>
+    <section class="paper-material" elevation="1">
+      <header>
+        <h1>Leaderboard</h1>
+      </header>
+      <paper-listbox>
+        <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
+          <paper-icon-item>
+            <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
+            <div class="flex layout horizontal">
+              <p class="flex">
+                [[item.displayName]]
+              </p>
+              <p>
+                [[item.rating]]
+              </p>
+            </div>
+          </paper-icon-item>
+        </template>
+      </paper-listbox>
+    </section>
+
   </template>
   <script>
     class DashboardLeaderboard extends Polymer.Element {

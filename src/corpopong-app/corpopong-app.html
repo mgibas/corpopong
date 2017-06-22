@@ -7,6 +7,8 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../corpopong-app/login-component.html">
+<link rel="import" href="../styles/app-theme.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="corpopong-app">
   <link rel="lazy-import" group="lazy" href="../dashboard/dashboard-fragment.html">
@@ -14,6 +16,7 @@
   <link rel="lazy-import" group="lazy" href="../match/match-create-fragment.html">
   <link rel="lazy-import" group="lazy" href="../player/player-fragment.html">
   <template>
+    <style include="app-styles"></style>
     <style>
       :host {
         display: block;

@@ -1,8 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="player-avatar">
   <template>
+    <style include="app-styles"></style>
     <style>
     :host {
       display: block;
@@ -11,6 +13,7 @@
       border-radius: 50%;
       height: 48px;
       width: 48px;
+      @apply --shadow-elevation-2dp;
     }
     iron-image[big] {
       height: 128px;

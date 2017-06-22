@@ -4,14 +4,20 @@
 <link rel="import" href="../dashboard/dashboard-leaderboard.html">
 <link rel="import" href="../dashboard/dashboard-open-matches.html">
 <link rel="import" href="../dashboard/dashboard-latest-matches.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="dashboard-fragment">
   <template>
+    <style include="app-styles"></style>
     <style>
     paper-fab{
       position: fixed;
       bottom: 2rem;
       right: 2rem;
+    }
+    dashboard-leaderboard, dashboard-open-matches {
+      display: block;
+      margin-bottom: 1rem;
     }
     </style>
     <fragment-layout title="CorpoPong">

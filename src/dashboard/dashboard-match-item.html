@@ -1,11 +1,27 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="dashboard-match-item">
   <template>
-    <style include="iron-flex iron-flex-alignment"></style>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      display: block;
+      padding: 0 16px;
+    }
+    .secondary {
+      @apply --ppaer-font-body1;
+      color: var(--secondary-text-color);
+    }
+    .right {
+      text-align: right;
+    }
+    player-avatar + *,
+    * + player-avatar {
+      margin-left:1rem;
+    }
+    </style>
     <firebase-document
       data="{{player1}}"
       path="/players/[[match.player1Uid]]">
@@ -18,16 +34,16 @@
     <div class="flex layout horizontal">
       <div class="flex layout horizontal start-justified">
         <player-avatar src="[[player1.photoURL]]"></player-avatar>
-        <div>
-          <p>[[player1.displayName]]</p>
-          <i>[[player1.rating]]</i>
+        <div class="layout vertical center-justified">
+          <span>[[player1.displayName]]</span>
+          <i class="secondary">[[player1.rating]]</i>
         </div>
       </div>
       <p>[[match.player1Score]]:[[match.player2Score]]</p>
       <div class="flex layout horizontal end-justified">
-        <div>
-          <p>[[player2.displayName]]</p>
-          <i>[[player2.rating]]</i>
+        <div class="layout vertical center-justified right">
+          <span>[[player2.displayName]]</span>
+          <i class="secondary">[[player2.rating]]</i>
         </div>
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
       </div>
