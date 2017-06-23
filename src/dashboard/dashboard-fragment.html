@@ -15,15 +15,39 @@
       bottom: 2rem;
       right: 2rem;
     }
-    dashboard-leaderboard, dashboard-open-matches {
+
+    dashboard-open-matches {
       display: block;
       margin-bottom: 1rem;
     }
+
+    .responsive {
+      @apply --layout-horizontal;
+      @apply --layout-wrap;
+      @apply --layout-justified;
+    }
+
+    .responsive > * {
+      @apply --layout-flex;
+      flex-basis: 100%;
+      margin: 0.5rem;
+    }
+
+    @media (min-width: 1100px) {
+        .responsive > * {
+            flex-basis: 45%;
+        }
+    }
+    
     </style>
     <fragment-layout title="CorpoPong">
-      <dashboard-leaderboard></dashboard-leaderboard>
-      <dashboard-open-matches user-uid="[[userUid]]"></dashboard-open-matches>
-      <dashboard-latest-matches></dashboard-latest-matches>
+      <div class="responsive">
+        <dashboard-leaderboard></dashboard-leaderboard>
+        <div>
+          <dashboard-open-matches user-uid="[[userUid]]"></dashboard-open-matches>
+          <dashboard-latest-matches></dashboard-latest-matches>
+        </div>
+      </div>
     </fragment-layout>
     <a href="/matches/create">
       <paper-fab icon="add"></paper-fab>
