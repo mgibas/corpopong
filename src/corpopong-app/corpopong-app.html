@@ -38,7 +38,7 @@
       <app-route route="[[route]]" pattern="/player/:id"></app-route>
     </app-active-route>
 
-    <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern">
+    <iron-pages id="pages" selected="[[activePattern]]" attr-for-selected="for-pattern">
       <dashboard-fragment for-pattern="/" user-uid="[[user.uid]]"></dashboard-fragment>
       <match-create-fragment for-pattern="/matches/create" user-uid="[[user.uid]]"></match-create-fragment>
       <match-fragment for-pattern="/matches/:id" user-uid="[[user.uid]]" match-uid="[[matchData.id]]"></match-fragment>
@@ -53,7 +53,8 @@
       ready(){
         super.ready();
         Polymer.RenderStatus.afterNextRender(this, ()=>{
-          this.importLazyGroup('lazy');
+          this.importLazyGroup('lazy')
+            .then(() => this.$.pages.notifyResize());
         });
       }
     }
