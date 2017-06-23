@@ -17,7 +17,7 @@
         <h1>Choose your oponent</h1>
       </header>
       <paper-listbox attr-for-selected="uid" selected="{{selectedUid}}">
-        <template is="dom-repeat" items="{{players}}">
+        <template is="dom-repeat" items="{{players}}" filter="_filter">
           <paper-icon-item uid="[[item.$key]]">
             <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
             <div class="flex layout horizontal">
@@ -39,6 +39,9 @@
             notify: true
           }
         };
+      }
+      _filter(player) {
+        return player.$key !== this.userUid;
       }
     }
 

@@ -19,7 +19,7 @@
     <firebase-document id="fb" data="{{match}}"></firebase-document>
 
     <fragment-layout title="Create Match" back-button>
-      <players-list selected-uid="{{match.player2Uid}}"></players-list>
+      <players-list user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></players-list>
     </fragment-layout>
     <paper-fab disabled="[[!match.player2Uid]]"  icon="done" on-tap="_create"></paper-fab>
   </template>

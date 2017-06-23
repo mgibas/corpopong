@@ -15,6 +15,9 @@
         font-size: 4rem;
       };
     }
+    .right{
+      text-align: right;
+    }
     p {
       font-size: 4rem;
     }
@@ -30,6 +33,7 @@
     </style>
 
     <firebase-document
+      id="fb"
       data="{{match}}"
       path="/users/[[userUid]]/matches/[[matchUid]]">
     </firebase-document>
@@ -51,6 +55,7 @@
           </div>
           <paper-input
             id="player1Score"
+            class="right"
             hidden="[[match.final]]"
             type="number"
             min="0"
@@ -60,7 +65,7 @@
           </paper-input>
           <p hidden="[[!match.final]]">[[match.player1Score]]</p>
         </div>
-        <p>:</p>
+        <p>-</p>
         <div class="flex layout horizontal center-center">
           <paper-input
             id="player2Score"
@@ -109,6 +114,11 @@
         else
           this.set('match.player2Accepted', true);
       }
+      _reject(){
+        this.$.fb.destroy();
+        window.history.pushState({}, null, '/');
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }
       _computedAccepted(userUid){
         if(!userUid || !this.match) return;
         if(userUid == this.match.player1Uid)
@@ -120,7 +130,6 @@
         return userUid == this.match.player2Uid && !this.match.final;
       }
       _updateInputs(player1Score, player2Score){
-        console.log('updating inputs')
         this.$.player1Score.value = player1Score;
         this.$.player2Score.value= player2Score;
       }
@@ -129,7 +138,6 @@
           this._ScoresDebouncer,
           Polymer.Async.timeOut.after(200),
           () => {
-            console.log('updating match scores')
             this.set('match.player1Score', this.$.player1Score.value);
             this.set('match.player2Score', this.$.player2Score.value);
           }

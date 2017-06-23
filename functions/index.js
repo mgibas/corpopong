@@ -11,7 +11,8 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
     .set({
       email: event.data.email,
       displayName: event.data.displayName,
-      photoURL: event.data.photoURL
+      photoURL: event.data.photoURL,
+      rating: 0
     })
 });
 
@@ -38,6 +39,25 @@ exports.createMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
         .set(match)
     ]);
 
+  });
+
+exports.rejectMatch = functions.database.ref('/users/{userUid}/matches/{matchUid}')
+  .onWrite(event => {
+    if (event.data.exists())
+      return;
+
+    let deletedMatch = event.data.previous.val();
+
+    return Promise.all([
+      admin.database()
+        .ref(`/users/${deletedMatch.player1Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(null),
+      admin.database()
+        .ref(`/users/${deletedMatch.player2Uid}/matches`)
+        .child(event.params.matchUid)
+        .set(null)
+    ]);
   });
 
 exports.syncScores = functions.database.ref('/users/{userUid}/matches/{matchUid}')

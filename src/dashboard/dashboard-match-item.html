@@ -21,6 +21,10 @@
     * + player-avatar {
       margin-left:1rem;
     }
+    p {
+      font-size: 2rem;
+      margin: 0;
+    }
     </style>
     <firebase-document
       data="{{player1}}"
@@ -39,7 +43,7 @@
           <i class="secondary">[[player1.rating]]</i>
         </div>
       </div>
-      <p>[[match.player1Score]]:[[match.player2Score]]</p>
+      <p>[[match.player1Score]] - [[match.player2Score]]</p>
       <div class="flex layout horizontal end-justified">
         <div class="layout vertical center-justified right">
           <span>[[player2.displayName]]</span>
