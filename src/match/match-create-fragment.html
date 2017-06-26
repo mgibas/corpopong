@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../layouts/fragment-layout.html">
-<link rel="import" href="../match/players-list.html">
+<link rel="import" href="../match/oponent-selector.html">
 <link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="match-create-fragment">
@@ -19,9 +19,9 @@
     <firebase-document id="fb" data="{{match}}"></firebase-document>
 
     <fragment-layout title="Create Match" back-button>
-      <players-list user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></players-list>
+      <oponent-selector user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></oponent-selector>
     </fragment-layout>
-    <paper-fab disabled="[[!match.player2Uid]]"  icon="done" on-tap="_create"></paper-fab>
+    <paper-fab disabled="[[!match.player2Uid]]" tabindex="0"  icon="done" on-tap="_create"></paper-fab>
   </template>
   <script>
     class MatchCreateFragment extends Polymer.Element {

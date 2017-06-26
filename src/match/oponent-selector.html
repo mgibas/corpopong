@@ -1,0 +1,157 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
+
+<dom-module id="oponent-selector">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    .container {
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+      width: 384px;
+      @apply --layout-horizontal;
+    }
+    .container::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to right, var(--primary-background-color), rgba(255, 0, 0, 0),rgba(255, 0, 0, 0), var(--primary-background-color));
+    }
+    .item {
+      position: absolute;
+      width: 128px;
+      transition: all 200ms ease-in-out;
+    }
+    .item h3 {
+      margin:0;
+    }
+    .item:not(.iron-selected) {
+      transform: scale(0.75);
+    }
+    .item.prev {
+      left: 0px;
+    }
+    .item.iron-selected {
+      left: 128px;
+    }
+    .item.next {
+      left: 256px;
+    }
+    .item:not(.prev):not(.iron-selected):not(.next) {
+      left: -128px;
+    }
+    .item.iron-selected ~ .item:not(.next) {
+      left: 384px;
+    }
+    </style>
+    <firebase-query path="/players" data="{{players}}">
+    </firebase-query>
+
+    <section class="paper-material" elevation="1">
+      <header>
+        <h1>Choose your oponent</h1>
+      </header>
+
+      <div class="layout horizontal center-center">
+        <paper-icon-button icon="arrow-back" on-tap="prev" disabled="[[atStart]]"></paper-icon-button>
+        <iron-selector id="selector" class="container" selected="{{selectedIndex}}" selected-item={{selectedItem}} on-iron-select="selectionChanged" on-iron-items-changed="matchOponent">
+          <template is="dom-repeat" items="{{players}}" filter="_filter" sort="_sort" observe="rating">
+            <div class="item layout vertical center-center" uid$="[[item.$key]]" rating$="[[item.rating]]">
+              <player-avatar src="[[item.photoURL]]" big></player-avatar>
+              <p>[[item.displayName]]</p>
+              <h3>[[item.rating]]</h3>
+            </div>
+          </template>
+        </iron-selector>
+        <paper-icon-button icon="arrow-forward" on-tap="next" disabled="[[atEnd]]"></paper-icon-button>
+      </div>
+    </section>
+  </template>
+  <script>
+    class OponentSelector extends Polymer.Element {
+      static get is() { return 'oponent-selector'; }
+      static get properties() {
+        return {
+          selectedUid:{
+            type: String,
+            notify: true
+          },
+          atStart: {
+            type: Boolean,
+            computed: '_computeAtStart(selectedIndex)'
+          },
+          atEnd: {
+            type: Boolean,
+            computed: '_computeAtEnd(selectedIndex)'
+          },
+          players: {
+            type: Object
+          },
+          selectedIndex: Number
+        };
+      }
+      static get observers() {
+        return ['matchOponent(players.*)'];
+      }
+      prev() {
+        this.selectedIndex--;
+      }
+      next() {
+        this.selectedIndex++;
+      }
+      selectionChanged(e,details){
+        this.$.selector.items.forEach((i)=>{
+          i.classList.remove('prev');
+          i.classList.remove('next');
+        });
+        let index = this.$.selector.items.indexOf(details.item);
+
+        if(index>0){
+          let prev = this.$.selector.items[index-1];
+          prev.classList.add('prev');
+        }
+        if(index + 1 < this.$.selector.items.length){
+          let next = this.$.selector.items[index+1];
+          next.classList.add('next');
+        }
+        this.set('selectedUid', details.item.attributes['uid'].value);
+      }
+      matchOponent() {
+        if(!this.$.selector.items || this.$.selector.items.length === 0) return;
+
+        let userRating = this.players.find((p) => p.$key === this.userUid).rating;
+        let bestMatch;
+        for (var i = 0; i < this.$.selector.items.length; i++) {
+          let itemRating = Number(this.$.selector.items[i].attributes['rating'].value);
+          let diff = Math.abs(userRating - itemRating);
+          if(!bestMatch || bestMatch > diff)
+            bestMatch = diff;
+          else if(bestMatch && bestMatch < diff)
+            return this.selectedIndex = i -1;
+        }
+        this.selectedIndex = 0;
+      }
+      _filter(player) {
+        return player.$key !== this.userUid;
+      }
+      _sort(a, b) {
+        return b.rating - a.rating;
+      }
+      _computeAtStart(index){
+        return index === 0;
+      }
+      _computeAtEnd(index){
+        return index === this.$.selector.items.length -1;
+      }
+    }
+
+    window.customElements.define(OponentSelector.is, OponentSelector);
+  </script>
+</dom-module>
