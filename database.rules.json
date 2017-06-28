@@ -12,6 +12,7 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         "matches": {
+          ".write": "$uid === auth.uid",
           "$match" : {
             "player1Accepted" : {
               ".write": "$uid === data.parent().child('player1Uid').val()"
