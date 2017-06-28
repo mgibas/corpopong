@@ -60,66 +60,75 @@ exports.rejectMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
     ]);
   });
 
-exports.syncScores = functions.database.ref('/users/{userUid}/matches/{matchUid}')
-  .onWrite(event => {
-    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
-      return;
+let syncScores = (event, propertyName) => {
+  if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+    return;
 
-    let match = event.data.val();
-    let previousMatch = event.data.previous.val();
+  let score = event.data.val();
+  let previousScore = event.data.previous.val();
 
-    if(match.final)
-      return;
-    if(match.player1Score === previousMatch.player1Score &&
-      match.player2Score === previousMatch.player2Score)
-      return;
+  if(score === previousScore)
+    return;
 
-    match.player1Accepted = match.player2Accepted = false;
-    return Promise.all([
-      admin.database()
-        .ref(`/users/${match.player1Uid}/matches`)
-        .child(event.params.matchUid)
-        .set(match),
-      admin.database()
-        .ref(`/users/${match.player2Uid}/matches`)
-        .child(event.params.matchUid)
-        .set(match)]);
-  });
-
-exports.syncAcceptances = functions.database.ref('/users/{userUid}/matches/{matchUid}')
-  .onWrite(event => {
-    if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
-      return;
-
-    let match = event.data.val();
-    let previousMatch = event.data.previous.val();
-
-    if(match.final)
-      return
-    if(match.player1Accepted === previousMatch.player1Accepted &&
-      match.player2Accepted === previousMatch.player2Accepted)
-      return;
-
-    if(match.player1Accepted && match.player2Accepted)
-    {
-      match.final = true;
-      match.finalizedDate = new Date().toISOString();
-      delete match.player1Accepted;
-      delete match.player2Accepted;
-    }
-
-    return Promise.all([
-      match.final ? admin.database().ref(`/matches/${event.params.matchUid}`).set(match) : Promise.resolve(),
-      admin.database()
-        .ref(`/users/${match.player1Uid}/matches`)
-        .child(event.params.matchUid)
-        .set(match),
-      admin.database()
-        .ref(`/users/${match.player2Uid}/matches`)
-        .child(event.params.matchUid)
-        .set(match)
+  return admin.database().ref(`/users/${event.params.userUid}/matches/${event.params.matchUid}`)
+    .once('value')
+    .then((snap) => {
+      let match = snap.val();
+      let playerToUpdate = event.params.userUid === match.player1Uid ? match.player2Uid : match.player1Uid;
+      return  Promise.all([
+        admin.database()
+          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}`)
+          .child(propertyName)
+          .set(score),
+        admin.database()
+          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}/player1Accepted`)
+          .set(false),
+        admin.database()
+          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}/player2Accepted`)
+          .set(false),
       ]);
-  });
+    });
+}
+exports.syncPlayer1Score = functions.database.ref('/users/{userUid}/matches/{matchUid}/player1Score')
+  .onWrite((e) => syncScores(e, 'player1Score'));
+exports.syncPlayer2Score = functions.database.ref('/users/{userUid}/matches/{matchUid}/player2Score')
+  .onWrite((e) => syncScores(e, 'player2Score'));
+
+let syncAcceptances = (event, propertyName) => {
+  if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+    return;
+
+  let accepted = event.data.val();
+  let previousAccepted = event.data.previous.val();
+  if(accepted === previousAccepted)
+    return;
+
+  return admin.database().ref(`/users/${event.params.userUid}/matches/${event.params.matchUid}`)
+    .once('value')
+    .then((snap) => {
+      let match = snap.val();
+
+      if(match.player1Accepted && match.player2Accepted) {
+        match.final = true;
+        match.finalizedDate = new Date().toISOString();
+        delete match.player1Accepted;
+        delete match.player2Accepted;
+      }
+      let playerToUpdate = event.params.userUid === match.player1Uid ? match.player2Uid : match.player1Uid;
+
+      return Promise.all([
+        match.final ? admin.database().ref(`/matches/${event.params.matchUid}`).set(match) : Promise.resolve(),
+        admin.database()
+          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}`)
+          .child(propertyName)
+          .set(accepted)
+      ]);
+    });
+};
+exports.syncPlayer1Accepted = functions.database.ref('/users/{userUid}/matches/{matchUid}/player1Accepted')
+  .onWrite((e) => syncAcceptances(e, 'player1Accepted'));
+exports.syncPlayer2Accepted = functions.database.ref('/users/{userUid}/matches/{matchUid}/player2Accepted')
+  .onWrite((e) => syncAcceptances(e, 'player2Accepted'));
 
 exports.updateRating = functions.database.ref('/matches/{matchUid}')
   .onWrite(event => {
