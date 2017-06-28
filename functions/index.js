@@ -1,6 +1,5 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const EloRank = require('elo-rank');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -140,27 +139,32 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       admin.database().ref(`/players/${match.player1Uid}`).once('value'),
       admin.database().ref(`/players/${match.player2Uid}`).once('value')
     ]).then((playerRefs)=>{
-      let elo = new EloRank();
-      let player1Rating = playerRefs[0].val().rating || 0;
-      let player2Rating = playerRefs[1].val().rating || 0;
-      let player1Result = Number(match.player1Score) > Number(match.player2Score) ? 1 : 0;
-      let player2Result = Number(match.player2Score) > Number(match.player1Score) ? 1 : 0;
-      let player1ExpectedScore = elo.getExpected(player1Rating, player2Rating);
-      let player2ExpectedScore = elo.getExpected(player2Rating, player1Rating);
+      let updateRating = (old, exp, score, k) => (old + (k * (score - exp)));
+      let getExpected = (a, b) => (1 / (1 + 10 ** ((b - a) / 400)));
+      
+      let player1Rating = playerRefs[0].val().rating || 1000;
+      let player2Rating = playerRefs[1].val().rating || 1000;
+      
+      let player1Result = Number(match.player1Score) || 0;
+      let player2Result = Number(match.player2Score) || 0;
+      let totalResult = player1Result + player2Result;
+      
+      let player1ExpectedScore = getExpected(player1Rating, player2Rating) * totalResult;
+      let player2ExpectedScore = getExpected(player2Rating, player1Rating) * totalResult;
 
-      let player1NewRating = elo.updateRating(
+      let player1NewRating = updateRating(
+        player1Rating,
         player1ExpectedScore,
         player1Result,
-        player1Rating
+        totalResult/2
       );
-      let player2NewRating = elo.updateRating(
+      let player2NewRating = updateRating(
+        player2Rating,
         player2ExpectedScore,
         player2Result,
-        player2Rating
+        totalResult/2
       );
-      player1NewRating = player1NewRating > 0 ? player1NewRating : 0;
-      player2NewRating = player2NewRating > 0 ? player2NewRating : 0;
-
+      
       return Promise.all([
         admin.database().ref(`/players/${match.player1Uid}/rating`)
           .set(player1NewRating),
