@@ -142,8 +142,8 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       let updateRating = (old, exp, score, k) => Math.round(old+k*(score-exp));
       let getExpected = (a, b) => 1/(1+Math.pow(10,((b-a)/400)));;
 
-      let player1Rating = playerRefs[0].val().rating || 1000;
-      let player2Rating = playerRefs[1].val().rating || 1000;
+      let player1Rating = playerRefs[0].val().rating || 750;
+      let player2Rating = playerRefs[1].val().rating || 750;
       let player1Result = Number(match.player1Score) || 0;
       let player2Result = Number(match.player2Score) || 0;
       let totalResult = player1Result + player2Result;
