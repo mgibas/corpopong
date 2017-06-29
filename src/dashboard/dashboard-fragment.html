@@ -29,16 +29,18 @@
 
     .responsive > * {
       @apply --layout-flex;
-      flex-basis: 100%;
+      -ms-flex-preferred-size: 100%;
+          flex-basis: 100%;
       margin: 0.5rem;
     }
 
     @media (min-width: 1100px) {
         .responsive > * {
-            flex-basis: 45%;
+            -ms-flex-preferred-size: 45%;
+                flex-basis: 45%;
         }
     }
-    
+
     </style>
     <fragment-layout title="CorpoPong">
       <div class="responsive">
