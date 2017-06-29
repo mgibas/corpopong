@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - "node"
 install:
+  - cd functions/ && npm install && cd ..
   - npm install bower
   - npm install polymer-cli
   - npm install firebase-tools
