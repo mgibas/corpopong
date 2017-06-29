@@ -10,4 +10,4 @@ install:
 before_script:
   - node_modules/.bin/polymer build
 script:
-  - node_modules/.bin/firebase deploy
+  - node_modules/.bin/firebase deploy --non-interactive
