@@ -16,7 +16,7 @@
       right: 2rem;
     }
 
-    dashboard-open-matches {
+    dashboard-leaderboard, dashboard-open-matches {
       display: block;
       margin-bottom: 1rem;
     }
@@ -31,13 +31,15 @@
       @apply --layout-flex;
       -ms-flex-preferred-size: 100%;
           flex-basis: 100%;
-      margin: 0.5rem;
     }
 
     @media (min-width: 1100px) {
         .responsive > * {
             -ms-flex-preferred-size: 45%;
                 flex-basis: 45%;
+        }
+        dashboard-leaderboard {
+          margin-right: 1rem;
         }
     }
 

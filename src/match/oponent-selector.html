@@ -22,8 +22,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: -webkit-gradient(linear, left top, right top, from(var(--primary-background-color)), color-stop(rgba(255, 0, 0, 0)),color-stop(rgba(255, 0, 0, 0)), to(var(--primary-background-color)));
-      background: linear-gradient(to right, var(--primary-background-color), rgba(255, 0, 0, 0),rgba(255, 0, 0, 0), var(--primary-background-color));
+      background: linear-gradient(to right, var(--primary-background-color), rgba(255, 255, 255, 0),rgba(255, 255, 255, 0), var(--primary-background-color));
     }
     .item {
       position: absolute;
@@ -62,8 +61,7 @@
         <h1>Choose your oponent</h1>
       </header>
 
-      <div class="layout horizontal center-center">
-        <paper-icon-button icon="arrow-back" on-tap="prev" disabled="[[atStart]]"></paper-icon-button>
+      <div class="layout vertical center-center">
         <iron-selector id="selector" class="container" selected="{{selectedIndex}}" selected-item={{selectedItem}} on-iron-select="selectionChanged" on-iron-items-changed="matchOponent">
           <template is="dom-repeat" items="{{players}}" filter="_filter" sort="_sort" observe="rating">
             <div class="item layout vertical center-center" uid$="[[item.$key]]" rating$="[[item.rating]]">
@@ -73,7 +71,10 @@
             </div>
           </template>
         </iron-selector>
-        <paper-icon-button icon="arrow-forward" on-tap="next" disabled="[[atEnd]]"></paper-icon-button>
+        <div>
+          <paper-icon-button icon="arrow-back" on-tap="prev" disabled="[[atStart]]"></paper-icon-button>
+          <paper-icon-button icon="arrow-forward" on-tap="next" disabled="[[atEnd]]"></paper-icon-button>
+        </div>
       </div>
     </section>
   </template>

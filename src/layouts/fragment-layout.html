@@ -29,6 +29,12 @@
     app-header paper-icon-button {
       --paper-icon-button-ink-color: var(--text-primary-color);
     }
+
+    @media (max-width: 425px) {
+      .content {
+        padding: 0;
+      }
+    }
     </style>
     <app-header-layout>
       <app-header slot="header" fixed effects="waterfall">
