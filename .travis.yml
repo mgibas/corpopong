@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "node"
+install:
+  - npm install bower
+  - npm install polymer-cli
+  - npm install firebase-tools
+  - node_modules/.bin/bower install --allow-root
+before_script:
+  - node_modules/.bin/polymer build
+script:
+  - node_modules/.bin/firebase deploy
