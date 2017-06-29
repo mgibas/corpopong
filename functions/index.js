@@ -60,13 +60,11 @@ exports.rejectMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
   });
 
 let syncScores = (event, propertyName) => {
-  if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+  if (event.auth.admin || !event.data.exists())
     return;
 
   let score = event.data.val();
-  let previousScore = event.data.previous.val();
-
-  if(score === previousScore)
+  if(event.data.previous.exists() && score === event.data.previous.val())
     return;
 
   return admin.database().ref(`/users/${event.params.userUid}/matches/${event.params.matchUid}`)
@@ -94,12 +92,11 @@ exports.syncPlayer2Score = functions.database.ref('/users/{userUid}/matches/{mat
   .onWrite((e) => syncScores(e, 'player2Score'));
 
 let syncAcceptances = (event, propertyName) => {
-  if (event.auth.admin || !event.data.previous.exists() || !event.data.exists())
+  if (event.auth.admin || !event.data.exists())
     return;
 
   let accepted = event.data.val();
-  let previousAccepted = event.data.previous.val();
-  if(accepted === previousAccepted)
+  if(event.data.previous.exists() && accepted === event.data.previous.val())
     return;
 
   return admin.database().ref(`/users/${event.params.userUid}/matches/${event.params.matchUid}`)
@@ -117,6 +114,8 @@ let syncAcceptances = (event, propertyName) => {
 
       return Promise.all([
         match.final ? admin.database().ref(`/matches/${event.params.matchUid}`).set(match) : Promise.resolve(),
+        match.final ? admin.database().ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/final`).set(true) : Promise.resolve(),
+        match.final ? admin.database().ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/final`).set(true) : Promise.resolve(),
         admin.database()
           .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}`)
           .child(propertyName)
