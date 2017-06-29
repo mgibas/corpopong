@@ -29,7 +29,19 @@
       background-color: var(--paper-red-600);
       color: var(--text-primary-color);
     }
-
+    .player-1-score, .player-2-score{
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+    @media (max-width: 767px) {
+      .player-1-score {
+        @apply --layout-vertical;
+      }
+      .player-2-score {
+        @apply --layout-vertical-reverse;
+      }
+    }
     </style>
 
     <firebase-document
@@ -48,7 +60,7 @@
 
     <section class="paper-material">
       <div class="layout horizontal  center-center">
-        <div class="flex layout horizontal center-center">
+        <div class="player-1-score">
           <div class="player-info">
             <player-avatar src="[[player1.photoURL]]" big></player-avatar>
             <h1>[[player1.displayName]]</h1>
@@ -66,7 +78,7 @@
           <p hidden="[[!match.final]]">[[match.player1Score]]</p>
         </div>
         <p>-</p>
-        <div class="flex layout horizontal center-center">
+        <div class="player-2-score">
           <paper-input
             id="player2Score"
             hidden="[[match.final]]"
