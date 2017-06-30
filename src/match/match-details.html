@@ -32,7 +32,10 @@
     .player-1-score, .player-2-score{
       @apply --layout-flex;
       @apply --layout-horizontal;
-      @apply --layout-center;
+      @apply --layout-center-justified;
+    }
+    .player-1-score p, .player-2-score p{
+      text-align: center;
     }
     @media (max-width: 767px) {
       .player-1-score {
