@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "node"
+branches:
+  only:
+  - master
 install:
   - cd functions/ && npm install && cd ..
   - npm install bower
