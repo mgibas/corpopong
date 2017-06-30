@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../styles/app-styles.html">
@@ -30,12 +31,26 @@
       @apply --layout-vertical;
       @apply --layout-center-center;
     }
+
+    .logo {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      height: 280px;
+      width: 280px;
+      --iron-image-height: 210px;
+      --iron-image-width: 210px;
+      background-color: var(--primary-background-color);
+      border-radius: 50%;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+    }
     </style>
 
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
 
     <section>
+      <iron-image class="logo" src="[[importPath]]../../images/logo.svg"></iron-image>
       <h1 hero-title>CorpoPong</h1>
       <paper-button on-tap="_login">
         <iron-icon icon="account-circle"></iron-icon>Login With Google
