@@ -7,6 +7,11 @@
     "src/match/match-create-fragment.html",
     "src/player/player-fragment.html"
   ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
   "extraDependencies": [
     "manifest.json"
   ],
