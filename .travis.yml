@@ -4,6 +4,7 @@ node_js:
 branches:
   only:
   - master
+  - dev
 install:
   - cd functions/ && npm install && cd ..
   - npm install bower
@@ -13,4 +14,4 @@ install:
 before_script:
   - node_modules/.bin/polymer build
 script:
-  - node_modules/.bin/firebase deploy --non-interactive
+  - node_modules/.bin/firebase deploy -P $TRAVIS_BRANCH --non-interactive
