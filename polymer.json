@@ -7,6 +7,9 @@
     "src/match/match-create-fragment.html",
     "src/player/player-fragment.html"
   ],
+  "extraDependencies": [
+    "manifest.json"
+  ],
   "lint": {
     "rules": [
       "polymer-2"
