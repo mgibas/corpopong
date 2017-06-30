@@ -139,27 +139,25 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       admin.database().ref(`/players/${match.player2Uid}`).once('value')
     ]).then((playerRefs)=>{
       let kFactor = 32;
-      let updateRating = (old, exp, score) => Math.round(old+kFactor*(score-exp));
-      let getExpected = (a, b) => 1/(1+Math.pow(10,((b-a)/400)));;
+      let updateRating = (expected, actual, current) => Math.round(current+ kFactor*(actual-expected));
+      let getExpected = (a, b) => 1/(1+Math.pow(10,((b-a)/400)));
 
       let player1Rating = playerRefs[0].val().rating;
       let player2Rating = playerRefs[1].val().rating;
-      let player1Result = Number(match.player1Score) || 0;
-      let player2Result = Number(match.player2Score) || 0;
 
-      let player1ExpectedScore = getExpected(player1Rating, player2Rating);
-      let player2ExpectedScore = getExpected(player2Rating, player1Rating);
-      console.log("expected1: " + player1ExpectedScore);
-      console.log("expected2: " + player2ExpectedScore);
+      let player1Expected = getExpected(player1Rating, player2Rating);
+      let player2Expected = getExpected(player2Rating, player1Rating);
+      console.log("expected1: " + player1Expected);
+      console.log("expected2: " + player2Expected);
 
       let player1NewRating = updateRating(
-        player1Rating,
-        player1ExpectedScore,
+        player1Expected,
+        Number(match.player1Score) > Number(match.player2Score) ? 1 : 0;
         player1Result
       );
       let player2NewRating = updateRating(
-        player2Rating,
-        player2ExpectedScore,
+        player2Expected,
+        Number(match.player2Score) > Number(match.player1Score) ? 1 : 0;
         player2Result
       );
 
