@@ -1,7 +1,9 @@
 {
-  "name": "corpopong",
-  "short_name": "corpopong",
-  "description": "Ping-pong app",
+  "name": "CorpoPong",
+  "short_name": "CorpoPong",
+  "description": "Corporate grade ping-pong leaderboard!",
   "start_url": "/",
-  "display": "standalone"
+  "display": "standalone",
+  "background_color": "#eeeeee",
+  "theme_color": "#607d8b",
 }
