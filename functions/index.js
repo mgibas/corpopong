@@ -152,12 +152,12 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       let player1NewRating = updateRating(
         player1Expected,
         player1Score > player2Score ? 1 : player1Score < player2Score ? 0 : 0.5,
-        player1Result
+        player1Rating
       );
       let player2NewRating = updateRating(
         player2Expected,
         player2Score > player1Score ? 1 : player2Score < player1Score ? 0 : 0.5,
-        player2Result
+        player2Rating
       );
 
       return Promise.all([
