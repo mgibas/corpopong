@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "corpopong"
+    "dev": "corpopong-dev",
+    "master": "corpopong"
   }
 }
