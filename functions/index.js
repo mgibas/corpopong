@@ -144,20 +144,19 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
 
       let player1Rating = playerRefs[0].val().rating;
       let player2Rating = playerRefs[1].val().rating;
-
+      let player1Score = Number(match.player1Score);
+      let player2Score = Number(match.player2Score);
       let player1Expected = getExpected(player1Rating, player2Rating);
       let player2Expected = getExpected(player2Rating, player1Rating);
-      console.log("expected1: " + player1Expected);
-      console.log("expected2: " + player2Expected);
 
       let player1NewRating = updateRating(
         player1Expected,
-        Number(match.player1Score) > Number(match.player2Score) ? 1 : 0;
+        player1Score > player2Score ? 1 : player1Score < player2Score ? 0 : 0.5,
         player1Result
       );
       let player2NewRating = updateRating(
         player2Expected,
-        Number(match.player2Score) > Number(match.player1Score) ? 1 : 0;
+        player2Score > player1Score ? 1 : player2Score < player1Score ? 0 : 0.5,
         player2Result
       );
 
