@@ -26,6 +26,13 @@ exports.createMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
 
     match.createdDate = new Date().toISOString();
     match.final = false;
+    let agreementDetails = {
+      player1Uid: match.player1Uid,
+      player2Uid: match.player2Uid,
+      createdDate: match.createdDate,
+      approvals: {player1: '', player2: ''}
+      scores: {player1: 0, player2: 0}
+    }
 
     return Promise.all([
       admin.database()
@@ -35,7 +42,10 @@ exports.createMatch = functions.database.ref('/users/{userUid}/matches/{matchUid
       admin.database()
         .ref(`/users/${match.player2Uid}/matches`)
         .child(event.params.matchUid)
-        .set(match)
+        .set(match),
+      admin.database()
+        .ref(`/match-agreements/${event.params.matchUid}`)
+        .set(agreementDetails)
     ]);
 
   });
@@ -76,19 +86,7 @@ let syncScores = (event, propertyName) => {
         admin.database()
           .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}`)
           .child(propertyName)
-          .set(score),
-        admin.database()
-          .ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/player1Accepted`)
-          .set(false),
-        admin.database()
-          .ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/player2Accepted`)
-          .set(false),
-        admin.database()
-          .ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/player1Accepted`)
-          .set(false),
-        admin.database()
-          .ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/player2Accepted`)
-          .set(false),
+          .set(score)
       ]);
     });
 }
@@ -109,7 +107,7 @@ let syncAcceptances = (event, propertyName) => {
     .once('value')
     .then((snap) => {
       let match = snap.val();
-
+      let
       if(match.player1Accepted && match.player2Accepted) {
         match.final = true;
         match.finalizedDate = new Date().toISOString();
