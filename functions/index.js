@@ -98,7 +98,7 @@ exports.syncPlayer2Score = functions.database.ref('/users/{userUid}/matches/{mat
   .onWrite((e) => syncScores(e, 'player2Score'));
 
 let syncAcceptances = (event, propertyName) => {
-  if (event.auth.admin || !event.data.exists())
+  if (!event.data.exists())
     return;
 
   let accepted = event.data.val();
