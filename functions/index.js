@@ -78,10 +78,16 @@ let syncScores = (event, propertyName) => {
           .child(propertyName)
           .set(score),
         admin.database()
-          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}/player1Accepted`)
+          .ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/player1Accepted`)
           .set(false),
         admin.database()
-          .ref(`/users/${playerToUpdate}/matches/${event.params.matchUid}/player2Accepted`)
+          .ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/player2Accepted`)
+          .set(false),
+        admin.database()
+          .ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/player1Accepted`)
+          .set(false),
+        admin.database()
+          .ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/player2Accepted`)
           .set(false),
       ]);
     });
