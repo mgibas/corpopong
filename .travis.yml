@@ -6,12 +6,15 @@ branches:
   - master
   - dev
 install:
-  - cd functions/ && npm install && cd ..
   - npm install bower
   - npm install polymer-cli
   - npm install firebase-tools
   - node_modules/.bin/bower install --allow-root
+  - cd functions/ && npm install && cd ..
 before_script:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i '' 's/corpopong-dev/corpopong/' ./src/corpopong-app/corpopong-app.html; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i '' 's/AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk/AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U/' ./src/corpopong-app/corpopong-app.html; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i '' 's/414017409980/182128657968/' ./src/corpopong-app/corpopong-app.html; fi
   - node_modules/.bin/polymer build
 script:
   - node_modules/.bin/firebase deploy -P $TRAVIS_BRANCH --non-interactive
