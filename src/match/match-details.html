@@ -116,7 +116,7 @@
           },
           _canReject: {
             type: Boolean,
-            computed: '_computedCanReject(userUid, match, match.final)'
+            computed: '_computedCanReject(userUid, match.*)'
           }
         };
       }
@@ -140,8 +140,8 @@
           return this.match.player1Accepted;
         return this.match.player2Accepted
       }
-      _computedCanReject(userUid, match) {
-        if(!userUid || !match) return;
+      _computedCanReject(userUid) {
+        if(!userUid || !this.match) return;
         return userUid == this.match.player2Uid && !this.match.final;
       }
       _updateInputs(player1Score, player2Score){
