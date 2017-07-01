@@ -19,7 +19,7 @@
     <firebase-document id="fb" data="{{match}}"></firebase-document>
 
     <fragment-layout title="Create Match" back-button>
-      <oponent-selector user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></oponent-selector>
+      <oponent-selector id="selector" user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></oponent-selector>
     </fragment-layout>
     <paper-fab disabled="[[!match.player2Uid]]" tabindex="0"  icon="done" on-tap="_create"></paper-fab>
   </template>
@@ -31,6 +31,12 @@
           match: {
             type: Object,
             value: {}
+          },
+          active: {
+            type: Boolean,
+            value: false,
+            observer: '_activeChanged',
+            reflectToAttribute: true
           }
         };
       }
@@ -42,6 +48,10 @@
             window.history.pushState({}, null, '/');
             window.dispatchEvent(new CustomEvent('location-changed'));
           })
+      }
+      _activeChanged(active){
+        if(active)
+          this.$.selector.matchOponent();
       }
     }
 

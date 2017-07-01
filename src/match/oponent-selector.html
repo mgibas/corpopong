@@ -95,14 +95,9 @@
             type: Boolean,
             computed: '_computeAtEnd(selectedIndex)'
           },
-          players: {
-            type: Object
-          },
+          players: Object,
           selectedIndex: Number
         };
-      }
-      static get observers() {
-        return ['matchOponent(players.*)'];
       }
       prev() {
         this.selectedIndex--;
