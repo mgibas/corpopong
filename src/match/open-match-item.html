@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
 
@@ -44,7 +46,18 @@
       font-size: 2rem;
       margin: 0;
     }
-    player-avatar + .info {
+    .avatar {
+      position: relative;
+    }
+    .avatar > iron-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+      border-radius: 50%;
+    }
+    .avatar + .info {
       margin: 1rem;
     }
 
@@ -71,7 +84,10 @@
     </firebase-document>
     <div class="container">
       <div class="player-1">
-        <player-avatar src="[[player1.photoURL]]"></player-avatar>
+        <div class="avatar">
+          <player-avatar src="[[player1.photoURL]]"></player-avatar>
+          <iron-icon hidden="[[!_player1Approved]]" icon="done"></iron-icon>
+        </div>
         <div class="info">
           <span>
             [[player1.displayName]]
@@ -81,7 +97,10 @@
         <p class="score">[[details.scores.player1]]</p>
       </div>
       <div class="player-2">
-        <player-avatar src="[[player2.photoURL]]"></player-avatar>
+        <div class="avatar">
+          <player-avatar src="[[player2.photoURL]]"></player-avatar>
+          <iron-icon hidden="[[!_player2Approved]]" icon="done"></iron-icon>
+        </div>
         <div class="info">
           <span>
             [[player2.displayName]]
@@ -98,8 +117,32 @@
       static get is() { return 'open-match-item'; }
       static get properties() {
         return {
-          match: Object
+          details: Object,
+          _player1Approved: {
+            type:Boolean,
+            computed: '_computePlayer1Approved(_approvalValue, details.approvals.*)'
+          },
+          _player2Approved: {
+            type:Boolean,
+            computed: '_computePlayer2Approved(_approvalValue, details.approvals.*)'
+          },
+          _approvalValue: {
+            type: String,
+            computed: '_computeApprovalValue(details.scores.*)'
+          }
         };
+      }
+      _computeApprovalValue(){
+        if(!this.details || !this.details.scores) return;
+        return `${this.details.scores.player1}|${this.details.scores.player2}`;
+      }
+      _computePlayer1Approved(approvalValue){
+        if(!approvalValue || !this.details.approvals) return;
+        return this.details.approvals.player1 === approvalValue;
+      }
+      _computePlayer2Approved(approvalValue){
+        if(!approvalValue || !this.details.approvals) return;
+        return this.details.approvals.player2 === approvalValue;
       }
     }
 
