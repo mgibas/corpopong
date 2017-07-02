@@ -1,0 +1,18 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../layouts/fragment-layout.html">
+<link rel="import" href="../match/open-match-details.html">
+
+<dom-module id="open-match-fragment">
+  <template>
+    <fragment-layout title="Open Match" back-button>
+      <open-match-details user-uid="[[userUid]]" match-uid="[[matchUid]]"></open-match-details>
+    </fragment-layout>
+  </template>
+  <script>
+    class OpenMatchFragment extends Polymer.Element {
+      static get is() { return 'open-match-fragment'; }
+    }
+
+    window.customElements.define(OpenMatchFragment.is, OpenMatchFragment);
+  </script>
+</dom-module>

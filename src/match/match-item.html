@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="match-item">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      display: block;
+      padding: 0 16px;
+    }
+    .secondary {
+      @apply --ppaer-font-body1;
+      color: var(--secondary-text-color);
+    }
+    .right {
+      text-align: right;
+    }
+    player-avatar + *,
+    * + player-avatar {
+      margin-left:1rem;
+    }
+    p {
+      font-size: 2rem;
+      margin: 0;
+    }
+    </style>
+    <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
+    </firebase-document>
+    <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
+    </firebase-document>
+    <firebase-document data="{{match}}" path="/matches/[[match.$key]]">
+    </firebase-document>
+
+    <div class="flex layout horizontal">
+      <div class="flex layout horizontal start-justified">
+        <player-avatar src="[[player1.photoURL]]"></player-avatar>
+        <div class="layout vertical center-justified">
+          <span>[[player1.displayName]]</span>
+          <i class="secondary">[[player1.rating]]</i>
+        </div>
+      </div>
+      <p>[[match.scores.player1]] - [[match.scores.player2]]</p>
+      <div class="flex layout horizontal end-justified">
+        <div class="layout vertical center-justified right">
+          <span>[[player2.displayName]]</span>
+          <i class="secondary">[[player2.rating]]</i>
+        </div>
+        <player-avatar src="[[player2.photoURL]]"></player-avatar>
+      </div>
+    </div>
+  </template>
+  <script>
+    class MatchItem extends Polymer.Element {
+      static get is() { return 'match-item'; }
+      static get properties() {
+        return {
+          match: Object
+        };
+      }
+    }
+
+    window.customElements.define(MatchItem.is, MatchItem);
+  </script>
+</dom-module>

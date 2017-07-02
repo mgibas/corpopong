@@ -12,7 +12,7 @@
 
 <dom-module id="corpopong-app">
   <link rel="lazy-import" group="lazy" href="../dashboard/dashboard-fragment.html">
-  <link rel="lazy-import" group="lazy" href="../match/match-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../match/open-match-fragment.html">
   <link rel="lazy-import" group="lazy" href="../match/match-create-fragment.html">
   <link rel="lazy-import" group="lazy" href="../player/player-fragment.html">
   <template>
@@ -34,14 +34,14 @@
 
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/matches/create"></app-route>
-      <app-route route="[[route]]" pattern="/matches/:id" data="{{matchData}}"></app-route>
+      <app-route route="[[route]]" pattern="/open-matches/:id" data="{{matchData}}"></app-route>
       <app-route route="[[route]]" pattern="/player/:id"></app-route>
     </app-active-route>
 
-    <iron-pages id="pages" selected="[[activePattern]]" attr-for-selected="for-pattern">
+    <iron-pages id="pages" selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
       <dashboard-fragment for-pattern="/" user-uid="[[user.uid]]"></dashboard-fragment>
       <match-create-fragment for-pattern="/matches/create" user-uid="[[user.uid]]"></match-create-fragment>
-      <match-fragment for-pattern="/matches/:id" user-uid="[[user.uid]]" match-uid="[[matchData.id]]"></match-fragment>
+      <open-match-fragment for-pattern="/open-matches/:id" user-uid="[[user.uid]]" match-uid="[[matchData.id]]"></open-match-fragment>
       <player-fragment for-pattern="/player/:id"></player-fragment>
     </iron-pages>
 

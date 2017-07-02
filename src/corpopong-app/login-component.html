@@ -74,6 +74,7 @@
         };
       }
       _login(){
+        this.$.auth.signOut();
         this.$.auth.signInWithRedirect();
       }
       _computeAuthenticated(user){

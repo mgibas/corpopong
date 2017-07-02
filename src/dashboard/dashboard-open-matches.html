@@ -2,25 +2,25 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
-<link rel="import" href="../dashboard/dashboard-match-item.html">
+<link rel="import" href="../match/open-match-item.html">
 <link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="dashboard-open-matches">
   <template>
     <style include="app-styles"></style>
     <firebase-query
-      path="/users/[[userUid]]/matches"
+      path="/users/[[userUid]]/open-matches"
       data="{{matches}}">
     </firebase-query>
     <section class="paper-material" elevation="1">
       <header>
-        <h2>Open Challenges</h2>
+        <h2>Open Matches</h2>
       </header>
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}" filter="_filter" observe="final">
-          <a href="/matches/[[item.$key]]" tabindex="-1">
+          <a href="/open-matches/[[item.$key]]" tabindex="-1">
             <paper-item>
-              <dashboard-match-item match="[[item]]"></dashboard-match-item>
+              <open-match-item match="[[item]]"></open-match-item>
             </paper-item>
           </a>
         </template>

@@ -3,7 +3,7 @@
   "shell": "src/corpopong-app/corpopong-app.html",
   "fragments": [
     "src/dashboard/dashboard-fragment.html",
-    "src/match/match-fragment.html",
+    "src/match/open-match-fragment.html",
     "src/match/match-create-fragment.html",
     "src/player/player-fragment.html"
   ],

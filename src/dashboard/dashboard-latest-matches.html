@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
-<link rel="import" href="../dashboard/dashboard-match-item.html">
+<link rel="import" href="../match/match-item.html">
 <link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="dashboard-latest-matches">
@@ -20,7 +20,7 @@
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}" sort="_sort">
           <paper-item>
-            <dashboard-match-item match="[[item]]"></dashboard-match-item>
+            <match-item match="[[item]]"></match-item>
           </paper-item>
         </template>
       </paper-listbox>
