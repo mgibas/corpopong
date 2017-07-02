@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../match/match-item.html">
 <link rel="import" href="../styles/app-styles.html">
@@ -8,6 +7,13 @@
 <dom-module id="dashboard-latest-matches">
   <template>
     <style include="app-styles"></style>
+    <style>
+    @media (max-width: 767px) {
+      paper-listbox > match-item + match-item {
+        border-top: 1px solid var(--divider-color);
+      }
+    }
+    </style>
     <firebase-query
       path="/matches"
       data="{{matches}}"
@@ -19,9 +25,7 @@
       </header>
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}" sort="_sort">
-          <paper-item>
-            <match-item match="[[item]]"></match-item>
-          </paper-item>
+          <match-item match="[[item]]"></match-item>
         </template>
       </paper-listbox>
     </section>

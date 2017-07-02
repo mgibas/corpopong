@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../match/open-match-item.html">
 <link rel="import" href="../styles/app-styles.html">
@@ -8,6 +7,16 @@
 <dom-module id="dashboard-open-matches">
   <template>
     <style include="app-styles"></style>
+    <style>
+    paper-listbox > * {
+      display: block;
+    }
+    @media (max-width: 767px) {
+      paper-listbox > a + a {
+        border-top: 1px solid var(--divider-color);
+      }
+    }
+    </style>
     <firebase-query
       path="/users/[[userUid]]/open-matches"
       data="{{matches}}">
@@ -19,9 +28,7 @@
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}" filter="_filter" observe="final">
           <a href="/open-matches/[[item.$key]]" tabindex="-1">
-            <paper-item>
-              <open-match-item match="[[item]]"></open-match-item>
-            </paper-item>
+            <open-match-item match="[[item]]"></open-match-item>
           </a>
         </template>
       </paper-listbox>
