@@ -123,6 +123,7 @@
         this.set('selectedUid', details.item.attributes['uid'].value);
       }
       matchOponent() {
+        this.selectedIndex = null;
         if(!this.$.selector.items || this.$.selector.items.length === 0) return;
 
         let userRating = this.players.find((p) => p.$key === this.userUid).rating;
@@ -130,12 +131,18 @@
         for (var i = 0; i < this.$.selector.items.length; i++) {
           let itemRating = Number(this.$.selector.items[i].attributes['rating'].value);
           let diff = Math.abs(userRating - itemRating);
-          if(!bestMatch || bestMatch > diff)
+
+          if(diff === 0){
+            return this.selectedIndex = i;
+          }
+          if(!bestMatch || bestMatch > diff){
             bestMatch = diff;
-          else if(bestMatch && bestMatch < diff)
+          }
+          else if(bestMatch && bestMatch < diff){
             return this.selectedIndex = i -1;
+          }
         }
-        this.selectedIndex = 0;
+        this.selectedIndex = this.$.selector.items.length - 1;
       }
       _filter(player) {
         return player.$key !== this.userUid;
