@@ -1,9 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../match/open-match-fragment.html">
 
 <dom-module id="open-match-details">
   <template>
@@ -18,9 +20,6 @@
     .right{
       text-align: right;
     }
-    p {
-      font-size: 4rem;
-    }
     .player-info {
       margin: 1rem;
       text-align: center;
@@ -32,10 +31,19 @@
     .player-1-score, .player-2-score{
       @apply --layout-flex;
       @apply --layout-horizontal;
-      @apply --layout-center-justified;
+      @apply --layout-center-center;
     }
-    .player-1-score p, .player-2-score p{
-      text-align: center;
+    .avatar {
+      position: relative;
+    }
+    .avatar > iron-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      @apply --shadow-elevation-2dp;
     }
     @media (max-width: 767px) {
       .player-1-score {
@@ -59,16 +67,26 @@
       data="{{player2}}"
       path="/players/[[details.player2Uid]]">
     </firebase-document>
+    <open-match-calculator
+      details="[[details]]"
+      uid="[[userUid]]"
+      approval-value="{{approvalValue}}"
+      uid-approved="{{approved}}"
+      player1-approved="{{player1Approved}}"
+      player2-approved="{{player2Approved}}">
+    </open-match-calculator>
 
     <section class="paper-material">
       <div class="layout horizontal  center-center">
         <div class="player-1-score">
           <div class="player-info">
-            <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+            <div class="avatar">
+              <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+              <iron-icon hidden="[[!player1Approved]]" icon="done"></iron-icon>
+            </div>
             <h1>[[player1.displayName]]</h1>
           </div>
           <paper-input
-            id="player1Score"
             class="right"
             value="{{details.scores.player1}}"
             type="number"
@@ -77,10 +95,9 @@
             label="Score">
           </paper-input>
         </div>
-        <p>-</p>
+        <h1>-</h1>
         <div class="player-2-score">
           <paper-input
-            id="player2Score"
             value="{{details.scores.player2}}"
             type="number"
             min="0"
@@ -88,14 +105,17 @@
             label="Score">
           </paper-input>
           <div class="player-info">
-            <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+            <div class="avatar">
+              <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+              <iron-icon hidden="[[!player2Approved]]" icon="done"></iron-icon>
+            </div>
             <h1>[[player2.displayName]]</h1>
           </div>
         </div>
       </div>
       <div class="buttons">
         <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
-        <paper-button raised on-tap="_accept" disabled="[[_accepted]]" hidden="[[match.final]]">Accept Score</paper-button>
+        <paper-button raised on-tap="_approve" disabled="[[approved]]" hidden="[[match.final]]">Approve score</paper-button>
       </div>
     </section>
 
@@ -105,43 +125,25 @@
       static get is() { return 'open-match-details'; }
       static get properties() {
         return {
-          _accepted: {
-            type: Boolean,
-            computed: '_computedAccepted(userUid, _approvalValue, details.approvals.*)'
-          },
           _canReject: {
             type: Boolean,
             computed: '_computedCanReject(userUid, details.player2Uid)'
-          },
-          _approvalValue: {
-            type: String,
-            computed: '_computeApprovalValue(details.scores.*)'
           }
         };
       }
-      _accept(){
+      _approve(){
         if(this.userUid == this.details.player1Uid)
-          this.set('details.approvals.player1', this._approvalValue);
+          this.set('details.approvals.player1', this.approvalValue);
         else
-          this.set('details.approvals.player2', this._approvalValue);
+          this.set('details.approvals.player2', this.approvalValue);
         this._back();
       }
       _reject(){
         this.set('details.rejected', true);
         this._back();
       }
-      _computedAccepted(userUid, approvalValue){
-        if(!userUid || !approvalValue || !this.details.approvals) return;
-        if(userUid == this.details.player1Uid)
-          return this.details.approvals.player1 === approvalValue;
-        return this.details.approvals.player2 === approvalValue;
-      }
       _computedCanReject(userUid, player2Uid) {
         return userUid && player2Uid && (userUid == player2Uid);
-      }
-      _computeApprovalValue(){
-        if(!this.details || !this.details.scores) return;
-        return `${this.details.scores.player1}|${this.details.scores.player2}`;
       }
       _back() {
         window.history.pushState({}, null, '/');

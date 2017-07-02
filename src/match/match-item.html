@@ -9,21 +9,58 @@
     :host {
       display: block;
       padding: 0 16px;
+      @apply --layout-flex;
     }
-    .secondary {
+    .container {
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+    }
+    .player-1, .player-2 {
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+    }
+    .player-2 {
+      @apply --layout-horizontal-reverse;
+    }
+    .player-1 + .player-2::after {
+      content: '-';
+      font-size: 2rem;
+      margin: 0 1rem;
+    }
+    .info {
+      @apply --layout-flex;
+      @apply --layout-vertical;
+      @apply --layout-center-justified;
+    }
+    .player-2 .info {
+      text-align: right;
+    }
+    .rating {
       @apply --ppaer-font-body1;
       color: var(--secondary-text-color);
     }
-    .right {
-      text-align: right;
-    }
-    player-avatar + *,
-    * + player-avatar {
-      margin-left:1rem;
-    }
-    p {
+    .score {
       font-size: 2rem;
       margin: 0;
+    }
+    player-avatar + .info {
+      margin: 1rem;
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        display: block;
+      }
+      .player-2 {
+        @apply --layout-horizontal;
+      }
+      .player-2 .info {
+        text-align: initial;
+      }
+      .player-1 + .player-2::after {
+        content: none;
+      }
     }
     </style>
     <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
@@ -33,21 +70,26 @@
     <firebase-document data="{{match}}" path="/matches/[[match.$key]]">
     </firebase-document>
 
-    <div class="flex layout horizontal">
-      <div class="flex layout horizontal start-justified">
+    <div class="container">
+      <div class="player-1">
         <player-avatar src="[[player1.photoURL]]"></player-avatar>
-        <div class="layout vertical center-justified">
-          <span>[[player1.displayName]]</span>
-          <i class="secondary">[[player1.rating]]</i>
+        <div class="info">
+          <span>
+            [[player1.displayName]]
+          </span>
+          <i class="rating">[[player1.rating]]</i>
         </div>
+        <p class="score">[[match.scores.player1]]</p>
       </div>
-      <p>[[match.scores.player1]] - [[match.scores.player2]]</p>
-      <div class="flex layout horizontal end-justified">
-        <div class="layout vertical center-justified right">
-          <span>[[player2.displayName]]</span>
-          <i class="secondary">[[player2.rating]]</i>
-        </div>
+      <div class="player-2">
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
+        <div class="info">
+          <span>
+            [[player2.displayName]]
+          </span>
+          <i class="rating">[[player2.rating]]</i>
+        </div>
+        <span class="score">[[match.scores.player2]]</span>
       </div>
     </div>
   </template>

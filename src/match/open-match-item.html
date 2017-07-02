@@ -1,6 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../match/open-match-calculator.html">
 
 <dom-module id="open-match-item">
   <template>
@@ -9,21 +12,70 @@
     :host {
       display: block;
       padding: 0 16px;
+      @apply --layout-flex;
     }
-    .secondary {
+    .container {
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+    }
+    .player-1, .player-2 {
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+    }
+    .player-2 {
+      @apply --layout-horizontal-reverse;
+    }
+    .player-1 + .player-2::after {
+      content: '-';
+      font-size: 2rem;
+      margin: 0 1rem;
+    }
+    .info {
+      @apply --layout-flex;
+      @apply --layout-vertical;
+      @apply --layout-center-justified;
+    }
+    .player-2 .info {
+      text-align: right;
+    }
+    .rating {
       @apply --ppaer-font-body1;
       color: var(--secondary-text-color);
     }
-    .right {
-      text-align: right;
-    }
-    player-avatar + *,
-    * + player-avatar {
-      margin-left:1rem;
-    }
-    p {
+    .score {
       font-size: 2rem;
       margin: 0;
+    }
+    .avatar {
+      position: relative;
+    }
+    .avatar > iron-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      @apply --shadow-elevation-2dp;
+    }
+    .avatar + .info {
+      margin: 1rem;
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        display: block;
+      }
+      .player-2 {
+        @apply --layout-horizontal;
+      }
+      .player-2 .info {
+        text-align: initial;
+      }
+      .player-1 + .player-2::after {
+        content: none;
+      }
     }
     </style>
     <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
@@ -32,35 +84,47 @@
     </firebase-document>
     <firebase-document data="{{details}}" path="/open-match-details/[[match.$key]]">
     </firebase-document>
-
-    <div class="flex layout horizontal">
-      <div class="flex layout horizontal start-justified">
-        <player-avatar src="[[player1.photoURL]]"></player-avatar>
-        <div class="layout vertical center-justified">
+    <open-match-calculator
+      details="[[details]]"
+      player1-approved="{{player1Approved}}"
+      player2-approved="{{player2Approved}}">
+    </open-match-calculator>
+    <div class="container">
+      <div class="player-1">
+        <div class="avatar">
+          <player-avatar src="[[player1.photoURL]]"></player-avatar>
+          <iron-icon hidden="[[!player1Approved]]" icon="done"></iron-icon>
+        </div>
+        <div class="info">
           <span>
             [[player1.displayName]]
           </span>
-          <i class="secondary">[[player1.rating]]</i>
+          <i class="rating">[[player1.rating]]</i>
         </div>
+        <p class="score">[[details.scores.player1]]</p>
       </div>
-      <p>[[details.scores.player1]] - [[details.scores.player2]]</p>
-      <div class="flex layout horizontal end-justified">
-        <div class="layout vertical center-justified right">
+      <div class="player-2">
+        <div class="avatar">
+          <player-avatar src="[[player2.photoURL]]"></player-avatar>
+          <iron-icon hidden="[[!player2Approved]]" icon="done"></iron-icon>
+        </div>
+        <div class="info">
           <span>
             [[player2.displayName]]
           </span>
-          <i class="secondary">[[player2.rating]]</i>
+          <i class="rating">[[player2.rating]]</i>
         </div>
-        <player-avatar src="[[player2.photoURL]]"></player-avatar>
+        <span class="score">[[details.scores.player2]]</span>
       </div>
     </div>
+
   </template>
   <script>
     class OpenMatchItem extends Polymer.Element {
       static get is() { return 'open-match-item'; }
       static get properties() {
         return {
-          match: Object
+          details: Object
         };
       }
     }

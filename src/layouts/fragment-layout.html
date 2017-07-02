@@ -30,6 +30,16 @@
       --paper-icon-button-ink-color: var(--text-primary-color);
     }
 
+    app-toolbar {
+      position: relative;
+    }
+
+    app-toolbar ::slotted(*) {
+      position: absolute;
+      right: 1rem;
+      bottom: -28px;
+    }
+
     @media (max-width: 425px) {
       .content {
         padding: 0;
@@ -43,6 +53,7 @@
             <paper-icon-button hidden$=[[!backButton]] icon="arrow-back"></paper-icon-button>
           </a>
           <div main-title>[[title]]</div>
+          <slot name="fab"></slot>
         </app-toolbar>
       </app-header>
       <div class="content">

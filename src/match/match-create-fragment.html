@@ -8,20 +8,14 @@
 <dom-module id="match-create-fragment">
   <template>
     <style include="app-styles"></style>
-    <style>
-    paper-fab {
-      position:fixed;
-      right: 2rem;
-      bottom: 2rem;
-    }
-    </style>
 
     <firebase-document id="fb" data="{{match}}"></firebase-document>
 
     <fragment-layout title="Create Match" back-button>
+      <paper-fab slot="fab" disabled="[[!match.player2Uid]]" tabindex="0"  icon="done" on-tap="_create"></paper-fab>
+
       <oponent-selector id="selector" user-uid="[[userUid]]" selected-uid="{{match.player2Uid}}"></oponent-selector>
     </fragment-layout>
-    <paper-fab disabled="[[!match.player2Uid]]" tabindex="0"  icon="done" on-tap="_create"></paper-fab>
   </template>
   <script>
     class MatchCreateFragment extends Polymer.Element {

@@ -10,12 +10,6 @@
   <template>
     <style include="app-styles"></style>
     <style>
-    paper-fab{
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-    }
-
     dashboard-leaderboard, dashboard-open-matches {
       display: block;
       margin-bottom: 1rem;
@@ -45,6 +39,10 @@
 
     </style>
     <fragment-layout title="CorpoPong">
+      <a href="/matches/create" slot="fab">
+        <paper-fab icon="add"></paper-fab>
+      </a>
+
       <div class="responsive">
         <dashboard-leaderboard></dashboard-leaderboard>
         <div>
@@ -53,9 +51,7 @@
         </div>
       </div>
     </fragment-layout>
-    <a href="/matches/create">
-      <paper-fab icon="add"></paper-fab>
-    </a>
+
   </template>
   <script>
     class DashboardFragment extends Polymer.Element {
