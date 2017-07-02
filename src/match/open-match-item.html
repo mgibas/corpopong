@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
 
-<dom-module id="dashboard-match-item">
+<dom-module id="open-match-item">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -30,19 +30,25 @@
     </firebase-document>
     <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
     </firebase-document>
+    <firebase-document data="{{details}}" path="/open-match-details/[[match.$key]]">
+    </firebase-document>
 
     <div class="flex layout horizontal">
       <div class="flex layout horizontal start-justified">
         <player-avatar src="[[player1.photoURL]]"></player-avatar>
         <div class="layout vertical center-justified">
-          <span>[[player1.displayName]]</span>
+          <span>
+            [[player1.displayName]]
+          </span>
           <i class="secondary">[[player1.rating]]</i>
         </div>
       </div>
-      <p>[[match.player1Score]] - [[match.player2Score]]</p>
+      <p>[[details.scores.player1]] - [[details.scores.player2]]</p>
       <div class="flex layout horizontal end-justified">
         <div class="layout vertical center-justified right">
-          <span>[[player2.displayName]]</span>
+          <span>
+            [[player2.displayName]]
+          </span>
           <i class="secondary">[[player2.rating]]</i>
         </div>
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
@@ -50,8 +56,8 @@
     </div>
   </template>
   <script>
-    class DashboardMatchItem extends Polymer.Element {
-      static get is() { return 'dashboard-match-item'; }
+    class OpenMatchItem extends Polymer.Element {
+      static get is() { return 'open-match-item'; }
       static get properties() {
         return {
           match: Object
@@ -59,6 +65,6 @@
       }
     }
 
-    window.customElements.define(DashboardMatchItem.is, DashboardMatchItem);
+    window.customElements.define(OpenMatchItem.is, OpenMatchItem);
   </script>
 </dom-module>

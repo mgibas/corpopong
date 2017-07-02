@@ -5,7 +5,7 @@
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
 
-<dom-module id="match-details">
+<dom-module id="open-match-details">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -48,17 +48,16 @@
     </style>
 
     <firebase-document
-      id="fb"
-      data="{{match}}"
-      path="/users/[[userUid]]/matches/[[matchUid]]">
+      data="{{details}}"
+      path="/open-match-details/[[matchUid]]">
     </firebase-document>
     <firebase-document
       data="{{player1}}"
-      path="/players/[[match.player1Uid]]">
+      path="/players/[[details.player1Uid]]">
     </firebase-document>
     <firebase-document
       data="{{player2}}"
-      path="/players/[[match.player2Uid]]">
+      path="/players/[[details.player2Uid]]">
     </firebase-document>
 
     <section class="paper-material">
@@ -71,27 +70,23 @@
           <paper-input
             id="player1Score"
             class="right"
-            hidden="[[match.final]]"
+            value="{{details.scores.player1}}"
             type="number"
             min="0"
             max="99"
-            label="Score"
-            on-change="_updateScores">
+            label="Score">
           </paper-input>
-          <p hidden="[[!match.final]]">[[match.player1Score]]</p>
         </div>
         <p>-</p>
         <div class="player-2-score">
           <paper-input
             id="player2Score"
-            hidden="[[match.final]]"
+            value="{{details.scores.player2}}"
             type="number"
             min="0"
             max="99"
-            label="Score"
-            on-change="_updateScores">
+            label="Score">
           </paper-input>
-          <p hidden="[[!match.final]]">[[match.player2Score]]</p>
           <div class="player-info">
             <player-avatar src="[[player2.photoURL]]" big></player-avatar>
             <h1>[[player2.displayName]]</h1>
@@ -106,60 +101,54 @@
 
   </template>
   <script>
-    class MatchDetails extends Polymer.Element {
-      static get is() { return 'match-details'; }
+    class OpenMatchDetails extends Polymer.Element {
+      static get is() { return 'open-match-details'; }
       static get properties() {
         return {
           _accepted: {
             type: Boolean,
-            computed: '_computedAccepted(userUid, match.*)'
+            computed: '_computedAccepted(userUid, _approvalValue, details.approvals.*)'
           },
           _canReject: {
             type: Boolean,
-            computed: '_computedCanReject(userUid, match.*)'
+            computed: '_computedCanReject(userUid, details.player2Uid)'
+          },
+          _approvalValue: {
+            type: String,
+            computed: '_computeApprovalValue(details.scores.*)'
           }
         };
       }
-      static get observers() {
-        return ['_updateInputs(match.player1Score, match.player2Score)']
-      }
       _accept(){
-        if(this.userUid == this.match.player1Uid)
-          this.set('match.player1Accepted', true);
+        if(this.userUid == this.details.player1Uid)
+          this.set('details.approvals.player1', this._approvalValue);
         else
-          this.set('match.player2Accepted', true);
+          this.set('details.approvals.player2', this._approvalValue);
+        this._back();
       }
       _reject(){
-        this.$.fb.destroy();
+        this.set('details.rejected', true);
+        this._back();
+      }
+      _computedAccepted(userUid, approvalValue){
+        if(!userUid || !approvalValue || !this.details.approvals) return;
+        if(userUid == this.details.player1Uid)
+          return this.details.approvals.player1 === approvalValue;
+        return this.details.approvals.player2 === approvalValue;
+      }
+      _computedCanReject(userUid, player2Uid) {
+        return userUid && player2Uid && (userUid == player2Uid);
+      }
+      _computeApprovalValue(){
+        if(!this.details || !this.details.scores) return;
+        return `${this.details.scores.player1}|${this.details.scores.player2}`;
+      }
+      _back() {
         window.history.pushState({}, null, '/');
         window.dispatchEvent(new CustomEvent('location-changed'));
       }
-      _computedAccepted(userUid){
-        if(!userUid || !this.match) return;
-        if(userUid == this.match.player1Uid)
-          return this.match.player1Accepted;
-        return this.match.player2Accepted
-      }
-      _computedCanReject(userUid) {
-        if(!userUid || !this.match) return;
-        return userUid == this.match.player2Uid && !this.match.final;
-      }
-      _updateInputs(player1Score, player2Score){
-        this.$.player1Score.value = player1Score;
-        this.$.player2Score.value= player2Score;
-      }
-      _updateScores() {
-        this._ScoresDebouncer = Polymer.Debouncer.debounce(
-          this._ScoresDebouncer,
-          Polymer.Async.timeOut.after(200),
-          () => {
-            this.set('match.player1Score', this.$.player1Score.value);
-            this.set('match.player2Score', this.$.player2Score.value);
-          }
-        );
-      }
     }
 
-    window.customElements.define(MatchDetails.is, MatchDetails);
+    window.customElements.define(OpenMatchDetails.is, OpenMatchDetails);
   </script>
 </dom-module>

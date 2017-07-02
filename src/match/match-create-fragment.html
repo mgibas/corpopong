@@ -42,7 +42,7 @@
       }
       _create() {
         this.match.player1Uid = this.userUid;
-        this.$.fb.saveValue(`/users/${this.userUid}/matches`)
+        this.$.fb.saveValue(`/users/${this.userUid}/open-matches`)
           .then(() => {
             this.$.fb.reset();
             window.history.pushState({}, null, '/');

@@ -1,5 +1,9 @@
 {
   "rules": {
+    "open-match-details": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
     "players": {
     	".read": "auth != null",
       ".write": false
@@ -11,23 +15,7 @@
     "users": {
       "$uid": {
         ".read": "$uid === auth.uid",
-        "matches": {
-          ".write": "$uid === auth.uid",
-          "$match" : {
-            "player1Accepted" : {
-              ".write": "$uid === data.parent().child('player1Uid').val()"
-            },
-            "player2Accepted" : {
-              ".write": "$uid === data.parent().child('player2Uid').val()"
-            },
-            "player1Score" : {
-              ".write": "$uid === auth.uid"
-            },
-            "player2Score" : {
-              ".write": "$uid === auth.uid"
-            }
-          }
-        }
+        ".write": "$uid === auth.uid"
       }
     }
   }
