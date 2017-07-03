@@ -20,7 +20,14 @@
       width: 128px;
     }
     </style>
-    <iron-image big$="[[big]]" src="[[src]]" sizing="cover"></iron-image>
+    <iron-image
+      big$="[[big]]"
+      src="[[src]]"
+      sizing="cover"
+      preload
+      fade
+      placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFBAMAAAB/QTvWAAAAElBMVEWgw/9DdOA+cd9eiuh3n/GOtPncueXQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QcDDA02wlcDyQAAABFJREFUCNdjYAABAQhmFARjAAImAEVVQ+aeAAAAAElFTkSuQmCC">
+    </iron-image>
   </template>
   <script>
     class PlayerAvatar extends Polymer.Element {
