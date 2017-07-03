@@ -32,17 +32,24 @@
       @apply --layout-center-center;
     }
 
-    .logo {
+    iron-image {
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
       margin-top: 1rem;
       margin-bottom: 2rem;
       height: 280px;
       width: 280px;
-      --iron-image-height: 210px;
-      --iron-image-width: 210px;
       background-color: var(--primary-background-color);
       border-radius: 50%;
-      @apply --layout-horizontal;
-      @apply --layout-center-center;
+      --iron-image-height: 210px;
+      --iron-image-width: 210px;
+      --iron-image-placeholder: {
+        border-radius: 50%;
+
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      };
     }
     </style>
 
@@ -50,7 +57,12 @@
     </firebase-auth>
 
     <section>
-      <iron-image class="logo" src="[[importPath]]../../images/logo.svg"></iron-image>
+      <iron-image
+        src="/images/logo.svg"
+        preload
+        fade
+        placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAPYQAAD2EBqD+naQAAAEVJREFUCB1jPHnuYiT79ZvZ+muW32L49q2EOezNOwO9G1fz2Rj+GzKwsFxh2i2p9LNRUPL71/8Mzxj+/dvHkFDTGcCABABezRs8JlBzTwAAAABJRU5ErkJggg==">
+      </iron-image>
       <h1 hero-title>CorpoPong</h1>
       <paper-button on-tap="_login">
         <iron-icon icon="account-circle"></iron-icon>Login With Google
