@@ -137,12 +137,24 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
         player2Score > player1Score ? 1 : player2Score < player1Score ? 0 : 0.5,
         player2Rating
       );
+      let ratings = {
+        player1Prev: player1Rating,
+        player2Prev: player2Rating,
+        player1New: player1NewRating,
+        player2New: player2NewRating
+      }
 
       return Promise.all([
         admin.database().ref(`/players/${match.player1Uid}/rating`)
           .set(player1NewRating),
         admin.database().ref(`/players/${match.player2Uid}/rating`)
-          .set(player2NewRating)
+          .set(player2NewRating),
+        admin.database().ref(`/matches/${event.params.matchUid}/ratings`)
+          .set(ratings),
+        admin.database().ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/ratings`)
+          .set(ratings),
+        admin.database().ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
+          .set(ratings)
       ]);
     });
   });
