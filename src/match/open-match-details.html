@@ -123,8 +123,8 @@
   </template>
   <script>
     class OpenMatchDetails extends Polymer.Element {
-      static get is() { return 'open-match-details'; }
-      static get properties() {
+      static get is () { return 'open-match-details' }
+      static get properties () {
         return {
           userUid: String,
           matchUid: String,
@@ -133,28 +133,29 @@
             type: Boolean,
             computed: '_computedCanReject(userUid, details.player2Uid)'
           }
-        };
+        }
       }
-      _approve(){
-        if(this.userUid == this.details.player1Uid)
-          this.set('details.approvals.player1', this.approvalValue);
-        else
-          this.set('details.approvals.player2', this.approvalValue);
-        this._back();
+      _approve () {
+        if (this.userUid === this.details.player1Uid) {
+          this.set('details.approvals.player1', this.approvalValue)
+        } else {
+          this.set('details.approvals.player2', this.approvalValue)
+        }
+        this._back()
       }
-      _reject(){
-        this.set('details.rejected', true);
-        this._back();
+      _reject () {
+        this.set('details.rejected', true)
+        this._back()
       }
-      _computedCanReject(userUid, player2Uid) {
-        return userUid && player2Uid && (userUid == player2Uid);
+      _computedCanReject (userUid, player2Uid) {
+        return userUid && player2Uid && (userUid === player2Uid)
       }
-      _back() {
-        window.history.pushState({}, null, '/');
-        window.dispatchEvent(new CustomEvent('location-changed'));
+      _back () {
+        window.history.pushState({}, null, '/')
+        window.dispatchEvent(new CustomEvent('location-changed'))
       }
     }
 
-    window.customElements.define(OpenMatchDetails.is, OpenMatchDetails);
+    window.customElements.define(OpenMatchDetails.is, OpenMatchDetails)
   </script>
 </dom-module>

@@ -66,18 +66,18 @@
   </template>
   <script>
     class FragmentLayout extends Polymer.Element {
-      static get is() { return 'fragment-layout'; }
-      static get properties() {
+      static get is () { return 'fragment-layout' }
+      static get properties () {
         return {
           title: String,
           backButton: {
             type: Boolean,
             value: false
           }
-        };
-      }
+        }
+  }
     }
 
-    window.customElements.define(FragmentLayout.is, FragmentLayout);
+    window.customElements.define(FragmentLayout.is, FragmentLayout)
   </script>
 </dom-module>

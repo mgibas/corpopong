@@ -5,13 +5,13 @@
   </template>
   <script>
     class OpenMatchCalculator extends Polymer.Element {
-      static get is() { return 'open-match-calculator'; }
-      static get properties() {
+      static get is () { return 'open-match-calculator' }
+      static get properties () {
         return {
           details: Object,
           uid: String,
           uidApproved: {
-            type:Boolean,
+            type: Boolean,
             notify: true,
             computed: '_computeUidApproved(approvalValue, uid, details.approvals.*)'
           },
@@ -21,33 +21,34 @@
             computed: '_computeApprovalValue(details.scores.player1, details.scores.player2)'
           },
           player1Approved: {
-            type:Boolean,
+            type: Boolean,
             notify: true,
             computed: '_computePlayerApproved(approvalValue, details.approvals.player1)'
           },
           player2Approved: {
-            type:Boolean,
+            type: Boolean,
             notify: true,
             computed: '_computePlayerApproved(approvalValue, details.approvals.player2)'
-          },
-        };
+          }
+        }
       }
-      _computeApprovalValue(player1Score, player2Score){
-        if(player1Score == undefined || player2Score == undefined) return;
-        return `${player1Score}|${player2Score}`;
+      _computeApprovalValue (player1Score, player2Score) {
+        if (player1Score === undefined || player2Score === undefined) return
+        return `${player1Score}|${player2Score}`
       }
-      _computePlayerApproved(approvalValue, playerApproval){
-        if(!approvalValue || !playerApproval) return false;
-        return approvalValue === playerApproval;
+      _computePlayerApproved (approvalValue, playerApproval) {
+        if (!approvalValue || !playerApproval) return false
+        return approvalValue === playerApproval
       }
-      _computeUidApproved(approvalValue, uid) {
-        if(!approvalValue || !uid || !this.details.approvals) return;
-        if(uid === this.details.player1Uid)
-          return this._computePlayerApproved(approvalValue, this.details.approvals.player1);
-        return this._computePlayerApproved(approvalValue, this.details.approvals.player2);
+      _computeUidApproved (approvalValue, uid) {
+        if (!approvalValue || !uid || !this.details.approvals) return
+        if (uid === this.details.player1Uid) {
+          return this._computePlayerApproved(approvalValue, this.details.approvals.player1)
+        }
+        return this._computePlayerApproved(approvalValue, this.details.approvals.player2)
       }
     }
 
-    window.customElements.define(OpenMatchCalculator.is, OpenMatchCalculator);
+    window.customElements.define(OpenMatchCalculator.is, OpenMatchCalculator)
   </script>
 </dom-module>

@@ -37,12 +37,12 @@
   </template>
   <script>
     class DashboardLeaderboard extends Polymer.Element {
-      static get is() { return 'dashboard-leaderboard'; }
-      _sort(a, b){
-        return b.rating - a.rating;
-      }
+      static get is () { return 'dashboard-leaderboard' }
+      _sort (a, b) {
+        return b.rating - a.rating
+  }
     }
 
-    window.customElements.define(DashboardLeaderboard.is, DashboardLeaderboard);
+    window.customElements.define(DashboardLeaderboard.is, DashboardLeaderboard)
   </script>
 </dom-module>

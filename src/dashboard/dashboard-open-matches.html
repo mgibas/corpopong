@@ -36,17 +36,17 @@
   </template>
   <script>
     class DashboardOpenMatches extends Polymer.Element {
-      static get is() { return 'dashboard-open-matches'; }
-      static get properties() {
+      static get is () { return 'dashboard-open-matches' }
+      static get properties () {
         return {
           userUid: String
-        };
-      }
-      _filter(match) {
-        return !match.final;
-      }
+        }
+  }
+      _filter (match) {
+        return !match.final
+  }
     }
 
-    window.customElements.define(DashboardOpenMatches.is, DashboardOpenMatches);
+    window.customElements.define(DashboardOpenMatches.is, DashboardOpenMatches)
   </script>
 </dom-module>

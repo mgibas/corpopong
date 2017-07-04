@@ -4,5 +4,9 @@
         "standard",
         "promise",
         "html"
-    ]
+    ],
+    "globals": {
+      "Polymer": false,
+      "CustomEvent": false
+    }
 }
