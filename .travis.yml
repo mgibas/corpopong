@@ -8,7 +8,6 @@ branches:
 install:
   - npm install bower
   - npm install polymer-cli
-  - npm install firebase-tools
   - node_modules/.bin/bower install --allow-root
   - cd functions/ && npm install && cd ..
 before_script:
@@ -21,7 +20,7 @@ deploy:
   - provider: firebase
     project: "corpopong-dev"
     on:
-      condition: -z "$TRAVIS_TAG"
+      condition: "-z $TRAVIS_TAG"
       all_branches: true
   - provider: firebase
     project: "corpopong"
