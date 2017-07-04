@@ -2,16 +2,15 @@ language: node_js
 node_js:
   - "node"
 install:
-  - npm install bower
-  - npm install polymer-cli
-  - node_modules/.bin/bower install --allow-root
+  - npm install
   - cd functions/ && npm install && cd ..
 before_script:
+  - npm run lint
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/corpopong-dev/corpopong/' ./src/corpopong-app/corpopong-app.html; fi
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk/AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U/' ./src/corpopong-app/corpopong-app.html; fi
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/414017409980/182128657968/' ./src/corpopong-app/corpopong-app.html; fi
 script:
-  - node_modules/.bin/polymer build
+  - npm run build
 deploy:
   - provider: firebase
     project: "corpopong-dev"
