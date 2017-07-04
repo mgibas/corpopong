@@ -1,6 +1,6 @@
 {
   "name": "corpopong",
-  "description": "Ping-pong app",
+  "description": "Corporate grade ping-pong leaderboard!",
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
