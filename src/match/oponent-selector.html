@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
@@ -80,10 +81,11 @@
   </template>
   <script>
     class OponentSelector extends Polymer.Element {
-      static get is() { return 'oponent-selector'; }
-      static get properties() {
+      static get is () { return 'oponent-selector' }
+      static get properties () {
         return {
-          selectedUid:{
+          userUid: String,
+          selectedUid: {
             type: String,
             notify: true
           },
@@ -96,68 +98,70 @@
             computed: '_computeAtEnd(selectedIndex)'
           },
           players: Object,
-          selectedIndex: Number
-        };
-      }
-      prev() {
-        this.selectedIndex--;
-      }
-      next() {
-        this.selectedIndex++;
-      }
-      selectionChanged(e,details){
-        this.$.selector.items.forEach((i)=>{
-          i.classList.remove('prev');
-          i.classList.remove('next');
-        });
-        let index = this.$.selector.items.indexOf(details.item);
-
-        if(index>0){
-          let prev = this.$.selector.items[index-1];
-          prev.classList.add('prev');
+          selectedIndex: Number,
+          selectedItem: Object
         }
-        if(index + 1 < this.$.selector.items.length){
-          let next = this.$.selector.items[index+1];
-          next.classList.add('next');
-        }
-        this.set('selectedUid', details.item.attributes['uid'].value);
       }
-      matchOponent() {
-        this.selectedIndex = null;
-        if(!this.$.selector.items || this.$.selector.items.length === 0) return;
+      prev () {
+        this.selectedIndex--
+      }
+      next () {
+        this.selectedIndex++
+      }
+      selectionChanged (e, details) {
+        this.$.selector.items.forEach((i) => {
+          i.classList.remove('prev')
+          i.classList.remove('next')
+        })
+        let index = this.$.selector.items.indexOf(details.item)
 
-        let userRating = this.players.find((p) => p.$key === this.userUid).rating;
-        let bestMatch;
+        if (index > 0) {
+          let prev = this.$.selector.items[index - 1]
+          prev.classList.add('prev')
+        }
+        if (index + 1 < this.$.selector.items.length) {
+          let next = this.$.selector.items[index + 1]
+          next.classList.add('next')
+        }
+        this.set('selectedUid', details.item.attributes['uid'].value)
+      }
+      matchOponent () {
+        this.selectedIndex = null
+        if (!this.$.selector.items || this.$.selector.items.length === 0) return
+
+        let userRating = this.players.find((p) => p.$key === this.userUid).rating
+        let bestMatch
         for (var i = 0; i < this.$.selector.items.length; i++) {
-          let itemRating = Number(this.$.selector.items[i].attributes['rating'].value);
-          let diff = Math.abs(userRating - itemRating);
+          let itemRating = Number(this.$.selector.items[i].attributes['rating'].value)
+          let diff = Math.abs(userRating - itemRating)
 
-          if(diff === 0){
-            return this.selectedIndex = i;
+          if (diff === 0) {
+            this.selectedIndex = i
+            return
           }
-          if(!bestMatch || bestMatch > diff){
-            bestMatch = diff;
-          }
-          else if(bestMatch && bestMatch < diff){
-            return this.selectedIndex = i -1;
+          if (!bestMatch || bestMatch > diff) {
+            bestMatch = diff
+          } else if (bestMatch && bestMatch < diff) {
+            this.selectedIndex = i - 1
+            return
           }
         }
-        this.selectedIndex = this.$.selector.items.length - 1;
+        this.selectedIndex = this.$.selector.items.length - 1
       }
-      _filter(player) {
-        return player.$key !== this.userUid;
+      _filter (player) {
+        return player.$key !== this.userUid
       }
-      _sort(a, b) {
-        return b.rating - a.rating;
+      _sort (a, b) {
+        return b.rating - a.rating
       }
-      _computeAtStart(index){
-        return index === 0;
+      _computeAtStart (index) {
+        return index === 0
       }
-      _computeAtEnd(index){
-        return index === this.$.selector.items.length -1;
+      _computeAtEnd (index) {
+        return index === this.$.selector.items.length - 1
       }
     }
 
-    window.customElements.define(OponentSelector.is, OponentSelector);
+    window.customElements.define(OponentSelector.is, OponentSelector)
   </script>
 </dom-module>

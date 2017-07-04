@@ -19,9 +19,10 @@
   </template>
   <script>
     class MatchCreateFragment extends Polymer.Element {
-      static get is() { return 'match-create-fragment'; }
-      static get properties() {
+      static get is () { return 'match-create-fragment' }
+      static get properties () {
         return {
+          userUid: String,
           match: {
             type: Object,
             value: {}
@@ -32,23 +33,22 @@
             observer: '_activeChanged',
             reflectToAttribute: true
           }
-        };
+        }
       }
-      _create() {
-        this.match.player1Uid = this.userUid;
+      _create () {
+        this.match.player1Uid = this.userUid
         this.$.fb.saveValue(`/users/${this.userUid}/open-matches`)
           .then(() => {
-            this.$.fb.reset();
-            window.history.pushState({}, null, '/');
-            window.dispatchEvent(new CustomEvent('location-changed'));
+            this.$.fb.reset()
+            window.history.pushState({}, null, '/')
+            window.dispatchEvent(new CustomEvent('location-changed'))
           })
       }
-      _activeChanged(active){
-        if(active)
-          this.$.selector.matchOponent();
+      _activeChanged (active) {
+        if (active) { this.$.selector.matchOponent() }
       }
     }
 
-    window.customElements.define(MatchCreateFragment.is, MatchCreateFragment);
+    window.customElements.define(MatchCreateFragment.is, MatchCreateFragment)
   </script>
 </dom-module>

@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
 
 <dom-module id="match-item">
   <template>
@@ -93,14 +94,14 @@
   </template>
   <script>
     class MatchItem extends Polymer.Element {
-      static get is() { return 'match-item'; }
-      static get properties() {
+      static get is () { return 'match-item' }
+      static get properties () {
         return {
           match: Object
-        };
-      }
+        }
+  }
     }
 
-    window.customElements.define(MatchItem.is, MatchItem);
+    window.customElements.define(MatchItem.is, MatchItem)
   </script>
 </dom-module>

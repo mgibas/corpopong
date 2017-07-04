@@ -49,15 +49,14 @@
 
   <script>
     class CorpopongApp extends Polymer.LazyImportsMixin(Polymer.Element) {
-      static get is() { return 'corpopong-app'; }
-      ready(){
-        super.ready();
-        Polymer.RenderStatus.afterNextRender(this, ()=>{
-          this.importLazyGroup('lazy')
-            .then(() => this.$.pages.notifyResize());
-        });
+      static get is () { return 'corpopong-app' }
+      ready () {
+        super.ready()
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.importLazyGroup('lazy').then(() => this.$.pages.notifyResize())
+        })
       }
     }
-    window.customElements.define(CorpopongApp.is, CorpopongApp);
+    window.customElements.define(CorpopongApp.is, CorpopongApp)
   </script>
 </dom-module>

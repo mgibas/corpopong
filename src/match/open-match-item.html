@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/open-match-calculator.html">
 
 <dom-module id="open-match-item">
@@ -124,14 +125,15 @@
   </template>
   <script>
     class OpenMatchItem extends Polymer.Element {
-      static get is() { return 'open-match-item'; }
-      static get properties() {
+      static get is () { return 'open-match-item' }
+      static get properties () {
         return {
+          match: Object,
           details: Object
-        };
+        }
       }
     }
 
-    window.customElements.define(OpenMatchItem.is, OpenMatchItem);
+    window.customElements.define(OpenMatchItem.is, OpenMatchItem)
   </script>
 </dom-module>

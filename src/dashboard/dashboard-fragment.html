@@ -55,9 +55,14 @@
   </template>
   <script>
     class DashboardFragment extends Polymer.Element {
-      static get is() { return 'dashboard-fragment'; }
+      static get is () { return 'dashboard-fragment' }
+      static get properties () {
+        return {
+          userUid: String
+        }
+  }
     }
 
-    window.customElements.define(DashboardFragment.is, DashboardFragment);
+    window.customElements.define(DashboardFragment.is, DashboardFragment)
   </script>
 </dom-module>

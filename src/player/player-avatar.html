@@ -34,15 +34,15 @@
   </template>
   <script>
     class PlayerAvatar extends Polymer.Element {
-      static get is() { return 'player-avatar'; }
-      static get properties() {
+      static get is () { return 'player-avatar' }
+      static get properties () {
         return {
           src: String,
           big: Boolean
-        };
-      }
+        }
+  }
     }
 
-    window.customElements.define(PlayerAvatar.is, PlayerAvatar);
+    window.customElements.define(PlayerAvatar.is, PlayerAvatar)
   </script>
 </dom-module>

@@ -1,0 +1,12 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "standard",
+        "promise",
+        "html"
+    ],
+    "globals": {
+      "Polymer": false,
+      "CustomEvent": false
+    }
+}

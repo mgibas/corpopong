@@ -8,13 +8,24 @@ branches:
 install:
   - npm install bower
   - npm install polymer-cli
-  - npm install firebase-tools
   - node_modules/.bin/bower install --allow-root
   - cd functions/ && npm install && cd ..
 before_script:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i 's/corpopong-dev/corpopong/g' ./src/corpopong-app/corpopong-app.html; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i 's/AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk/AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U/g' ./src/corpopong-app/corpopong-app.html; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then sed -i 's/414017409980/182128657968/g' ./src/corpopong-app/corpopong-app.html; fi
-  - node_modules/.bin/polymer build
+  - if [ "$TRAVIS_TAG" ]; then sed -i '' 's/corpopong-dev/corpopong/' ./src/corpopong-app/corpopong-app.html; fi
+  - if [ "$TRAVIS_TAG" ]; then sed -i '' 's/AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk/AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U/' ./src/corpopong-app/corpopong-app.html; fi
+  - if [ "$TRAVIS_TAG" ]; then sed -i '' 's/414017409980/182128657968/' ./src/corpopong-app/corpopong-app.html; fi
 script:
-  - node_modules/.bin/firebase deploy -P $TRAVIS_BRANCH --non-interactive
+  - node_modules/.bin/polymer build
+deploy:
+  - provider: firebase
+    project: "corpopong-dev"
+    skip_cleanup: true
+    on:
+      condition: "-z $TRAVIS_TAG"
+      all_branches: true
+  - provider: firebase
+    project: "corpopong"
+    skip_cleanup: true
+    on:
+      tags: true
+      all_branches: true

@@ -33,17 +33,17 @@
   </template>
   <script>
     class DashboardLatestMatches extends Polymer.Element {
-      static get is() { return 'dashboard-latest-matches'; }
-      static get properties() {
+      static get is () { return 'dashboard-latest-matches' }
+      static get properties () {
         return {
           matches: Array
-        };
-      }
-      _sort(a, b) {
-        return a.finalizedDate > b.finalizedDate ? -1 : 1;
-      }
+        }
+  }
+      _sort (a, b) {
+        return a.finalizedDate > b.finalizedDate ? -1 : 1
+  }
     }
 
-    window.customElements.define(DashboardLatestMatches.is, DashboardLatestMatches);
+    window.customElements.define(DashboardLatestMatches.is, DashboardLatestMatches)
   </script>
 </dom-module>

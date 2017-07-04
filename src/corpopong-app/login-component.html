@@ -71,8 +71,8 @@
   </template>
   <script>
     class LoginComponent extends Polymer.Element {
-      static get is() { return 'login-component'; }
-      static get properties() {
+      static get is () { return 'login-component' }
+      static get properties () {
         return {
           authenticated: {
             type: Boolean,
@@ -83,17 +83,17 @@
             type: Object,
             notify: true
           }
-        };
+        }
       }
-      _login(){
-        this.$.auth.signOut();
-        this.$.auth.signInWithRedirect();
+      _login () {
+        this.$.auth.signOut()
+        this.$.auth.signInWithRedirect()
       }
-      _computeAuthenticated(user){
-        return !!user;
+      _computeAuthenticated (user) {
+        return !!user
       }
     }
 
-    window.customElements.define(LoginComponent.is, LoginComponent);
+    window.customElements.define(LoginComponent.is, LoginComponent)
   </script>
 </dom-module>
