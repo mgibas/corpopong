@@ -19,11 +19,13 @@ script:
 deploy:
   - provider: firebase
     project: "corpopong-dev"
+    skip_cleanup: true
     on:
       condition: "-z $TRAVIS_TAG"
       all_branches: true
   - provider: firebase
     project: "corpopong"
+    skip_cleanup: true
     on:
       tags: true
       all_branches: true
