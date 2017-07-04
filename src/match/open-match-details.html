@@ -3,9 +3,10 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
-<link rel="import" href="../match/open-match-fragment.html">
+<link rel="import" href="../match/open-match-calculator.html">
 
 <dom-module id="open-match-details">
   <template>
@@ -115,7 +116,7 @@
       </div>
       <div class="buttons">
         <paper-button class="danger" on-tap="_reject" hidden="[[!_canReject]]">Reject</paper-button>
-        <paper-button raised on-tap="_approve" disabled="[[approved]]" hidden="[[match.final]]">Approve score</paper-button>
+        <paper-button raised on-tap="_approve" disabled="[[approved]]">Approve score</paper-button>
       </div>
     </section>
 
@@ -125,6 +126,9 @@
       static get is() { return 'open-match-details'; }
       static get properties() {
         return {
+          userUid: String,
+          matchUid: String,
+          approvalValue: String,
           _canReject: {
             type: Boolean,
             computed: '_computedCanReject(userUid, details.player2Uid)'

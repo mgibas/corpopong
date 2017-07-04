@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
@@ -83,6 +84,7 @@
       static get is() { return 'oponent-selector'; }
       static get properties() {
         return {
+          userUid: String,
           selectedUid:{
             type: String,
             notify: true
@@ -96,7 +98,8 @@
             computed: '_computeAtEnd(selectedIndex)'
           },
           players: Object,
-          selectedIndex: Number
+          selectedIndex: Number,
+          selectedItem: Object
         };
       }
       prev() {

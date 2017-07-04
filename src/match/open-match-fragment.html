@@ -11,6 +11,12 @@
   <script>
     class OpenMatchFragment extends Polymer.Element {
       static get is() { return 'open-match-fragment'; }
+      static get properties() {
+        return {
+          userUid: String,
+          matchUid: String
+        };
+      }
     }
 
     window.customElements.define(OpenMatchFragment.is, OpenMatchFragment);
