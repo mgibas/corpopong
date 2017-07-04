@@ -1,33 +1,33 @@
-# \<corpopong\>
+# CorpoPong
 
-Ping-pong app
+Corporate grade ping-pong leaderboard!
 
-## Install the Polymer-CLI
+## Installation
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+```
+$ npm install
+```
 
 ## Viewing Your Application
 
 ```
-$ polymer serve
+$ npm start
+```
+
+## Running Linter
+
+```
+$ npm run lint
 ```
 
 ## Building Your Application
 
 ```
-$ polymer build
+$ npm run build
 ```
 
-This will create builds of your application in the `build/` directory, optimized to be served in production. You can then serve the built versions by giving `polymer serve` a folder to serve from:
+## Deployment
 
-```
-$ polymer serve build/default
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Everything is taken care of by Travis.
+All changes are applied to https://corpopong-dev.firebaseapp.com.
+Tagged releases are deployed to https://corpopong.firebaseapp.com.
