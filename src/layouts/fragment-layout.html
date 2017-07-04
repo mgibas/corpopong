@@ -17,6 +17,9 @@
     [hidden] {
       display: none !important;
     }
+    app-header-layout[has-scrolling-region] {
+      height:100vh;
+    }
     app-header * {
       color: var(--text-primary-color);
     }
@@ -46,7 +49,7 @@
       }
     }
     </style>
-    <app-header-layout>
+    <app-header-layout has-scrolling-region>
       <app-header slot="header" fixed effects="waterfall">
         <app-toolbar>
           <a href="/" tabindex="-1">
