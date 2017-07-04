@@ -18,7 +18,8 @@
     <firebase-query
       path="/matches"
       data="{{matches}}"
-      limit-to-last="5">
+      limit-to-last="5"
+      order-by-child="finalizedDate">
     </firebase-query>
     <section class="paper-material" elevation="1">
       <header>
@@ -38,10 +39,10 @@
         return {
           matches: Array
         }
-  }
+      }
       _sort (a, b) {
         return a.finalizedDate > b.finalizedDate ? -1 : 1
-  }
+      }
     }
 
     window.customElements.define(DashboardLatestMatches.is, DashboardLatestMatches)
