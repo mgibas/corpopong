@@ -110,34 +110,34 @@
   </template>
   <script>
     class MatchItem extends Polymer.Element {
-      static get is() { return 'match-item'; }
-      static get properties() {
+      static get is () { return 'match-item' }
+      static get properties () {
         return {
-          match: Object, 
+          match: Object,
           player1Color: {
             type: String,
             computed: '_applyColor(match.ratings.player1New, match.ratings.player1Prev)'
           },
-         
           player2Color: {
             type: String,
             computed: '_applyColor(match.ratings.player2New, match.ratings.player2Prev)'
-          },
-        };
+          }
+        }
       }
 
-      _calcPlayerDiff(playerNew, playerPrev) {
-        return playerNew - playerPrev;
+      _calcPlayerDiff (playerNew, playerPrev) {
+        return playerNew - playerPrev
       }
 
-      _applyColor(playerNew, playerPrev) {
-        if(this._calcPlayerDiff(playerNew, playerPrev) > 0)
-          return "positive";
-        else
-          return "negative";
+      _applyColor (playerNew, playerPrev) {
+        if (this._calcPlayerDiff(playerNew, playerPrev) > 0) {
+          return 'positive'
+        } else {
+          return 'negative'
+        }
       }
     }
 
-    window.customElements.define(MatchItem.is, MatchItem);
+    window.customElements.define(MatchItem.is, MatchItem)
   </script>
 </dom-module>
