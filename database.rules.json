@@ -1,20 +1,32 @@
 {
   "rules": {
     "open-match-details": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      "$uid": {
+        ".read": "auth.uid === data.child('player1Uid').val() || auth.uid === data.child('player2Uid').val()",
+        "scores": {
+          ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
+        },
+        "approvals": {
+          "player1": {
+            ".write": "auth.uid === data.parent().parent().child('player1Uid').val()"
+          },
+          "player2": {
+            ".write": "auth.uid === data.parent().parent().child('player2Uid').val()"
+          }
+        }
+      }
     },
     "players": {
-    	".read": "auth != null",
+      ".read": "auth != null",
       ".write": false
     },
     "matches": {
-    	".read": "auth != null",
+      ".read": "auth != null",
       ".write": false
     },
     "users": {
       "$uid": {
-        ".read": "$uid === auth.uid",
+        ".read": "auth != null",
         ".write": "$uid === auth.uid"
       }
     }
