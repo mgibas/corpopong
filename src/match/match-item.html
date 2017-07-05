@@ -41,6 +41,15 @@
       @apply --ppaer-font-body1;
       color: var(--secondary-text-color);
     }
+
+    .positive {
+      color: var(--paper-green-700);
+    }
+
+    .negative {
+      color: var(--paper-red-600);
+    }
+
     .score {
       font-size: 2rem;
       margin: 0;
@@ -76,7 +85,11 @@
           <span>
             [[player1.displayName]]
           </span>
-          <i class="rating">[[player1.rating]]</i>
+          <div class="row">
+            <del class="rating">[[match.ratings.player1Prev]]</del>
+            <i class$="[[player1Color]]">({{_calcPlayerDiff(match.ratings.player1New, match.ratings.player1Prev)}})</i>
+            <b class="rating">[[match.ratings.player1New]]</b>
+          </div>
         </div>
         <p class="score">[[match.scores.player1]]</p>
       </div>
@@ -86,7 +99,11 @@
           <span>
             [[player2.displayName]]
           </span>
-          <i class="rating">[[player2.rating]]</i>
+          <div class="row">
+            <del class="rating">[[match.ratings.player2Prev]]</del>
+           <i class$="[[player2Color]]">({{_calcPlayerDiff(match.ratings.player2New, match.ratings.player2Prev)}})</i>
+            <b class="rating">[[match.ratings.player2New]]</b>
+          </div>
         </div>
         <span class="score">[[match.scores.player2]]</span>
       </div>
@@ -97,9 +114,29 @@
       static get is () { return 'match-item' }
       static get properties () {
         return {
-          match: Object
+          match: Object,
+          player1Color: {
+            type: String,
+            computed: '_applyColor(match.ratings.player1New, match.ratings.player1Prev)'
+          },
+          player2Color: {
+            type: String,
+            computed: '_applyColor(match.ratings.player2New, match.ratings.player2Prev)'
+          }
         }
-  }
+      }
+
+      _calcPlayerDiff (playerNew, playerPrev) {
+        return playerNew - playerPrev
+      }
+
+      _applyColor (playerNew, playerPrev) {
+        if (this._calcPlayerDiff(playerNew, playerPrev) > 0) {
+          return 'positive'
+        } else {
+          return 'negative'
+        }
+      }
     }
 
     window.customElements.define(MatchItem.is, MatchItem)
