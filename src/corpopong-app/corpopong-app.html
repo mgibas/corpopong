@@ -35,14 +35,14 @@
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/matches/create"></app-route>
       <app-route route="[[route]]" pattern="/open-matches/:id" data="{{matchData}}"></app-route>
-      <app-route route="[[route]]" pattern="/player/:id"></app-route>
+      <app-route route="[[route]]" pattern="/players/:id" data="{{playersData}}"></app-route>
     </app-active-route>
 
     <iron-pages id="pages" selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
       <dashboard-fragment for-pattern="/" user-uid="[[user.uid]]"></dashboard-fragment>
       <match-create-fragment for-pattern="/matches/create" user-uid="[[user.uid]]"></match-create-fragment>
       <open-match-fragment for-pattern="/open-matches/:id" user-uid="[[user.uid]]" match-uid="[[matchData.id]]"></open-match-fragment>
-      <player-fragment for-pattern="/player/:id"></player-fragment>
+      <player-fragment for-pattern="/players/:id" player-uid="[[playersData.id]]"></player-fragment>
     </iron-pages>
 
   </template>

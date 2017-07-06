@@ -1,0 +1,128 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../imports/d3-import.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../match/match-item.html">
+
+<dom-module id="player-details">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+      player-avatar {
+        margin: 2rem;
+      }
+      .ranking {
+        @apply --paper-font-display3;
+        text-align: right;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .totals {
+        @apply --paper-font-display2;
+      }
+      .total {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .totals iron-label + iron-label{
+        margin-left: 1rem;
+      }
+      .totals iron-label{
+        position: relative;
+      }
+      .totals iron-label label {
+        position: absolute;
+        bottom:-10px;
+        right:0;
+        @apply --paper-font-caption;
+        color: var(--secondary-text-color);
+      }
+      @media (max-width: 767px) {
+        match-item + match-item {
+          border-top: 1px solid var(--divider-color);
+        }
+      }
+    </style>
+
+    <firebase-document path="/players/[[playerUid]]" data="{{player}}"></firebase-document>
+    <firebase-query path="/users/[[playerUid]]/matches" data="{{matches}}"></firebase-query>
+
+    <section class="paper-material layout vertical" elevation="1">
+      <div class="layout horizontal center-center">
+        <player-avatar big src="[[player.photoURL]]"></player-avatar>
+        <div class="layout vertical">
+          <p class="ranking">[[player.rating]]</p>
+          <div class="layout horizontal center-center totals">
+            <iron-label>
+              <p class="total">[[lostMatches.length]]</p>
+              <label>Losses</label>
+            </iron-label>
+            <iron-label>
+              <p class="total">[[wonMatches.length]]</p>
+              <label>Wins</label>
+            </iron-label>
+            <iron-label>
+              <p class="total">[[matches.length]]</p>
+              <label>Total</label>
+            </iron-label>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="paper-material" elevation="1">
+      <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
+        <match-item match="[[item]]"></match-item>
+      </template>
+    </section>
+
+  </template>
+  <script>
+    class PlayerDetails extends Polymer.Element {
+      static get is () { return 'player-details' }
+      static get properties () {
+        return {
+          playerUid: String,
+          player: {
+            type: Object,
+            notify: true
+          },
+          matches: {
+            type: Array
+          },
+          lostMatches: {
+            type: Array,
+            computed: '_computeLostMatches(playerUid, matches, matches.*)'
+          },
+          wonMatches: {
+            type: Array,
+            computed: '_computeWonMatches(playerUid, matches, matches.*)'
+          }
+        }
+      }
+      _computeLostMatches (playerUid, matches) {
+        if (!matches) return
+        return matches.filter((m) => {
+          return m.player1Uid === playerUid
+            ? m.scores.player1 < m.scores.player2
+            : m.scores.player1 > m.scores.player2
+        })
+      }
+      _computeWonMatches (playerUid, matches) {
+        if (!matches) return
+        return matches.filter((m) => {
+          return m.player1Uid === playerUid
+            ? m.scores.player1 > m.scores.player2
+            : m.scores.player1 < m.scores.player2
+        })
+      }
+      _sort (a, b) {
+        return a.finalizedDate > b.finalizedDate ? -1 : 1
+      }
+    }
+
+    window.customElements.define(PlayerDetails.is, PlayerDetails)
+  </script>
+</dom-module>

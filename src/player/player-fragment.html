@@ -1,16 +1,24 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../layouts/fragment-layout.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-details.html">
 
 <dom-module id="player-fragment">
   <template>
-    <fragment-layout title="Player" back-button>
-      Player
+    <style include="app-styles"></style>
+    <fragment-layout title="[[player.displayName]]" back-button>
+      <player-details player-uid="[[playerUid]]" player="{{player}}"></player-details>
     </fragment-layout>
   </template>
   <script>
     class PlayerFragment extends Polymer.Element {
       static get is () { return 'player-fragment' }
+      static get properties () {
+        return {
+          playerUid: String,
+          player: Object
+        }
+      }
     }
 
     window.customElements.define(PlayerFragment.is, PlayerFragment)
