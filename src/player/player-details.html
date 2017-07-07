@@ -73,6 +73,9 @@
       </div>
     </section>
     <section class="paper-material" elevation="1">
+      <div hidden="[[!noData]]">
+        <i>No matches yet :(</i>
+      </div>
       <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
         <match-item match="[[item]]"></match-item>
       </template>
@@ -99,6 +102,10 @@
           wonMatches: {
             type: Array,
             computed: '_computeWonMatches(playerUid, matches, matches.*)'
+          },
+          noData: {
+            type: Boolean,
+            computed: '_computeNoData(matches.length)'
           }
         }
       }
@@ -120,6 +127,9 @@
       }
       _sort (a, b) {
         return a.finalizedDate > b.finalizedDate ? -1 : 1
+      }
+      _computeNoData (length) {
+        return !length
       }
     }
 
