@@ -6,6 +6,9 @@
         "scores": {
           ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
         },
+        "rejected": {
+          ".write": "auth.uid === data.parent().child('player2Uid').val()"
+        },
         "approvals": {
           "player1": {
             ".write": "auth.uid === data.parent().parent().child('player1Uid').val()"
