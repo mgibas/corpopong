@@ -1,0 +1,116 @@
+[debug] [2017-07-07T00:21:15.026Z] ----------------------------------------------------------------------
+[debug] [2017-07-07T00:21:15.029Z] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy -P dev --debug
+[debug] [2017-07-07T00:21:15.030Z] CLI Version:  3.9.1
+[debug] [2017-07-07T00:21:15.030Z] Platform:     darwin
+[debug] [2017-07-07T00:21:15.030Z] Node Version: v7.1.0
+[debug] [2017-07-07T00:21:15.031Z] Time:         Thu Jul 06 2017 20:21:15 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:15.031Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-07-07T00:21:15.042Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-07-07T00:21:15.042Z] > authorizing via signed-in user
+[debug] [2017-07-07T00:21:15.044Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/corpopong-dev  
+ Thu Jul 06 2017 20:21:15 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:15.636Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-07T00:21:15.638Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/corpopong-dev/tokens  
+ Thu Jul 06 2017 20:21:15 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:16.141Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'corpopong-dev'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] ✔  database: rules ready to deploy.
+[debug] [2017-07-07T00:21:16.768Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "firebase-admin": "~4.2.1",
+    "firebase-functions": "^0.5.7"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] [2017-07-07T00:21:16.769Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/corpopong-dev?view=CONSUMER_VIEW  
+ Thu Jul 06 2017 20:21:16 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:16.770Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/corpopong-dev?view=CONSUMER_VIEW  
+ Thu Jul 06 2017 20:21:16 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:17.477Z] <<< HTTP RESPONSE 200
+[info] ✔  runtimeconfig: all necessary APIs are enabled
+[debug] [2017-07-07T00:21:17.502Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2017-07-07T00:21:17.504Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/corpopong-dev  
+ Thu Jul 06 2017 20:21:17 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:17.505Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/corpopong-dev/apiKeys  
+ Thu Jul 06 2017 20:21:17 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:17.697Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-07T00:21:17.981Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2017-07-07T00:21:18.640Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/corpopong-dev/configs  
+ Thu Jul 06 2017 20:21:18 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:19.006Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (2.04 KB) for uploading
+[debug] [2017-07-07T00:21:19.771Z] >>> HTTP REQUEST GET https://www.googleapis.com/storage/v1/b/staging.corpopong-dev.appspot.com  
+ Thu Jul 06 2017 20:21:19 GMT-0400 (EDT)
+[debug] [2017-07-07T00:21:19.892Z] <<< HTTP RESPONSE 503
+[debug] [2017-07-07T00:21:19.892Z] <<< HTTP RESPONSE BODY undefined
+[debug] [2017-07-07T00:21:19.894Z] TypeError: Cannot read property 'error' of undefined
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2017-07-07T00:27:53.532Z] ----------------------------------------------------------------------
+[debug] [2017-07-07T00:27:53.537Z] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy -P dev
+[debug] [2017-07-07T00:27:53.538Z] CLI Version:  3.9.1
+[debug] [2017-07-07T00:27:53.538Z] Platform:     darwin
+[debug] [2017-07-07T00:27:53.538Z] Node Version: v7.1.0
+[debug] [2017-07-07T00:27:53.539Z] Time:         Thu Jul 06 2017 20:27:53 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:53.539Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-07-07T00:27:53.549Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-07-07T00:27:53.550Z] > authorizing via signed-in user
+[debug] [2017-07-07T00:27:53.552Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/corpopong-dev  
+ Thu Jul 06 2017 20:27:53 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:54.279Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-07T00:27:54.281Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/corpopong-dev/tokens  
+ Thu Jul 06 2017 20:27:54 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:54.762Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'corpopong-dev'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] ✔  database: rules ready to deploy.
+[debug] [2017-07-07T00:27:55.423Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "firebase-admin": "~4.2.1",
+    "firebase-functions": "^0.5.7"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] [2017-07-07T00:27:55.425Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/corpopong-dev?view=CONSUMER_VIEW  
+ Thu Jul 06 2017 20:27:55 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:55.425Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/corpopong-dev?view=CONSUMER_VIEW  
+ Thu Jul 06 2017 20:27:55 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:55.992Z] <<< HTTP RESPONSE 200
+[info] ✔  runtimeconfig: all necessary APIs are enabled
+[debug] [2017-07-07T00:27:56.042Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2017-07-07T00:27:56.044Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/corpopong-dev  
+ Thu Jul 06 2017 20:27:56 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:56.045Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/corpopong-dev/apiKeys  
+ Thu Jul 06 2017 20:27:56 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:56.346Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-07T00:27:56.498Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2017-07-07T00:27:57.190Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/corpopong-dev/configs  
+ Thu Jul 06 2017 20:27:57 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:57.429Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (2.04 KB) for uploading
+[debug] [2017-07-07T00:27:58.219Z] >>> HTTP REQUEST GET https://www.googleapis.com/storage/v1/b/staging.corpopong-dev.appspot.com  
+ Thu Jul 06 2017 20:27:58 GMT-0400 (EDT)
+[debug] [2017-07-07T00:27:58.417Z] <<< HTTP RESPONSE 503
+[debug] [2017-07-07T00:27:58.417Z] <<< HTTP RESPONSE BODY undefined
+[debug] [2017-07-07T00:27:58.419Z] TypeError: Cannot read property 'error' of undefined
+[error] 
+[error] Error: An unexpected error has occurred.
