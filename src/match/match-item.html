@@ -126,9 +126,6 @@
         if (newRating === prevRating) return 'trending-flat'
         return newRating > prevRating ? 'trending-up' : 'trending-down'
       }
-      _absDiff (playerNew, playerPrev) {
-        return Math.abs(playerNew - playerPrev)
-      }
     }
 
     window.customElements.define(MatchItem.is, MatchItem)
