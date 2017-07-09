@@ -19,10 +19,7 @@
     "iron-image": "polymerelements/iron-image#^2.1.1",
     "paper-input": "polymerelements/paper-input#^2.0.1",
     "d3": "^4.9.1",
-    "iron-label": "polymerelements/iron-label#^2.0.0"
-  },
-  "devDependencies": {
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "iron-label": "polymerelements/iron-label#^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   }
 }
