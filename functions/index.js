@@ -1,5 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const aws = require('aws-sdk')
 
 admin.initializeApp(functions.config().firebase)
 
@@ -41,7 +42,8 @@ exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{mat
         .set(match),
       admin.database()
         .ref(`/open-match-details/${event.params.matchUid}`)
-        .set(details)
+        .set(details),
+      sendChallengeEmail(match.player1Uid, match.player2Uid)
     ])
   })
 exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/rejected')
@@ -152,3 +154,39 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       ])
     })
   })
+
+let sendChallengeEmail = (player1Uid, player2Uid) => {
+  return Promise.all([
+    admin.database().ref(`/players/${player1Uid}`).once('value'),
+    admin.database().ref(`/players/${player2Uid}`).once('value')
+  ]).then((playerRefs) => {
+    return new Promise((resolve, reject) => {
+      let player1 = playerRefs[0].val()
+      let player2 = playerRefs[1].val()
+      let ses = new aws.SES()
+      let params = {
+        Source: 'ping@corpopong.com',
+        Destination: {
+          ToAddresses: [player2.email]
+        },
+        Message: {
+          Subject: {
+            Data: `🏓 New Challenge!`
+          },
+          Body: {
+            Text: {
+              Data: `${player1.displayName} (${player1.rating}) challenged you - go kick his/her paddle! \n\n https://corpopong.com`
+            }
+          }
+        }
+      }
+      ses.sendEmail(params, (err, data) => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        }
+        resolve(data)
+      })
+    })
+  })
+}
