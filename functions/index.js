@@ -3,9 +3,6 @@ const admin = require('firebase-admin')
 const aws = require('aws-sdk')
 
 admin.initializeApp(functions.config().firebase)
-// process.env['AWS_ACCESS_KEY_ID'] = functions.config().aws.key_id
-// process.env['AWS_SECRET_ACCESS_KEY'] = functions.config().aws.key_secret
-aws.config.update({region: 'us-east-1'})
 
 exports.createPlayer = functions.auth.user().onCreate(event => {
   return admin.database()
@@ -159,6 +156,10 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
   })
 
 let sendChallengeEmail = (player1Uid, player2Uid) => {
+  process.env['AWS_ACCESS_KEY_ID'] = functions.config().aws.key_id
+  process.env['AWS_SECRET_ACCESS_KEY'] = functions.config().aws.key_secret
+  aws.config.update({region: 'us-east-2'})
+
   return Promise.all([
     admin.database().ref(`/players/${player1Uid}`).once('value'),
     admin.database().ref(`/players/${player2Uid}`).once('value')
