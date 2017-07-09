@@ -5,6 +5,7 @@ const aws = require('aws-sdk')
 admin.initializeApp(functions.config().firebase)
 process.env['AWS_ACCESS_KEY_ID'] = functions.config().aws.key_id
 process.env['AWS_SECRET_ACCESS_KEY'] = functions.config().aws.key_secret
+aws.config.update({region: 'us-east-1'})
 
 exports.createPlayer = functions.auth.user().onCreate(event => {
   return admin.database()
