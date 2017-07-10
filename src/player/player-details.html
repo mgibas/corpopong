@@ -57,12 +57,12 @@
           <p class="ranking">[[player.rating]]</p>
           <div class="layout horizontal center-center totals">
             <iron-label>
-              <p class="total">[[lostMatches.length]]</p>
-              <label>Losses</label>
-            </iron-label>
-            <iron-label>
               <p class="total">[[wonMatches.length]]</p>
               <label>Wins</label>
+            </iron-label>
+            <iron-label>
+              <p class="total">[[lostMatches.length]]</p>
+              <label>Losses</label>
             </iron-label>
             <iron-label>
               <p class="total">[[matches.length]]</p>
@@ -116,16 +116,16 @@
         if (!matches) return
         return matches.filter((m) => {
           return m.player1Uid === playerUid
-            ? m.scores.player1 < m.scores.player2
-            : m.scores.player1 > m.scores.player2
+            ? Number(m.scores.player1) < Number(m.scores.player2)
+            : Number(m.scores.player1) > Number(m.scores.player2)
         })
       }
       _computeWonMatches (playerUid, matches) {
         if (!matches) return
         return matches.filter((m) => {
           return m.player1Uid === playerUid
-            ? m.scores.player1 > m.scores.player2
-            : m.scores.player1 < m.scores.player2
+            ? Number(m.scores.player1) > Number(m.scores.player2)
+            : Number(m.scores.player1) < Number(m.scores.player2)
         })
       }
       _sort (a, b) {
