@@ -109,30 +109,25 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       admin.database().ref(`/players/${match.player1Uid}`).once('value'),
       admin.database().ref(`/players/${match.player2Uid}`).once('value')
     ]).then((playerRefs) => {
-      let kFactor = 32
-      let updateRating = (expected, actual, current) => Math.round(current + kFactor * (actual - expected))
-      let getExpected = (a, b) => 1 / (1 + Math.pow(10, ((b - a) / 400)))
+      let p1Rating = playerRefs[0].val().rating
+      let p2Rating = playerRefs[1].val().rating
+      let p1Score = Number(match.scores.player1)
+      let p2Score = Number(match.scores.player2)
+      let p1Prob = calcProbability(p1Rating, p2Rating)
+      let p2Prob = calcProbability(p2Rating, p1Rating)
+      let kFactor = 50 * calcKFactorMultiplier(p1Score, p2Score, p1Rating, p2Rating)
 
-      let player1Rating = playerRefs[0].val().rating
-      let player2Rating = playerRefs[1].val().rating
-      let player1Score = Number(match.scores.player1)
-      let player2Score = Number(match.scores.player2)
-      let player1Expected = getExpected(player1Rating, player2Rating)
-      let player2Expected = getExpected(player2Rating, player1Rating)
-
-      let player1NewRating = updateRating(
-        player1Expected,
-        player1Score > player2Score ? 1 : player1Score < player2Score ? 0 : 0.5,
-        player1Rating
+      let player1NewRating = calcNewRating(
+        p1Prob, p1Score > p2Score ? 1 : p1Score < p2Score ? 0 : 0.5,
+        p1Rating, kFactor
       )
-      let player2NewRating = updateRating(
-        player2Expected,
-        player2Score > player1Score ? 1 : player2Score < player1Score ? 0 : 0.5,
-        player2Rating
+      let player2NewRating = calcNewRating(
+        p2Prob, p2Score > p1Score ? 1 : p2Score < p1Score ? 0 : 0.5,
+        p2Rating, kFactor
       )
       let ratings = {
-        player1Prev: player1Rating,
-        player2Prev: player2Rating,
+        player1Prev: p1Rating,
+        player2Prev: p2Rating,
         player1New: player1NewRating,
         player2New: player2NewRating
       }
@@ -151,3 +146,15 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       ])
     })
   })
+
+let calcKFactorMultiplier = (score1, score2, rating1, rating2) => {
+  let diff = Math.log(Math.abs(score1 - score2) + 1)
+  let ratingDiff = score1 > score2 ? rating1 - rating2 : rating2 - rating1
+  return diff * (2.2 / (ratingDiff * 0.001 + 2.2))
+}
+let calcNewRating = (expected, actual, current, kFactor) => {
+  Math.round(current + kFactor * (actual - expected))
+}
+let calcProbability = (rating1, rating2) => {
+  return 1 / (1 + Math.pow(10, ((rating2 - rating1) / 400)))
+}
