@@ -76,8 +76,6 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
       .then((snap) => {
         let details = snap.val()
         let closingApproval = `${details.scores.player1}|${details.scores.player2}`
-        console.log(details)
-        console.log(closingApproval)
         if (closingApproval !== details.approvals.player1 ||
           closingApproval !== details.approvals.player2) {
           return
@@ -153,7 +151,7 @@ let calcKFactorMultiplier = (score1, score2, rating1, rating2) => {
   return diff * (2.2 / (ratingDiff * 0.001 + 2.2))
 }
 let calcNewRating = (expected, actual, current, kFactor) => {
-  Math.round(current + kFactor * (actual - expected))
+  return Math.round(current + kFactor * (actual - expected))
 }
 let calcProbability = (rating1, rating2) => {
   return 1 / (1 + Math.pow(10, ((rating2 - rating1) / 400)))
