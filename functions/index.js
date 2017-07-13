@@ -43,7 +43,7 @@ exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{mat
         .set(details)
     ])
   })
-exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/rejected')
+exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/removed')
   .onWrite(event => {
     if (event.auth.admin || !event.data.exists() || !event.data.val()) { return }
 
