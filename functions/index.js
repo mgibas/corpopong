@@ -148,7 +148,7 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
 let calcKFactorMultiplier = (score1, score2, rating1, rating2) => {
   let diff = Math.log(Math.abs(score1 - score2) + 1)
   let ratingDiff = score1 > score2 ? rating1 - rating2 : rating2 - rating1
-  return diff * (2.2 / (ratingDiff * 0.01 + 2.2))
+  return diff * (2.2 / (ratingDiff * 0.001 + 2.2))
 }
 let calcNewRating = (expected, actual, current, kFactor) => {
   return Math.round(current + kFactor * (actual - expected))
