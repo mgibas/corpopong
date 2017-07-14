@@ -15,11 +15,11 @@
 
     <link rel="import" href="/src/corpopong-app/corpopong-app.html" async onload="removeLoader()">
     <script>
-      function imageLoaded () {
+      function imageLoaded () { // eslint-disable-line no-unused-vars
         document.querySelector('.loader .img .placeholder').style.opacity = 0
         document.querySelector('.loader .img img').style.opacity = 1
       }
-      function removeLoader () {
+      function removeLoader () { // eslint-disable-line no-unused-vars
         setTimeout(() => {
           document.querySelector('.loader').remove()
         }, 500)
