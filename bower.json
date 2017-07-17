@@ -20,6 +20,6 @@
     "paper-input": "polymerelements/paper-input#^2.0.1",
     "d3": "^4.9.1",
     "iron-label": "polymerelements/iron-label#^2.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#1.0.1"
   }
 }
