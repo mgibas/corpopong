@@ -27,8 +27,14 @@
         margin-top: 0;
         margin-bottom: 0;
       }
+      .total-wins {
+        color: var(--paper-green-900);
+      }
+      .total-losses {
+        color: var(--paper-red-900);
+      }
       .totals iron-label + iron-label{
-        margin-left: 1rem;
+        margin-left: 1.5rem;
       }
       .totals iron-label{
         position: relative;
@@ -57,11 +63,11 @@
           <p class="ranking">[[player.rating]]</p>
           <div class="layout horizontal center-center totals">
             <iron-label>
-              <p class="total">[[wonMatches.length]]</p>
+              <p class="total total-wins">[[wonMatches.length]]</p>
               <label>Wins</label>
             </iron-label>
             <iron-label>
-              <p class="total">[[lostMatches.length]]</p>
+              <p class="total total-losses">[[lostMatches.length]]</p>
               <label>Losses</label>
             </iron-label>
             <iron-label>
@@ -80,7 +86,7 @@
         <i>No matches yet :(</i>
       </div>
       <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-        <match-item match="[[item]]"></match-item>
+        <match-item match="[[item]]" player-uid="[[playerUid]]"></match-item>
       </template>
     </section>
 

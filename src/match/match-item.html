@@ -47,6 +47,13 @@
       font-size: 2rem;
       margin: 0;
     }
+    :host([player-uid][player-uid-won]) .score {
+      color: var(--paper-green-900);
+    }
+    :host([player-uid]:not([player-uid-won])) .score {
+      color: var(--paper-red-900);
+    }
+
     player-avatar + .info {
       margin: 1rem;
     }
@@ -112,6 +119,15 @@
       static get properties () {
         return {
           match: Object,
+          playerUid: {
+            type: String,
+            reflectToAttribute: true
+          },
+          playerUidWon: {
+            type: Boolean,
+            reflectToAttribute: true,
+            computed: '_computeplayerUidWon(playerUid, match)'
+          },
           player1Icon: {
             type: Boolean,
             computed: '_computePlayerIcon(match.ratings.player1New, match.ratings.player1Prev)'
@@ -121,6 +137,11 @@
             computed: '_computePlayerIcon(match.ratings.player2New, match.ratings.player2Prev)'
           }
         }
+      }
+      _computeplayerUidWon (playerUid, match) {
+        if (!playerUid || !match) return
+        let player1Won = Number(match.scores.player1) > Number(match.scores.player2)
+        return playerUid === match.player1Uid && player1Won
       }
       _computePlayerIcon (newRating, prevRating) {
         if (newRating === prevRating) return 'trending-flat'
