@@ -21,9 +21,9 @@
     ]
   },
   "builds": [{
-    "addServiceWorker": true,
-    "bundle": true,
-    "css": {"minify": true},
-    "html": {"minify": true}
+    "preset": "es5-bundled",
+    "js": {
+      "minify": false
+    }
   }]
 }

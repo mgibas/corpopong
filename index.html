@@ -15,6 +15,9 @@
 
     <link rel="import" href="/src/corpopong-app/corpopong-app.html" async onload="removeLoader()">
     <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+      }
       function imageLoaded () { // eslint-disable-line no-unused-vars
         document.querySelector('.loader .img .placeholder').style.opacity = 0
         document.querySelector('.loader .img img').style.opacity = 1

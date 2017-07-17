@@ -25,7 +25,8 @@
     },
     "matches": {
       ".read": "auth != null",
-      ".write": false
+      ".write": false,
+      ".indexOn": "finalizedDate"
     },
     "users": {
       "$uid": {
