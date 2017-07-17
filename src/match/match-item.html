@@ -140,8 +140,8 @@
       }
       _computeplayerUidWon (playerUid, match) {
         if (!playerUid || !match) return
-        let player1Won = Number(match.scores.player1) > Number(match.scores.player2)
-        return playerUid === match.player1Uid && player1Won
+        let p1Won = Number(match.scores.player1) > Number(match.scores.player2)
+        return playerUid === match.player1Uid ? p1Won : !p1Won
       }
       _computePlayerIcon (newRating, prevRating) {
         if (newRating === prevRating) return 'trending-flat'
