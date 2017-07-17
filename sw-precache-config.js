@@ -5,5 +5,5 @@ module.exports = {
     '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
   ],
   navigateFallback: '/index.html',
-  navigateFallbackWhitelist: [ /^\/[^\_]+\/?/ ]
-};
+  navigateFallbackWhitelist: [ /^\/[^_]+\/?/ ]
+}
