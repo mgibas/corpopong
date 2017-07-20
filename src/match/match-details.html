@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="match-details">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    .info {
+      margin: 1rem;
+      text-align: center;
+    }
+    paper-button.danger {
+      background-color: var(--paper-red-600);
+      color: var(--text-primary-color);
+    }
+    .player-1, .player-2{
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+    }
+    .score, .vs {
+      font-size: 4rem;
+    }
+    @media (max-width: 767px) {
+      .player-1 {
+        @apply --layout-vertical;
+      }
+      .player-2 {
+        @apply --layout-vertical-reverse;
+      }
+    }
+    </style>
+
+    <firebase-document
+      data="{{details}}"
+      path="/matches/[[matchUid]]">
+    </firebase-document>
+    <firebase-document
+      data="{{player1}}"
+      path="/players/[[details.player1Uid]]">
+    </firebase-document>
+    <firebase-document
+      data="{{player2}}"
+      path="/players/[[details.player2Uid]]">
+    </firebase-document>
+
+    <section class="paper-material" elevation="1">
+      <div class="layout horizontal  center-center">
+        <div class="player-1">
+          <div class="info">
+            <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+            <h1>[[player1.displayName]]</h1>
+          </div>
+          <span class="score">[[details.scores.player1]]</span>
+        </div>
+        <span class="vs">-</span>
+        <div class="player-2">
+          <span class="score">[[details.scores.player2]]</span>
+          <div class="info">
+            <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+            <h1>[[player2.displayName]]</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </template>
+  <script>
+    class MatchDetails extends Polymer.Element {
+      static get is () { return 'match-details' }
+      static get properties () {
+        return {
+          matchUid: String
+        }
+      }
+    }
+
+    window.customElements.define(MatchDetails.is, MatchDetails)
+  </script>
+</dom-module>

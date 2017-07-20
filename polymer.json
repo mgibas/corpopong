@@ -5,6 +5,7 @@
     "src/dashboard/dashboard-fragment.html",
     "src/match/open-match-fragment.html",
     "src/match/match-create-fragment.html",
+    "src/match/match-fragment.html",
     "src/player/player-fragment.html"
   ],
   "sources": [

@@ -86,7 +86,9 @@
         <i>No matches yet :(</i>
       </div>
       <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-        <match-item match="[[item]]" player-uid="[[playerUid]]"></match-item>
+        <a href="/matches/[[item.$key]]" tabindex="-1">
+          <match-item match="[[item]]" player-uid="[[playerUid]]"></match-item>
+        </a>
       </template>
     </section>
 
