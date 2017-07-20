@@ -10,7 +10,8 @@
     <style include="app-styles"></style>
     <firebase-query
       path="/players"
-      data="{{players}}">
+      data="{{players}}"
+      order-by-child="rating">
     </firebase-query>
 
     <section class="paper-material" elevation="1">
@@ -18,7 +19,7 @@
         <h1>Leaderboard</h1>
       </header>
       <paper-listbox>
-        <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
+        <template is="dom-repeat" items="{{players}}" sort="_sort">
           <a href="/players/[[item.$key]]">
             <paper-icon-item>
               <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
@@ -42,7 +43,7 @@
       static get is () { return 'dashboard-leaderboard' }
       _sort (a, b) {
         return b.rating - a.rating
-  }
+      }
     }
 
     window.customElements.define(DashboardLeaderboard.is, DashboardLeaderboard)

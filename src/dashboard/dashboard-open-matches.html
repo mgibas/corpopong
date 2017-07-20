@@ -26,7 +26,7 @@
         <h2>Open Matches</h2>
       </header>
       <paper-listbox>
-        <template is="dom-repeat" items="{{matches}}" filter="_filter" observe="final">
+        <template is="dom-repeat" items="{{matches}}">
           <a href="/open-matches/[[item.$key]]" tabindex="-1">
             <open-match-item match="[[item]]"></open-match-item>
           </a>
@@ -41,10 +41,7 @@
         return {
           userUid: String
         }
-  }
-      _filter (match) {
-        return !match.final
-  }
+      }
     }
 
     window.customElements.define(DashboardOpenMatches.is, DashboardOpenMatches)
