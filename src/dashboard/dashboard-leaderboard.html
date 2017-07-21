@@ -1,13 +1,22 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../dashboard/trophy-icon.html">
 
 <dom-module id="dashboard-leaderboard">
   <template>
     <style include="app-styles"></style>
+    <style>
+    .position {
+      width:48px;
+      text-align: center;
+      font-size: 2rem;
+    }
+    </style>
     <firebase-query
       path="/players"
       data="{{players}}"
@@ -23,13 +32,21 @@
           <a href="/players/[[item.$key]]">
             <paper-icon-item>
               <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
-              <div class="flex layout horizontal">
-                <p class="flex">
-                  [[item.displayName]]
-                </p>
-                <p>
-                  [[item.rating]]
-                </p>
+              <div class="layout horizontal flex center-center">
+                <paper-item-body two-lines class="flex">
+                  <span>
+                    [[item.displayName]]
+                  </span>
+                  <span secondary>
+                    [[item.rating]]
+                  </span>
+                </paper-item-body>
+                <span class="position">
+                  <div hidden="[[!_medalPosition(index)]]">
+                    <trophy-icon position="[[_getPosition(index)]]"></trophy-icon>
+                  </div>
+                  <span hidden="[[_medalPosition(index)]]">[[_getPosition(index)]]</span>
+                </span>
               </div>
             </paper-icon-item>
           </a>
@@ -43,6 +60,12 @@
       static get is () { return 'dashboard-leaderboard' }
       _sort (a, b) {
         return b.rating - a.rating
+      }
+      _getPosition (index) {
+        return index + 1
+      }
+      _medalPosition (index) {
+        return index <= 2
       }
     }
 
