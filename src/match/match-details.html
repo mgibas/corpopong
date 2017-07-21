@@ -18,7 +18,11 @@
     .player-1, .player-2{
       @apply --layout-flex;
       @apply --layout-horizontal;
-      @apply --layout-center-center;
+      @apply --layout-end-justified;
+      @apply --layout-center;
+    }
+    .player-2 {
+      @apply --layout-start-justified;
     }
     .score, .vs {
       font-size: 4rem;
