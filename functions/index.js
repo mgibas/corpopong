@@ -10,7 +10,8 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       email: event.data.email,
       displayName: event.data.displayName,
       photoURL: event.data.photoURL,
-      rating: 750
+      rating: 750,
+      unrated: true
     })
 })
 exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{matchUid}')
@@ -98,6 +99,7 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
         ])
       })
   })
+
 exports.updateRating = functions.database.ref('/matches/{matchUid}')
   .onWrite(event => {
     if (event.data.previous.exists() || !event.data.exists()) { return }
@@ -140,7 +142,11 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
         admin.database().ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
         admin.database().ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
-          .set(ratings)
+          .set(ratings),
+        admin.database().ref(`/players/${match.player1Uid}/unrated`)
+          .set(false),
+        admin.database().ref(`/players/${match.player2Uid}/unrated`)
+          .set(false)
       ])
     })
   })
