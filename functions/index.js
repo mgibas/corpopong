@@ -11,7 +11,7 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       displayName: event.data.displayName,
       photoURL: event.data.photoURL,
       rating: 750,
-      unrated: true
+      rated: false
     })
 })
 exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{matchUid}')
@@ -143,10 +143,10 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
           .set(ratings),
         admin.database().ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        admin.database().ref(`/players/${match.player1Uid}/unrated`)
-          .set(false),
-        admin.database().ref(`/players/${match.player2Uid}/unrated`)
-          .set(false)
+        admin.database().ref(`/players/${match.player1Uid}/rated`)
+          .set(true),
+        admin.database().ref(`/players/${match.player2Uid}/rated`)
+          .set(true)
       ])
     })
   })
