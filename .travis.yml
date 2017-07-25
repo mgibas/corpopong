@@ -9,7 +9,6 @@ before_script:
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/corpopong-dev/corpopong/' ./src/corpopong-app/corpopong-app.html; fi
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk/AIzaSyDbtyN2aekFdVcqWP-YbclBHkwknQOrk6U/' ./src/corpopong-app/corpopong-app.html; fi
   - if [ "$TRAVIS_TAG" ]; then sed -i 's/414017409980/182128657968/' ./src/corpopong-app/corpopong-app.html; fi
-  - cat ./src/corpopong-app/corpopong-app.html
 script:
   - npm run build
 deploy:
