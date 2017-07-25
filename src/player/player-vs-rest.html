@@ -1,0 +1,111 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
+
+<dom-module id="player-vs-rest">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+      .stats {
+        text-align: right;
+      }
+    </style>
+    <firebase-query
+      path="/players"
+      data="{{_players}}"
+      order-by-child="rated"
+      equal-to="true">
+    </firebase-query>
+    <firebase-query
+      path="/users/[[playerUid]]/matches"
+      data="{{_matches}}">
+    </firebase-query>
+
+    <template is="dom-repeat" items="[[summaries]]" sort="_sort">
+      <paper-icon-item>
+        <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
+        <div class="layout horizontal flex center-center">
+          <paper-item-body two-lines class="flex">
+            <span>
+              [[item.displayName]]
+            </span>
+            <span secondary>
+              [[item.rating]]
+            </span>
+          </paper-item-body>
+          <paper-item-body two-lines class="stats flex">
+            <span>[[_getLastMatchScore(item)]]</span>
+            <span secondary>
+              [[_getWinsCount(item)]] / [[_getLossesCount(item)]] / [[item.matches.length]]
+            </span>
+          </paper-item-body>
+        </div>
+      </paper-icon-item>
+    </template>
+
+  </template>
+  <script>
+    class PlayerVsRest extends Polymer.Element {
+      static get is () { return 'player-vs-rest' }
+      static get properties () {
+        return {
+          playerUid: String,
+          _players: Array,
+          _matches: Array,
+          summaries: {
+            type: Array,
+            computed: '_computeSummaries(playerUid, _players, _matches, _players.*, _matches.*)'
+          }
+        }
+      }
+      _sort (a, b) {
+        return a.displayName.localeCompare(b.displayName)
+      }
+      _computeSummaries (playerUid, _players, _matches) {
+        if (!playerUid || !_players || !_matches) return
+
+        let result = _players
+          .filter((p) => p.$key !== playerUid)
+          .map((p) => {
+            return Object.assign({
+              uid: p.$key,
+              matches: _matches.filter((m) => m.player1Uid === p.$key || m.player2Uid === p.$key)
+            }, p)
+          })
+        return result
+      }
+      _getLastMatchScore (summary) {
+        if (!summary || !summary.matches || summary.matches.length === 0) {
+          return '-'
+        }
+
+        let lastMatch = summary.matches
+          .sort((a, b) => b.finalizedDate > a.finalizedDate ? -1 : 1)[0]
+
+        if (this.playerUid === lastMatch.uid) {
+          return `${lastMatch.scores.player2} - ${lastMatch.scores.player1}`
+        }
+        return `${lastMatch.scores.player1} - ${lastMatch.scores.player2}`
+      }
+      _getWinsCount (summary) {
+        return summary.matches.filter((m) => {
+          return m.player1Uid === this.playerUid
+            ? Number(m.scores.player1) > Number(m.scores.player2)
+            : Number(m.scores.player1) < Number(m.scores.player2)
+        }).length
+      }
+      _getLossesCount (summary) {
+        return summary.matches.filter((m) => {
+          return m.player1Uid === this.playerUid
+            ? Number(m.scores.player1) < Number(m.scores.player2)
+            : Number(m.scores.player1) > Number(m.scores.player2)
+        }).length
+      }
+    }
+
+    window.customElements.define(PlayerVsRest.is, PlayerVsRest)
+  </script>
+</dom-module>

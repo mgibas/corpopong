@@ -5,6 +5,7 @@
 <link rel="import" href="../imports/d3-import.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../player/player-vs-rest.html">
 <link rel="import" href="../match/match-item.html">
 
 <dom-module id="player-details">
@@ -90,6 +91,12 @@
           <match-item match="[[item]]" player-uid="[[playerUid]]"></match-item>
         </a>
       </template>
+    </section>
+    <section class="paper-material" elevation="1">
+      <header>
+        <h2>Player vs Rest</h2>
+      </header>
+      <player-vs-rest player-uid="[[playerUid]]"></player-vs-rest>
     </section>
 
   </template>
