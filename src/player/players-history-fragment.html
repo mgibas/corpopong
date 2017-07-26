@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../layouts/fragment-layout.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/players-history.html">
+
+<dom-module id="players-history-fragment">
+  <template>
+    <style include="app-styles"></style>
+    <fragment-layout title="Players History" back-button>
+      <players-history player1-uid="[[player1Uid]]" player2-uid="[[player2Uid]]"></players-history>
+    </fragment-layout>
+
+  </template>
+  <script>
+    class PlayersHistoryFragment extends Polymer.Element {
+      static get is () { return 'players-history-fragment' }
+      static get properties () {
+        return {
+          player1Uid: String,
+          player2Uid: String
+        }
+      }
+    }
+
+    window.customElements.define(PlayersHistoryFragment.is, PlayersHistoryFragment)
+  </script>
+</dom-module>

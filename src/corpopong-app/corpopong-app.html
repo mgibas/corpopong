@@ -16,6 +16,7 @@
   <link rel="lazy-import" group="lazy" href="../match/match-create-fragment.html">
   <link rel="lazy-import" group="lazy" href="../match/match-fragment.html">
   <link rel="lazy-import" group="lazy" href="../player/player-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../player/players-history-fragment.html">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -37,6 +38,7 @@
       <app-route route="[[route]]" pattern="/matches/create"></app-route>
       <app-route route="[[route]]" pattern="/open-matches/:id" data="{{openMatchData}}"></app-route>
       <app-route route="[[route]]" pattern="/matches/:id" data="{{matchData}}"></app-route>
+      <app-route route="[[route]]" pattern="/players/:id1/history/:id2" data="{{historyData}}"></app-route>
       <app-route route="[[route]]" pattern="/players/:id" data="{{playersData}}"></app-route>
     </app-active-route>
 
@@ -46,6 +48,7 @@
       <open-match-fragment for-pattern="/open-matches/:id" user-uid="[[user.uid]]" match-uid="[[openMatchData.id]]"></open-match-fragment>
       <match-fragment for-pattern="/matches/:id" match-uid="[[matchData.id]]"></match-fragment>
       <player-fragment for-pattern="/players/:id" player-uid="[[playersData.id]]"></player-fragment>
+      <players-history-fragment for-pattern="/players/:id1/history/:id2" player1-uid="[[historyData.id1]]" player2-uid="[[historyData.id2]]"></players-history-fragment>
     </iron-pages>
 
   </template>

@@ -18,6 +18,9 @@
       @apply --layout-flex;
       @apply --layout-horizontal;
     }
+    :host([flipped]) .container {
+      @apply --layout-horizontal-reverse;
+    }
     .player-1, .player-2 {
       @apply --layout-flex;
       @apply --layout-horizontal;
@@ -26,10 +29,11 @@
     .player-2 {
       @apply --layout-horizontal-reverse;
     }
-    .player-1 + .player-2::after {
-      content: '-';
-      font-size: 2rem;
-      margin: 0 1rem;
+    :host([flipped]) .player-1 {
+      @apply --layout-horizontal-reverse;
+    }
+    :host([flipped]) .player-2 {
+      @apply --layout-horizontal;
     }
     .info {
       @apply --layout-flex;
@@ -37,6 +41,12 @@
       @apply --layout-center-justified;
     }
     .player-2 .info {
+      text-align: right;
+    }
+    :host([flipped]) .player-2 .info {
+      text-align: left;
+    }
+    :host([flipped]) .player-1 .info {
       text-align: right;
     }
     .rating {
@@ -53,14 +63,24 @@
     :host([player-uid]:not([player-uid-won])) .score {
       color: var(--paper-red-900);
     }
+    .divider {
+      margin: 1rem;
+    }
 
     player-avatar + .info {
       margin: 1rem;
     }
 
     @media (max-width: 767px) {
+      :host([flipped]) .container,
       .container {
         display: block;
+      }
+      :host([flipped]) .player-1 {
+        @apply --layout-horizontal;
+      }
+      :host([flipped]) .player-1  .info{
+        text-align: left;
       }
       .player-2 {
         @apply --layout-horizontal;
@@ -68,8 +88,8 @@
       .player-2 .info {
         text-align: initial;
       }
-      .player-1 + .player-2::after {
-        content: none;
+      .divider {
+        display: none;
       }
     }
     </style>
@@ -95,6 +115,7 @@
         </div>
         <p class="score">[[match.scores.player1]]</p>
       </div>
+      <h1 class="divider">-</h1>
       <div class="player-2">
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
         <div class="info">
@@ -135,6 +156,10 @@
           player2Icon: {
             type: Boolean,
             computed: '_computePlayerIcon(match.ratings.player2New, match.ratings.player2Prev)'
+          },
+          flipped: {
+            type: Boolean,
+            reflectToAttribute: true
           }
         }
       }

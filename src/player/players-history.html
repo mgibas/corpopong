@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="players-history">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    .totals {
+      @apply --paper-font-display2;
+      text-align: center;
+    }
+    </style>
+    <firebase-document path="/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
+    <firebase-document path="/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
+    <firebase-query path="/users/[[player1Uid]]/matches" data="{{_player1Matches}}"></firebase-query>
+
+    <section class="paper-material" elevation="1">
+      <div class="layout horizontal center-center">
+        <div class="layout vertical flex center-center">
+          <player-avatar big src="[[player1.photoURL]]"></player-avatar>
+          <h1>[[player1.displayName]]</h1>
+        </div>
+        <span>VS</span>
+        <div class="layout vertical flex center-center">
+          <player-avatar big src="[[player2.photoURL]]"></player-avatar>
+          <h1>[[player2.displayName]]</h1>
+        </div>
+      </div>
+      <div class="layout horizontal center-center totals">
+        <span class="flex">[[_getPlayerWinsCount(player1Uid, matches)]]</span>
+        <span class="flex">[[matches.length]]</span>
+        <span class="flex">[[_getPlayerWinsCount(player2Uid, matches)]]</span>
+      </div>
+    </section>
+    <section class="paper-material" elevation="1">
+      <header>
+        <h2>Matches</h2>
+      </header>
+      <template id="domRepeat" is="dom-repeat" items="[[matches]]">
+        <a href="/matches/[[item.$key]]" tabindex="-1">
+          <match-item match="[[item]]" flipped="[[_shouldFlip(item)]]"></match-item>
+        </a>
+      </template>
+    </section>
+
+  </template>
+  <script>
+    class PlayersHistory extends Polymer.Element {
+      static get is () { return 'players-history' }
+      static get properties () {
+        return {
+          player1Uid: String,
+          player2Uid: String,
+          _player1Matches: Object,
+          matches: {
+            type: Array,
+            computed: '_computeMatches(player1Uid, player2Uid, _player1Matches, _player1Matches.*)'
+          }
+        }
+      }
+      _computeMatches (player1Uid, player2Uid, matches) {
+        if (!player1Uid || !player2Uid || !matches) return
+        return matches.filter((m) => {
+          return (m.player1Uid === player1Uid || m.player2Uid === player1Uid) &&
+        (m.player1Uid === player2Uid || m.player2Uid === player2Uid)
+        })
+      }
+      _getPlayerWinsCount (playerUid, matches) {
+        if (!matches) return
+        return matches.filter((m) => {
+          return m.player1Uid === playerUid
+            ? Number(m.scores.player1) > Number(m.scores.player2)
+            : Number(m.scores.player1) < Number(m.scores.player2)
+        }).length
+      }
+      _shouldFlip (match) {
+        console.log(match.player1Uid !== this.player1Uid)
+        return match.player1Uid !== this.player1Uid
+      }
+    }
+
+    window.customElements.define(PlayersHistory.is, PlayersHistory)
+  </script>
+</dom-module>
