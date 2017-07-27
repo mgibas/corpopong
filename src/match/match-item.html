@@ -26,7 +26,8 @@
       @apply --layout-horizontal;
       @apply --layout-center-center;
     }
-    .player-2 {
+    .player-2,
+    .player-2 .body {
       @apply --layout-horizontal-reverse;
     }
     :host([flipped]) .player-1,
@@ -97,24 +98,11 @@
       }
     }
     @media (max-width: 550px) {
-      /*.player-1, .player-2 {
-        overflow: hidden;
-      }
-      :host([flipped]) .player-2 player-avatar,
-      .player-1 player-avatar {
-        margin-left: -24px;
-        margin-right: 0px;
-      }
-      :host([flipped]) .player-1 player-avatar,
-      .player-2 player-avatar {
-        margin-right: -24px;
-        margin-left: 0px;
-      }
-      :host {
-        padding: 0;
-      }*/
       .divider {
-        display: none;
+        margin-left:0.1rem;
+        margin-right: 0.1rem;
+        margin-bottom: 1rem;
+        margin-top: auto;
       }
       .ratings {
         display: none;
@@ -125,9 +113,14 @@
       :host([flipped]) .player-2 .body {
         @apply --layout-vertical;
       }
-
+      .player-1 .score {
+        text-align: right;
+      }
       :host([flipped]) .player-1 .body {
         text-align: right;
+      }
+      .score {
+        font-size: 1.5rem;
       }
 
     }
@@ -156,7 +149,7 @@
           <p class="score">[[match.scores.player1]]</p>
         </div>
       </div>
-      <h1 class="divider">-</h1>
+      <span class="divider">-</span>
       <div class="player-2">
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
         <div class="body">
