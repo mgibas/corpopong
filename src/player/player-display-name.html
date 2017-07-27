@@ -10,16 +10,22 @@
       static get properties () {
         return {
           value: String,
+          abbreviate: Boolean,
+          semiAbbreviate: Boolean,
           formattedValue: {
             type: String,
-            computed: '_computeFormattedValue(value)'
+            computed: '_computeFormattedValue(value, abbreviate, semiAbbreviate)'
           }
         }
       }
-      _computeFormattedValue (value) {
+      _computeFormattedValue (value, abbreviate, semiAbbreviate) {
+        if ((!abbreviate && !semiAbbreviate) || !value) return value
         let split = value.trim().split(' ')
         if (split.length > 1) {
-          return (split[0][0] + split[1][0])
+          if (abbreviate) {
+            return split[0][0] + split[1][0]
+          }
+          return split[0][0] + '.' + split[1]
         }
         return split[0][0]
       }

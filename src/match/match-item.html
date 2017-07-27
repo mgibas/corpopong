@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
@@ -12,15 +13,12 @@
     <style>
     :host {
       display: block;
-      padding: 0 16px;
       @apply --layout-flex;
     }
     .container {
       @apply --layout-flex;
       @apply --layout-horizontal;
-    }
-    :host([flipped]) .container {
-      @apply --layout-horizontal-reverse;
+      @apply --layout-center-center;
     }
     .player-1, .player-2 {
       @apply --layout-flex;
@@ -30,12 +28,6 @@
     .player-2 {
       @apply --layout-horizontal-reverse;
     }
-    :host([flipped]) .player-1 {
-      @apply --layout-horizontal-reverse;
-    }
-    :host([flipped]) .player-2 {
-      @apply --layout-horizontal;
-    }
     .info {
       @apply --layout-flex;
       @apply --layout-vertical;
@@ -43,17 +35,6 @@
     }
     .player-2 .info {
       text-align: right;
-    }
-    :host([flipped]) .player-2 .info {
-      text-align: left;
-    }
-    :host([flipped]) .player-1 .info {
-      text-align: right;
-    }
-    .body {
-      @apply --layout-flex;
-      @apply --layout-horizontal;
-      @apply --layout-center-justified;
     }
     .ratings {
       @apply --ppaer-font-body1;
@@ -63,67 +44,53 @@
       font-size: 2rem;
       margin: 0;
     }
+    .divider {
+      margin: 0.5rem;
+    }
+    player-avatar + .info {
+      margin: 1rem;
+    }
+
     :host([player-uid][player-uid-won]) .score {
       color: var(--paper-green-900);
     }
     :host([player-uid]:not([player-uid-won])) .score {
       color: var(--paper-red-900);
     }
-    .divider {
-      margin: 1rem;
+
+    :host([flipped]) .container {
+      @apply --layout-horizontal-reverse;
     }
-    player-avatar + .info {
-      margin: 1rem;
+    :host([flipped]) .player-1 {
+      @apply --layout-horizontal-reverse;
+    }
+    :host([flipped]) .player-2 {
+      @apply --layout-horizontal;
+    }
+    :host([flipped]) .player-2 .info {
+      text-align: left;
+    }
+    :host([flipped]) .player-1 .info {
+      text-align: right;
     }
 
-    @media (max-width: 767px) {
-      :host {
-        position: relative;
-      }
-      .player-1, .player-2 {
-        position: relative;
-        overflow: hidden;
-      }
-      /*player-avatar {
-        opacity: 0.15;
-      }*/
-      /*:host([flipped]) .player-2 player-avatar,
-      .player-1 player-avatar {
-        position: absolute;
-        right:0;
-        top:0;
-      }
-      :host([flipped]) .player-1 player-avatar,
-      .player-2 player-avatar {
-        position: absolute;
-        left:0;
-        top:0;
-      }*/
-      :host {
-        padding: 0;
-      }
-      .divider {
-        /*margin: 0;
-        margin-bottom:1rem;
-        margin-top:auto;*/
-      }
-      player-avatar + .info {
-        /*margin: 0;*/
-      }
-      .info {
-        /*font-size: 0.8rem;*/
-        /*display: none;*/
-        /*margin:0;*/
-        /*z-index:1;*/
-      }
-      .ratings{
+    @media (max-width: 479px) {
+      .ratings {
         display: none;
       }
+    }
+
+    @media (max-width: 599px) {
       .score {
-        font-size: 1rem;
+        font-size: 1.5rem;
+      }
+      .ratings {
+        font-size: 0.7rem;
       }
     }
     </style>
+    <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 599px)" query-matches="{{mediumMobile}}"></iron-media-query>
     <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
     </firebase-document>
     <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
@@ -134,7 +101,11 @@
         <player-avatar src="[[player1.photoURL]]"></player-avatar>
           <div class="info">
             <span>
-              <player-display-name value=[[player1.displayName]]></player-display-name>
+              <player-display-name
+                value=[[player1.displayName]]
+                abbreviate="[[smallMobile]]"
+                semi-abbreviate="[[mediumMobile]]">
+              </player-display-name>
             </span>
             <div class="ratings">
               <span>
@@ -151,7 +122,11 @@
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
           <div class="info">
             <span>
-              <player-display-name value=[[player2.displayName]]></player-display-name>
+              <player-display-name
+                value=[[player2.displayName]]
+                abbreviate="[[smallMobile]]"
+                semi-abbreviate="[[mediumMobile]]">
+              </player-display-name>
             </span>
             <div class="ratings">
               <span>
