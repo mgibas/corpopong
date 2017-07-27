@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../player/player-display-name.html">
 
 <dom-module id="match-item">
   <template>
@@ -26,16 +27,13 @@
       @apply --layout-horizontal;
       @apply --layout-center-center;
     }
-    .player-2,
-    .player-2 .body {
+    .player-2 {
       @apply --layout-horizontal-reverse;
     }
-    :host([flipped]) .player-1,
-    :host([flipped]) .player-1 .body {
+    :host([flipped]) .player-1 {
       @apply --layout-horizontal-reverse;
     }
-    :host([flipped]) .player-2,
-    :host([flipped]) .player-2 .body {
+    :host([flipped]) .player-2 {
       @apply --layout-horizontal;
     }
     .info {
@@ -74,55 +72,56 @@
     .divider {
       margin: 1rem;
     }
-
     player-avatar + .info {
       margin: 1rem;
     }
 
     @media (max-width: 767px) {
+      :host {
+        position: relative;
+      }
       .player-1, .player-2 {
+        position: relative;
         overflow: hidden;
       }
-      :host([flipped]) .player-2 player-avatar,
+      /*player-avatar {
+        opacity: 0.15;
+      }*/
+      /*:host([flipped]) .player-2 player-avatar,
       .player-1 player-avatar {
-        margin-left: -24px;
-        margin-right: 0px;
+        position: absolute;
+        right:0;
+        top:0;
       }
       :host([flipped]) .player-1 player-avatar,
       .player-2 player-avatar {
-        margin-right: -24px;
-        margin-left: 0px;
-      }
+        position: absolute;
+        left:0;
+        top:0;
+      }*/
       :host {
         padding: 0;
       }
-    }
-    @media (max-width: 550px) {
       .divider {
-        margin-left:0.1rem;
-        margin-right: 0.1rem;
-        margin-bottom: 1rem;
-        margin-top: auto;
+        /*margin: 0;
+        margin-bottom:1rem;
+        margin-top:auto;*/
       }
-      .ratings {
+      player-avatar + .info {
+        /*margin: 0;*/
+      }
+      .info {
+        /*font-size: 0.8rem;*/
+        /*display: none;*/
+        /*margin:0;*/
+        /*z-index:1;*/
+      }
+      .ratings{
         display: none;
       }
-      .player-1 .body,
-      .player-2 .body,
-      :host([flipped]) .player-1 .body,
-      :host([flipped]) .player-2 .body {
-        @apply --layout-vertical;
-      }
-      .player-1 .score {
-        text-align: right;
-      }
-      :host([flipped]) .player-1 .body {
-        text-align: right;
-      }
       .score {
-        font-size: 1.5rem;
+        font-size: 1rem;
       }
-
     }
     </style>
     <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
@@ -133,10 +132,9 @@
     <div class="container">
       <div class="player-1">
         <player-avatar src="[[player1.photoURL]]"></player-avatar>
-        <div class="body">
           <div class="info">
             <span>
-              [[player1.displayName]]
+              <player-display-name value=[[player1.displayName]]></player-display-name>
             </span>
             <div class="ratings">
               <span>
@@ -147,15 +145,13 @@
             </div>
           </div>
           <p class="score">[[match.scores.player1]]</p>
-        </div>
       </div>
       <span class="divider">-</span>
       <div class="player-2">
         <player-avatar src="[[player2.photoURL]]"></player-avatar>
-        <div class="body">
           <div class="info">
             <span>
-              [[player2.displayName]]
+              <player-display-name value=[[player2.displayName]]></player-display-name>
             </span>
             <div class="ratings">
               <span>
@@ -166,7 +162,6 @@
             </div>
           </div>
           <span class="score">[[match.scores.player2]]</span>
-        </div>
       </div>
     </div>
   </template>

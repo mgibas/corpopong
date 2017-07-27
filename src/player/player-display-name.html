@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="player-display-name">
+  <template>
+    [[formattedValue]]
+  </template>
+  <script>
+    class PlayerDisplayName extends Polymer.Element {
+      static get is () { return 'player-display-name' }
+      static get properties () {
+        return {
+          value: String,
+          formattedValue: {
+            type: String,
+            computed: '_computeFormattedValue(value)'
+          }
+        }
+      }
+      _computeFormattedValue (value) {
+        let split = value.trim().split(' ')
+        if (split.length > 1) {
+          return (split[0][0] + split[1][0])
+        }
+        return split[0][0]
+      }
+    }
+
+    window.customElements.define(PlayerDisplayName.is, PlayerDisplayName)
+  </script>
+</dom-module>
