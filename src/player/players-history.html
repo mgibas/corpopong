@@ -23,14 +23,18 @@
 
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">
-        <div class="layout vertical flex center-center">
-          <player-avatar big src="[[player1.photoURL]]"></player-avatar>
-          <h1>[[player1.displayName]]</h1>
+        <div class="flex">
+          <a href="/players/[[player1Uid]]" class="layout vertical center-center">
+            <player-avatar big src="[[player1.photoURL]]"></player-avatar>
+            <h1>[[player1.displayName]]</h1>
+          </a>
         </div>
         <span>VS</span>
-        <div class="layout vertical flex center-center">
-          <player-avatar big src="[[player2.photoURL]]"></player-avatar>
-          <h1>[[player2.displayName]]</h1>
+        <div class="flex">
+          <a href="/players/[[player2Uid]]" class="layout vertical center-center">
+            <player-avatar big src="[[player2.photoURL]]"></player-avatar>
+            <h1>[[player2.displayName]]</h1>
+          </a>
         </div>
       </div>
       <div class="layout horizontal center-center totals">

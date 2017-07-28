@@ -55,8 +55,10 @@
       <div class="layout horizontal  center-center">
         <div class="player-1">
           <div class="info">
-            <player-avatar src="[[player1.photoURL]]" big></player-avatar>
-            <h1>[[player1.displayName]]</h1>
+            <a href="/players/[[details.player1Uid]]">
+              <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+              <h1>[[player1.displayName]]</h1>
+            </a>
           </div>
           <span class="score">[[details.scores.player1]]</span>
         </div>
@@ -64,8 +66,10 @@
         <div class="player-2">
           <span class="score">[[details.scores.player2]]</span>
           <div class="info">
-            <player-avatar src="[[player2.photoURL]]" big></player-avatar>
-            <h1>[[player2.displayName]]</h1>
+            <a href="/players/[[details.player2Uid]]">
+              <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+              <h1>[[player2.displayName]]</h1>
+            </a>
           </div>
         </div>
       </div>
