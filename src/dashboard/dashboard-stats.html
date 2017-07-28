@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="dashboard-stats">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+      section div {
+        @apply --layout-horizontal;
+        @apply --layout-center-justified;
+      }
+      span {
+        font-size: 4rem;
+      }
+      iron-label{
+        position: relative;
+      }
+      iron-label label {
+        position: absolute;
+        bottom:0px;
+        right:0;
+        @apply --paper-font-caption;
+        color: var(--secondary-text-color);
+      }
+    </style>
+
+    <firebase-query
+      path="/players"
+      data="{{players}}"
+      order-by-child="rated"
+      equal-to="true">
+    </firebase-query>
+    <firebase-query path="/matches" data="{{matches}}"></firebase-query>
+
+    <section class="paper-material" elevation="1">
+      <header>
+        <h2>Numbers</h2>
+      </header>
+      <div>
+        <div class="flex">
+          <iron-label>
+            <span>[[players.length]]</span>
+            <label>Players</label>
+          </iron-label>
+        </div>
+        <div class="flex">
+          <iron-label>
+            <span>[[matches.length]]</span>
+            <label>Matches</label>
+          </iron-label>
+        </div>
+        <div class="flex">
+          <iron-label>
+            <span>[[_pointsSum(matches, matches.*)]]</span>
+            <label>Points</label>
+          </iron-label>
+        </div>
+      </div>
+    </section>
+  </template>
+  <script>
+    class DashboardStats extends Polymer.Element {
+      static get is () { return 'dashboard-stats' }
+      _pointsSum (matches) {
+        if (!matches) return
+        return matches.reduce((sum, match) => {
+          return sum + Number(match.scores.player1) + Number(match.scores.player2)
+        }, 0)
+      }
+    }
+
+    window.customElements.define(DashboardStats.is, DashboardStats)
+  </script>
+</dom-module>

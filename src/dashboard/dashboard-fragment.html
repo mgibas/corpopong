@@ -4,13 +4,14 @@
 <link rel="import" href="../dashboard/dashboard-leaderboard.html">
 <link rel="import" href="../dashboard/dashboard-open-matches.html">
 <link rel="import" href="../dashboard/dashboard-latest-matches.html">
+<link rel="import" href="../dashboard/dashboard-stats.html">
 <link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="dashboard-fragment">
   <template>
     <style include="app-styles"></style>
     <style>
-    dashboard-leaderboard, dashboard-open-matches {
+    dashboard-leaderboard, dashboard-open-matches, dashboard-stats {
       display: block;
       margin-bottom: 1rem;
     }
@@ -46,6 +47,7 @@
       <div class="responsive">
         <dashboard-leaderboard></dashboard-leaderboard>
         <div>
+          <dashboard-stats></dashboard-stats>
           <dashboard-open-matches user-uid="[[userUid]]"></dashboard-open-matches>
           <dashboard-latest-matches></dashboard-latest-matches>
         </div>
