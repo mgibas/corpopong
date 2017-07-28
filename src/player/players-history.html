@@ -47,7 +47,7 @@
       <header>
         <h2>Matches</h2>
       </header>
-      <template id="domRepeat" is="dom-repeat" items="[[matches]]">
+      <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
         <a href="/matches/[[item.$key]]" tabindex="-1">
           <match-item match="[[item]]" flipped="[[_shouldFlip(item)]]"></match-item>
         </a>
@@ -87,6 +87,9 @@
       _shouldFlip (match) {
         console.log(match.player1Uid !== this.player1Uid)
         return match.player1Uid !== this.player1Uid
+      }
+      _sort (a, b) {
+        return a.finalizedDate > b.finalizedDate ? -1 : 1
       }
     }
 
