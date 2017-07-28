@@ -52,9 +52,7 @@
     <app-header-layout has-scrolling-region>
       <app-header slot="header" fixed effects="waterfall">
         <app-toolbar>
-          <a href="/" tabindex="-1">
-            <paper-icon-button hidden$=[[!backButton]] icon="arrow-back"></paper-icon-button>
-          </a>
+          <paper-icon-button hidden$=[[!backButton]] icon="arrow-back" on-tap="_back"></paper-icon-button>
           <div main-title>[[title]]</div>
           <slot name="fab"></slot>
         </app-toolbar>
@@ -75,7 +73,10 @@
             value: false
           }
         }
-  }
+      }
+      _back () {
+        window.history.back()
+      }
     }
 
     window.customElements.define(FragmentLayout.is, FragmentLayout)
