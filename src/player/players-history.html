@@ -13,6 +13,9 @@
       @apply --paper-font-display2;
       text-align: center;
     }
+    h1 {
+      text-align: center;
+    }
     </style>
     <firebase-document path="/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
     <firebase-document path="/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
@@ -32,7 +35,7 @@
       </div>
       <div class="layout horizontal center-center totals">
         <span class="flex">[[_getPlayerWinsCount(player1Uid, matches)]]</span>
-        <span class="flex">[[matches.length]]</span>
+        <span>[[matches.length]]</span>
         <span class="flex">[[_getPlayerWinsCount(player2Uid, matches)]]</span>
       </div>
     </section>

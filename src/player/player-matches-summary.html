@@ -23,6 +23,7 @@
       path="/users/[[playerUid]]/matches"
       data="{{_matches}}">
     </firebase-query>
+    <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
 
     <template is="dom-repeat" items="[[summaries]]" sort="_sort">
       <a href="/players/[[playerUid]]/history/[[item.uid]]">
@@ -31,7 +32,10 @@
           <div class="layout horizontal flex center-center">
             <paper-item-body two-lines class="flex">
               <span>
-                [[item.displayName]]
+                <player-display-name
+                  value=[[item.displayName]]
+                  semi-abbreviate="[[smallMobile]]">
+                </player-display-name>
               </span>
               <span secondary>
                 [[item.rating]]
