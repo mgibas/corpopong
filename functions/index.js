@@ -27,7 +27,7 @@ exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{mat
       player2Uid: match.player2Uid,
       createdDate: match.createdDate,
       approvals: {player1: '', player2: ''},
-      scores: {player1: 0, player2: 0}
+      scores: [{player1: 0, player2: 0}]
     }
 
     return Promise.all([
