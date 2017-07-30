@@ -15,10 +15,20 @@
             notify: true,
             computed: '_computeUidApproved(approvalValue, uid, details.approvals.*)'
           },
+          player1Wins: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer1Wins(details.scores, details.scores.*)'
+          },
+          player2Wins: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer2Wins(details.scores, details.scores.*)'
+          },
           approvalValue: {
             type: String,
             notify: true,
-            computed: '_computeApprovalValue(details.scores.player1, details.scores.player2)'
+            computed: '_computeApprovalValue(details.scores, details.scores.*)'
           },
           player1Approved: {
             type: Boolean,
@@ -32,9 +42,11 @@
           }
         }
       }
-      _computeApprovalValue (player1Score, player2Score) {
-        if (player1Score === undefined || player2Score === undefined) return
-        return `${player1Score}|${player2Score}`
+      _computeApprovalValue (scores) {
+        if (!scores || scores.length === 0) return
+        return scores.reduce((approval, score) => {
+          return approval + `|${score.player1}|${score.player2}`
+        }, '')
       }
       _computePlayerApproved (approvalValue, playerApproval) {
         if (!approvalValue || !playerApproval) return false
@@ -46,6 +58,18 @@
           return this._computePlayerApproved(approvalValue, this.details.approvals.player1)
         }
         return this._computePlayerApproved(approvalValue, this.details.approvals.player2)
+      }
+      _computePlayer1Wins (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player1) > Number(score.player2)
+        }).length
+      }
+      _computePlayer2Wins (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player2) > Number(score.player1)
+        }).length
       }
     }
 

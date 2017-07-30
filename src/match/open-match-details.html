@@ -2,7 +2,9 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
@@ -12,27 +14,37 @@
   <template>
     <style include="app-styles"></style>
     <style>
-    paper-input {
-      margin: 1rem;
-      --paper-input-container-input: {
-        font-size: 4rem;
-      };
-    }
-    .right{
-      text-align: right;
-    }
-    .player-info {
-      margin: 1rem;
-      text-align: center;
-    }
-    paper-button.danger {
-      background-color: var(--paper-red-600);
-      color: var(--text-primary-color);
-    }
-    .player-1-score, .player-2-score{
+    .player-1, .player-2 {
       @apply --layout-flex;
       @apply --layout-horizontal;
       @apply --layout-center-center;
+    }
+    .player-2 {
+      @apply --layout-horizontal-reverse;
+    }
+    paper-input {
+      --paper-input-container-input: {
+        font-size: 2.5rem;
+      };
+    }
+    .divider {
+      margin: 0 2rem;
+    }
+    .divider h2 {
+      margin-bottom: 0;
+    }
+    .match-score {
+      font-size: 3rem;
+      margin:0 2rem;
+    }
+    .buttons {
+      margin-top:1rem;
+      @apply --layout-horizontal;
+      @apply --layout-end-justified;
+    }
+    .danger {
+      color: var(--primary-background-color);
+      background-color: var(--error-color);
     }
     .avatar {
       position: relative;
@@ -46,14 +58,13 @@
       border-radius: 50%;
       @apply --shadow-elevation-2dp;
     }
-    @media (max-width: 767px) {
-      .player-1-score {
+
+    @media (max-width: 599px) {
+      .player-1, .player-2 {
         @apply --layout-vertical;
       }
-      .player-2-score {
-        @apply --layout-vertical-reverse;
-      }
     }
+
     </style>
 
     <firebase-document
@@ -74,52 +85,71 @@
       approval-value="{{approvalValue}}"
       uid-approved="{{approved}}"
       player1-approved="{{player1Approved}}"
-      player2-approved="{{player2Approved}}">
+      player2-approved="{{player2Approved}}"
+      player1-wins="{{player1Wins}}"
+      player2-wins="{{player2Wins}}">
     </open-match-calculator>
 
     <section class="paper-material" elevation="1">
-      <div class="layout horizontal  center-center">
-        <div class="player-1-score">
-          <div class="player-info">
+      <div class="layout horizontal center-center">
+        <div class="player-1">
+          <div class="info">
             <div class="avatar">
               <player-avatar src="[[player1.photoURL]]" big></player-avatar>
               <iron-icon hidden="[[!player1Approved]]" icon="done"></iron-icon>
             </div>
             <h1>[[player1.displayName]]</h1>
           </div>
-          <paper-input
-            class="right"
-            value="{{details.scores.player1}}"
-            type="number"
-            min="0"
-            max="99"
-            label="Score">
-          </paper-input>
+          <span class="match-score">
+            [[player1Wins]]
+          </span>
         </div>
-        <h1>-</h1>
-        <div class="player-2-score">
-          <paper-input
-            value="{{details.scores.player2}}"
-            type="number"
-            min="0"
-            max="99"
-            label="Score">
-          </paper-input>
-          <div class="player-info">
+        <div class="player-2">
+          <div class="info">
             <div class="avatar">
               <player-avatar src="[[player2.photoURL]]" big></player-avatar>
               <iron-icon hidden="[[!player2Approved]]" icon="done"></iron-icon>
             </div>
             <h1>[[player2.displayName]]</h1>
           </div>
+          <span class="match-score">
+            [[player2Wins]]
+          </span>
         </div>
       </div>
+    </section>
+    <section class="paper-material" elevation="1">
+      <div class="layout horizontal center">
+        <h2>Games</h2>
+        <paper-icon-button icon="remove" on-tap="_removeGame">Remove</paper-icon-button>
+        <paper-icon-button icon="add" on-tap="_addGame">Add</paper-icon-button>
+      </div>
+      <template is="dom-repeat" items="{{details.scores}}">
+        <div class="layout horizontal center-center">
+          <paper-input
+            value="{{item.player1}}"
+            type="number"
+            min="0"
+            max="99"
+            label="Score">
+          </paper-input>
+          <div class="divider layout vertical center-center">
+            <h2>-</h2>
+          </div>
+          <paper-input
+            value="{{item.player2}}"
+            type="number"
+            min="0"
+            max="99"
+            label="Score">
+          </paper-input>
+        </div>
+      </template>
       <div class="buttons">
         <paper-button class="danger" on-tap="_remove">Remove</paper-button>
-        <paper-button raised on-tap="_approve" disabled="[[approved]]">Approve score</paper-button>
+        <paper-button raised on-tap="_approve" disabled="[[approved]]">Approve</paper-button>
       </div>
     </section>
-
   </template>
   <script>
     class OpenMatchDetails extends Polymer.Element {
@@ -142,6 +172,12 @@
       _remove () {
         this.set('details.removed', true)
         this._back()
+      }
+      _addGame () {
+        this.push('details.scores', {player1: 0, player2: 0})
+      }
+      _removeGame () {
+        this.pop('details.scores')
       }
       _back () {
         window.history.pushState({}, null, '/')
