@@ -12,12 +12,12 @@
     <style>
     :host {
       display: block;
-      padding: 0 16px;
       @apply --layout-flex;
     }
     .container {
       @apply --layout-flex;
       @apply --layout-horizontal;
+      @apply --layout-center-center;
     }
     .player-1, .player-2 {
       @apply --layout-flex;
@@ -26,11 +26,6 @@
     }
     .player-2 {
       @apply --layout-horizontal-reverse;
-    }
-    .player-1 + .player-2::after {
-      content: '-';
-      font-size: 2rem;
-      margin: 0 1rem;
     }
     .info {
       @apply --layout-flex;
@@ -48,6 +43,36 @@
       font-size: 2rem;
       margin: 0;
     }
+    .divider {
+      margin: 0.5rem;
+    }
+    player-avatar + .info {
+      margin: 1rem;
+    }
+
+    :host([player-uid][player-uid-won]) .score {
+      color: var(--paper-green-900);
+    }
+    :host([player-uid]:not([player-uid-won])) .score {
+      color: var(--paper-red-900);
+    }
+
+    :host([flipped]) .container {
+      @apply --layout-horizontal-reverse;
+    }
+    :host([flipped]) .player-1 {
+      @apply --layout-horizontal-reverse;
+    }
+    :host([flipped]) .player-2 {
+      @apply --layout-horizontal;
+    }
+    :host([flipped]) .player-2 .info {
+      text-align: left;
+    }
+    :host([flipped]) .player-1 .info {
+      text-align: right;
+    }
+
     .avatar {
       position: relative;
     }
@@ -64,21 +89,24 @@
       margin: 1rem;
     }
 
-    @media (max-width: 767px) {
-      .container {
-        display: block;
+    @media (max-width: 479px) {
+      .rating {
+        display: none;
       }
-      .player-2 {
-        @apply --layout-horizontal;
+    }
+
+    @media (max-width: 599px) {
+      .score {
+        font-size: 1.5rem;
       }
-      .player-2 .info {
-        text-align: initial;
-      }
-      .player-1 + .player-2::after {
-        content: none;
+      .rating {
+        font-size: 0.7rem;
       }
     }
     </style>
+    <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 599px)" query-matches="{{mediumMobile}}"></iron-media-query>
+
     <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
     </firebase-document>
     <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
@@ -98,12 +126,17 @@
         </div>
         <div class="info">
           <span>
-            [[player1.displayName]]
+            <player-display-name
+              value=[[player1.displayName]]
+              abbreviate="[[smallMobile]]"
+              semi-abbreviate="[[mediumMobile]]">
+            </player-display-name>
           </span>
           <i class="rating">[[player1.rating]]</i>
         </div>
         <p class="score">[[details.scores.player1]]</p>
       </div>
+      <span class="divider">-</span>
       <div class="player-2">
         <div class="avatar">
           <player-avatar src="[[player2.photoURL]]"></player-avatar>
@@ -111,7 +144,11 @@
         </div>
         <div class="info">
           <span>
-            [[player2.displayName]]
+            <player-display-name
+              value=[[player2.displayName]]
+              abbreviate="[[smallMobile]]"
+              semi-abbreviate="[[mediumMobile]]">
+            </player-display-name>
           </span>
           <i class="rating">[[player2.rating]]</i>
         </div>
