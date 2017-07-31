@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="match-calculator">
+  <template>
+  </template>
+  <script>
+    class MatchCalculator extends Polymer.Element {
+      static get is () { return 'match-calculator' }
+      static get properties () {
+        return {
+          match: Object,
+          player1WinsCount: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer1WinsCount(match.scores, match.scores.*)'
+          },
+          player2WinsCount: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer2WinsCount(match.scores, match.scores.*)'
+          }
+        }
+      }
+      _computePlayer1WinsCount (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player1) > Number(score.player2)
+        }).length
+      }
+      _computePlayer2WinsCount (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player2) > Number(score.player1)
+        }).length
+      }
+    }
+
+    window.customElements.define(MatchCalculator.is, MatchCalculator)
+  </script>
+</dom-module>

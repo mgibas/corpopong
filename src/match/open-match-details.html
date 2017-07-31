@@ -8,6 +8,7 @@
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../match/open-match-calculator.html">
+<link rel="import" href="../match/match-calculator.html">
 
 <dom-module id="open-match-details">
   <template>
@@ -84,10 +85,13 @@
       approval-value="{{approvalValue}}"
       uid-approved="{{approved}}"
       player1-approved="{{player1Approved}}"
-      player2-approved="{{player2Approved}}"
-      player1-wins="{{player1Wins}}"
-      player2-wins="{{player2Wins}}">
+      player2-approved="{{player2Approved}}">
     </open-match-calculator>
+    <match-calculator
+      match="[[details]]"
+      player1-wins-count="{{player1Wins}}"
+      player2-wins-count="{{player2Wins}}">
+    </match-calculator>
 
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">

@@ -11,11 +11,6 @@
     paper-listbox > * {
       display: block;
     }
-    @media (max-width: 767px) {
-      paper-listbox > a + a {
-        border-top: 1px solid var(--divider-color);
-      }
-    }
     </style>
     <firebase-query
       path="/users/[[userUid]]/open-matches"
