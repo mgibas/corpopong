@@ -76,7 +76,9 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
       .once('value')
       .then((snap) => {
         let details = snap.val()
-        let closingApproval = `${details.scores.player1}|${details.scores.player2}`
+        let closingApproval = details.scores.reduce((approval, score) => {
+          return approval + `|${score.player1}|${score.player2}`
+        }, '')
         if (closingApproval !== details.approvals.player1 ||
           closingApproval !== details.approvals.player2) {
           return
