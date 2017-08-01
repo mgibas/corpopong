@@ -115,17 +115,11 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       let p2Rating = playerRefs[1].val().rating
       let p1Score = match.scores.reduce((total, i) => total + Number(i.player1), 0)
       let p2Score = match.scores.reduce((total, i) => total + Number(i.player2), 0)
-      console.log('Scores:')
-      console.log(match.scores)
-      console.log('P1 total score: ' + p1Score)
-      console.log('P2 total score: ' + p2Score)
       let p1Prob = calcProbability(p1Rating, p2Rating)
       let p2Prob = calcProbability(p2Rating, p1Rating)
       let kFactor = 50 * calcKFactorMultiplier(p1Score, p2Score, p1Rating, p2Rating)
       let p1Wins = match.scores.filter((s) => Number(s.player1) > Number(s.player2)).length
       let p2Wins = match.scores.length - p1Wins
-      console.log('P1 wins: ' + p1Wins)
-      console.log('P2 wins: ' + p2Wins)
       let player1NewRating = calcNewRating(
         p1Prob, p1Wins > p2Wins ? 1 : p1Wins < p2Wins ? 0 : 0.5,
         p1Rating, kFactor
