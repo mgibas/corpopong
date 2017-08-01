@@ -113,8 +113,8 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
     ]).then((playerRefs) => {
       let p1Rating = playerRefs[0].val().rating
       let p2Rating = playerRefs[1].val().rating
-      let p1Score = match.scores.reduse((total, i) => total + Number(i.player1), 0)
-      let p2Score = match.scores.reduse((total, i) => total + Number(i.player2), 0)
+      let p1Score = match.scores.reduce((total, i) => total + Number(i.player1), 0)
+      let p2Score = match.scores.reduce((total, i) => total + Number(i.player2), 0)
       console.log('Scores:')
       console.log(match.scores)
       console.log('P1 total score: ' + p1Score)
