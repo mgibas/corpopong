@@ -2,38 +2,37 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../match/match-calculator.html">
 
 <dom-module id="match-details">
   <template>
     <style include="app-styles"></style>
     <style>
-
-    .info {
-      margin: 1rem;
-      text-align: center;
-    }
-    paper-button.danger {
-      background-color: var(--paper-red-600);
-      color: var(--text-primary-color);
-    }
-    .player-1, .player-2{
+    .player-1, .player-2 {
       @apply --layout-flex;
       @apply --layout-horizontal;
-      @apply --layout-end-justified;
-      @apply --layout-center;
+      @apply --layout-center-center;
     }
     .player-2 {
-      @apply --layout-start-justified;
+      @apply --layout-horizontal-reverse;
     }
-    .score, .vs {
-      font-size: 4rem;
+    .match-score {
+      font-size: 3rem;
+      margin:0 2rem;
     }
-    @media (max-width: 767px) {
-      .player-1 {
+    .danger {
+      color: var(--primary-background-color);
+      background-color: var(--error-color);
+    }
+    .score {
+      font-size: 2.5rem;
+    }
+    .divider {
+      margin: 0 2rem;
+    }
+    @media (max-width: 599px) {
+      .player-1, .player-2 {
         @apply --layout-vertical;
-      }
-      .player-2 {
-        @apply --layout-vertical-reverse;
       }
     }
     </style>
@@ -51,6 +50,12 @@
       path="/players/[[details.player2Uid]]">
     </firebase-document>
 
+    <match-calculator
+      match="[[details]]"
+      player1-wins-count="{{player1Wins}}"
+      player2-wins-count="{{player2Wins}}">
+    </match-calculator>
+
     <section class="paper-material" elevation="1">
       <div class="layout horizontal  center-center">
         <div class="player-1">
@@ -60,19 +65,32 @@
               <h1>[[player1.displayName]]</h1>
             </a>
           </div>
-          <span class="score">[[details.scores.player1]]</span>
+          <span class="match-score">[[player1Wins]]</span>
         </div>
-        <span class="vs">-</span>
         <div class="player-2">
-          <span class="score">[[details.scores.player2]]</span>
           <div class="info">
             <a href="/players/[[details.player2Uid]]">
               <player-avatar src="[[player2.photoURL]]" big></player-avatar>
               <h1>[[player2.displayName]]</h1>
             </a>
           </div>
+          <span class="match-score">[[player2Wins]]</span>
         </div>
       </div>
+    </section>
+    <section class="paper-material" elevation="1">
+      <div class="layout horizontal center">
+        <h2>Games</h2>
+      </div>
+      <template is="dom-repeat" items="{{details.scores}}">
+        <div class="layout horizontal center-center">
+          <span class="score">[[item.player1]]</span>
+          <div class="divider layout vertical center-center">
+            <h2>-</h2>
+          </div>
+          <span class="score">[[item.player2]]</span>
+        </div>
+      </template>
     </section>
 
   </template>
