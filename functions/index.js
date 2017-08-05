@@ -84,12 +84,18 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
           return
         }
 
+        let player1Games = details.scores.filter((s) => Number(s.player1) > Number(s.player2)).length
+        let player2Games = details.scores.length - player1Games
+
         let finalMatch = {
           finalizedDate: new Date().toISOString(),
           createdDate: details.createdDate,
           player1Uid: details.player1Uid,
           player2Uid: details.player2Uid,
-          scores: details.scores
+          scores: details.scores,
+          player1Games: player1Games,
+          player2Games: player2Games,
+          winner: player1Games > player2Games ? details.player1Uid : details.player2Uid
         }
         return Promise.all([
           admin.database().ref(`/matches/${event.params.matchUid}`).set(finalMatch),
@@ -118,16 +124,10 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       let p1Prob = calcProbability(p1Rating, p2Rating)
       let p2Prob = calcProbability(p2Rating, p1Rating)
       let kFactor = 50 * calcKFactorMultiplier(p1Score, p2Score, p1Rating, p2Rating)
-      let p1Wins = match.scores.filter((s) => Number(s.player1) > Number(s.player2)).length
-      let p2Wins = match.scores.length - p1Wins
-      let player1NewRating = calcNewRating(
-        p1Prob, p1Wins > p2Wins ? 1 : p1Wins < p2Wins ? 0 : 0.5,
-        p1Rating, kFactor
-      )
-      let player2NewRating = calcNewRating(
-        p2Prob, p2Wins > p1Wins ? 1 : p2Wins < p1Wins ? 0 : 0.5,
-        p2Rating, kFactor
-      )
+      let p1Result = match.player1Games > match.player2Games ? 1 : match.player1Games < match.player2Games ? 0 : 0.5
+      let p2Result = 1 - p1Result
+      let player1NewRating = calcNewRating(p1Prob, p1Result, p1Rating, kFactor)
+      let player2NewRating = calcNewRating(p2Prob, p2Result, p2Rating, kFactor)
       let ratings = {
         player1Prev: p1Rating,
         player2Prev: p2Rating,
