@@ -29,6 +29,16 @@
             type: Boolean,
             notify: true,
             computed: '_computePlayerApproved(approvalValue, details.approvals.player2)'
+          },
+          player1WinsCount: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer1WinsCount(details.scores, match.scores.*)'
+          },
+          player2WinsCount: {
+            type: Number,
+            notify: true,
+            computed: '_computePlayer2WinsCount(details.scores, match.scores.*)'
           }
         }
       }
@@ -48,6 +58,18 @@
           return this._computePlayerApproved(approvalValue, this.details.approvals.player1)
         }
         return this._computePlayerApproved(approvalValue, this.details.approvals.player2)
+      }
+      _computePlayer1WinsCount (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player1) > Number(score.player2)
+        }).length
+      }
+      _computePlayer2WinsCount (scores) {
+        if (!scores) return
+        return scores.filter((score) => {
+          return Number(score.player2) > Number(score.player1)
+        }).length
       }
     }
 

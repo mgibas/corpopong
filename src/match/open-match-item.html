@@ -7,7 +7,6 @@
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
 <link rel="import" href="../match/open-match-calculator.html">
-<link rel="import" href="../match/match-calculator.html">
 
 <dom-module id="open-match-item">
   <template>
@@ -120,13 +119,10 @@
     <open-match-calculator
       details="[[details]]"
       player1-approved="{{player1Approved}}"
-      player2-approved="{{player2Approved}}">
-    </open-match-calculator>
-    <match-calculator
-      match="[[details]]"
+      player2-approved="{{player2Approved}}"
       player1-wins-count="{{player1WinsCount}}"
       player2-wins-count="{{player2WinsCount}}">
-    </match-calculator>
+    </open-match-calculator>
 
     <div class="container">
       <div class="player-1">

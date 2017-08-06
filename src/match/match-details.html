@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
-<link rel="import" href="../match/match-calculator.html">
 
 <dom-module id="match-details">
   <template>
@@ -50,12 +49,6 @@
       path="/players/[[details.player2Uid]]">
     </firebase-document>
 
-    <match-calculator
-      match="[[details]]"
-      player1-wins-count="{{player1Wins}}"
-      player2-wins-count="{{player2Wins}}">
-    </match-calculator>
-
     <section class="paper-material" elevation="1">
       <div class="layout horizontal  center-center">
         <div class="player-1">
@@ -65,7 +58,7 @@
               <h1>[[player1.displayName]]</h1>
             </a>
           </div>
-          <span class="match-score">[[player1Wins]]</span>
+          <span class="match-score">[[details.player1Games]]</span>
         </div>
         <div class="player-2">
           <div class="info">
@@ -74,7 +67,7 @@
               <h1>[[player2.displayName]]</h1>
             </a>
           </div>
-          <span class="match-score">[[player2Wins]]</span>
+          <span class="match-score">[[details.player2Games]]</span>
         </div>
       </div>
     </section>

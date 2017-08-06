@@ -6,7 +6,6 @@
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
-<link rel="import" href="../match/match-calculator.html">
 
 <dom-module id="match-item">
   <template>
@@ -90,7 +89,7 @@
       }
     }
     </style>
-    
+
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
     <iron-media-query query="(max-width: 599px)" query-matches="{{mediumMobile}}"></iron-media-query>
 
@@ -98,12 +97,6 @@
     </firebase-document>
     <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
     </firebase-document>
-
-    <match-calculator
-      match="[[match]]"
-      player1-wins-count="{{player1WinsCount}}"
-      player2-wins-count="{{player2WinsCount}}">
-    </match-calculator>
 
     <div class="container">
       <div class="player-1">
@@ -162,7 +155,7 @@
           playerUidWon: {
             type: Boolean,
             reflectToAttribute: true,
-            computed: '_computeplayerUidWon(playerUid, match, player1WinsCount, player2WinsCount)'
+            computed: '_computeplayerUidWon(playerUid, match.winnerUid)'
           },
           player1Icon: {
             type: Boolean,
@@ -176,36 +169,33 @@
             type: Boolean,
             reflectToAttribute: true
           },
-          player1WinsCount: Number,
-          player2WinsCount: Number,
           player1Score: {
             type: Number,
-            computed: '_computePlayer1Score(match.scores, player1WinsCount, match.scores.*)'
+            computed: '_computePlayer1Score(match.scores, match.player1Games, match.scores.*)'
           },
           player2Score: {
             type: Number,
-            computed: '_computePlayer2Score(match.scores, player2WinsCount, match.scores.*)'
+            computed: '_computePlayer2Score(match.scores, match.player2Games, match.scores.*)'
           }
         }
       }
-      _computeplayerUidWon (playerUid, match, player1WinsCount, player2WinsCount) {
-        if (!playerUid || !match) return
-        let p1Won = Number(player1WinsCount) > Number(player2WinsCount)
-        return playerUid === match.player1Uid ? p1Won : !p1Won
+      _computeplayerUidWon (playerUid, winnerUid) {
+        if (!playerUid || !winnerUid) return
+        return playerUid === winnerUid
       }
       _computePlayerIcon (newRating, prevRating) {
         if (newRating === prevRating) return 'trending-flat'
         return newRating > prevRating ? 'trending-up' : 'trending-down'
       }
-      _computePlayer1Score (scores, player1WinsCount) {
+      _computePlayer1Score (scores, player1Games) {
         if (!scores || scores.length === 0) return
         if (scores.length === 1) return scores[0].player1
-        return player1WinsCount
+        return player1Games
       }
-      _computePlayer2Score (scores, player2WinsCount) {
+      _computePlayer2Score (scores, player2Games) {
         if (!scores || scores.length === 0) return
         if (scores.length === 1) return scores[0].player2
-        return player2WinsCount
+        return player2Games
       }
     }
 

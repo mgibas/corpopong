@@ -64,11 +64,11 @@
           <p class="ranking">[[player.rating]]</p>
           <div class="layout horizontal center-center totals">
             <iron-label>
-              <p class="total total-wins">[[wonMatches.length]]</p>
+              <p class="total total-wins">[[wins]]</p>
               <label>Wins</label>
             </iron-label>
             <iron-label>
-              <p class="total total-losses">[[lostMatches.length]]</p>
+              <p class="total total-losses">[[losses]]</p>
               <label>Losses</label>
             </iron-label>
             <iron-label>
@@ -100,13 +100,13 @@
           matches: {
             type: Array
           },
-          lostMatches: {
-            type: Array,
-            computed: '_computeLostMatches(playerUid, matches, matches.*)'
+          wins: {
+            type: Number,
+            computed: '_computeWins(playerUid, matches, matches.*)'
           },
-          wonMatches: {
-            type: Array,
-            computed: '_computeWonMatches(playerUid, matches, matches.*)'
+          losses: {
+            type: Number,
+            computed: '_computeLosses(wins, matches.length)'
           },
           noData: {
             type: Boolean,
@@ -114,24 +114,15 @@
           }
         }
       }
-      _computeLostMatches (playerUid, matches) {
-        if (!matches) return
-        return matches.filter((m) => {
-          return m.player1Uid === playerUid
-            ? Number(m.scores.player1) < Number(m.scores.player2)
-            : Number(m.scores.player1) > Number(m.scores.player2)
-        })
-      }
-      _computeWonMatches (playerUid, matches) {
-        if (!matches) return
-        return matches.filter((m) => {
-          return m.player1Uid === playerUid
-            ? Number(m.scores.player1) > Number(m.scores.player2)
-            : Number(m.scores.player1) < Number(m.scores.player2)
-        })
-      }
       _sort (a, b) {
         return a.finalizedDate > b.finalizedDate ? -1 : 1
+      }
+      _computeWins (playerUid, matches) {
+        if (!matches || matches.length === 0) return
+        return matches.filter((m) => m.winnerUid === playerUid).length
+      }
+      _computeLosses (wins, all) {
+        return all - wins
       }
       _computeNoData (length) {
         return !length

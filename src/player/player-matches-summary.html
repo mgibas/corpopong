@@ -43,12 +43,11 @@
                 [[item.rating]]
               </span>
             </paper-item-body>
-            <paper-item-body two-lines class="stats flex">
-              <span>[[_getLastMatchScore(item)]]</span>
-              <span secondary>
+            <div class="stats flex">
+              <span>
                 [[_getWinsCount(item)]] / [[_getLossesCount(item)]] / [[item.matches.length]]
               </span>
-            </paper-item-body>
+            </div>
           </div>
         </paper-icon-item>
       </a>
@@ -85,32 +84,11 @@
           })
           .filter((s) => s.matches.length > 0)
       }
-      _getLastMatchScore (summary) {
-        if (!summary || !summary.matches || summary.matches.length === 0) {
-          return '-'
-        }
-
-        let lastMatch = summary.matches
-          .sort((a, b) => a.finalizedDate > b.finalizedDate ? -1 : 1)[0]
-
-        if (this.playerUid === lastMatch.player1Uid) {
-          return `${lastMatch.scores.player1} - ${lastMatch.scores.player2}`
-        }
-        return `${lastMatch.scores.player2} - ${lastMatch.scores.player1}`
-      }
       _getWinsCount (summary) {
-        return summary.matches.filter((m) => {
-          return m.player1Uid === this.playerUid
-            ? Number(m.scores.player1) > Number(m.scores.player2)
-            : Number(m.scores.player1) < Number(m.scores.player2)
-        }).length
+        return summary.matches.filter((m) => m.winnerUid === this.playerUid).length
       }
       _getLossesCount (summary) {
-        return summary.matches.filter((m) => {
-          return m.player1Uid === this.playerUid
-            ? Number(m.scores.player1) < Number(m.scores.player2)
-            : Number(m.scores.player1) > Number(m.scores.player2)
-        }).length
+        return summary.matches.filter((m) => m.winnerUid !== this.playerUid).length
       }
     }
 

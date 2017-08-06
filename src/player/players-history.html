@@ -38,9 +38,9 @@
         </div>
       </div>
       <div class="layout horizontal center-center totals">
-        <span class="flex">[[_getPlayerWinsCount(player1Uid, matches)]]</span>
+        <span class="flex">[[_getPlayerGames(player1Uid, matches)]]</span>
         <span>[[matches.length]]</span>
-        <span class="flex">[[_getPlayerWinsCount(player2Uid, matches)]]</span>
+        <span class="flex">[[_getPlayerGames(player2Uid, matches)]]</span>
       </div>
     </section>
     <section class="paper-material" elevation="1">
@@ -76,13 +76,9 @@
         (m.player1Uid === player2Uid || m.player2Uid === player2Uid)
         })
       }
-      _getPlayerWinsCount (playerUid, matches) {
-        if (!matches) return
-        return matches.filter((m) => {
-          return m.player1Uid === playerUid
-            ? Number(m.scores.player1) > Number(m.scores.player2)
-            : Number(m.scores.player1) < Number(m.scores.player2)
-        }).length
+      _getPlayerGames (playerUid, matches) {
+        if (!playerUid || !matches) return
+        return matches.filter((m) => m.winnerUid === playerUid).length
       }
       _shouldFlip (match) {
         console.log(match.player1Uid !== this.player1Uid)
