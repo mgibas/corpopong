@@ -95,7 +95,7 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
           scores: details.scores,
           player1Games: player1Games,
           player2Games: player2Games,
-          winner: player1Games > player2Games ? details.player1Uid : details.player2Uid
+          winnerUid: player1Games > player2Games ? details.player1Uid : details.player2Uid
         }
         return Promise.all([
           admin.database().ref(`/matches/${event.params.matchUid}`).set(finalMatch),
