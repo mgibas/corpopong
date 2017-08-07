@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
@@ -57,13 +59,17 @@
       border-radius: 50%;
       @apply --shadow-elevation-2dp;
     }
-
     @media (max-width: 599px) {
       .player-1, .player-2 {
         @apply --layout-vertical;
       }
     }
-
+    paper-tabs {
+      --paper-tabs-selection-bar-color: var(--primary-color);
+    }
+    paper-tab {
+      --paper-tab-ink: var(--accent-color);
+    }
     </style>
 
     <firebase-document
@@ -84,13 +90,11 @@
       approval-value="{{approvalValue}}"
       uid-approved="{{approved}}"
       player1-approved="{{player1Approved}}"
-      player2-approved="{{player2Approved}}"
-      player1-wins-count="{{player1Wins}}"
-      player2-wins-count="{{player2Wins}}">
+      player2-approved="{{player2Approved}}">
     </open-match-calculator>
 
     <section class="paper-material" elevation="1">
-      <div class="layout horizontal center-center">
+      <div class="layout horizontal">
         <div class="player-1">
           <div class="info">
             <div class="avatar">
@@ -99,9 +103,6 @@
             </div>
             <h1>[[player1.displayName]]</h1>
           </div>
-          <span class="match-score">
-            [[player1Wins]]
-          </span>
         </div>
         <div class="player-2">
           <div class="info">
@@ -111,39 +112,38 @@
             </div>
             <h1>[[player2.displayName]]</h1>
           </div>
-          <span class="match-score">
-            [[player2Wins]]
-          </span>
         </div>
       </div>
-    </section>
-    <section class="paper-material" elevation="1">
-      <div class="layout horizontal center">
-        <h2>Games</h2>
-        <paper-icon-button icon="remove" on-tap="_removeGame">Remove</paper-icon-button>
-        <paper-icon-button icon="add" on-tap="_addGame">Add</paper-icon-button>
-      </div>
-      <template is="dom-repeat" items="{{details.scores}}">
-        <div class="layout horizontal center-center">
-          <paper-input
-            value="{{item.player1}}"
-            type="number"
-            min="0"
-            max="99"
-            label="Score">
-          </paper-input>
-          <div class="divider layout vertical center-center">
-            <h2>-</h2>
+      <div class="scores layout vertical">
+        <app-toolbar class="layout horizontal">
+          <paper-tabs selected="{{games}}" attr-for-selected="games" class="flex">
+            <paper-tab games="1">1 Game</paper-tab>
+            <paper-tab games="3">3 Games</paper-tab>
+            <paper-tab games="5">5 Games</paper-tab>
+          </paper-tabs>
+        </app-toolbar>
+        <template is="dom-repeat" items="{{details.scores}}">
+          <div class="layout horizontal center-center">
+            <paper-input
+              value="{{item.player1}}"
+              type="number"
+              min="0"
+              max="99"
+              label="Score">
+            </paper-input>
+            <div class="divider layout vertical center-center">
+              <h2>-</h2>
+            </div>
+            <paper-input
+              value="{{item.player2}}"
+              type="number"
+              min="0"
+              max="99"
+              label="Score">
+            </paper-input>
           </div>
-          <paper-input
-            value="{{item.player2}}"
-            type="number"
-            min="0"
-            max="99"
-            label="Score">
-          </paper-input>
-        </div>
-      </template>
+        </template>
+      </div>
       <div class="buttons">
         <paper-button class="danger" on-tap="_remove">Remove</paper-button>
         <paper-button raised on-tap="_approve" disabled="[[approved]]">Approve</paper-button>
@@ -157,8 +157,15 @@
         return {
           userUid: String,
           matchUid: String,
-          approvalValue: String
+          approvalValue: String,
+          games: {
+            type: Number,
+            observer: '_gamesChanged'
+          }
         }
+      }
+      static get observers () {
+        return ['_scoresLengthChanged(details.scores.length)']
       }
       _approve () {
         if (this.userUid === this.details.player1Uid) {
@@ -172,11 +179,20 @@
         this.set('details.removed', true)
         this._back()
       }
-      _addGame () {
-        this.push('details.scores', {player1: 0, player2: 0})
+      _scoresLengthChanged (length) {
+        this.games = length
       }
-      _removeGame () {
-        this.pop('details.scores')
+      _gamesChanged (games) {
+        if (!this.details || !this.details.scores || games === this.details.scores.length) return
+        let newScores = []
+        for (let i = 0; i < games; i++) {
+          if (this.details.scores.length - 1 >= i) {
+            newScores.push(this.details.scores[i])
+          } else {
+            newScores.push({player1: 0, player2: 0})
+          }
+        }
+        this.set('details.scores', newScores)
       }
       _back () {
         window.history.pushState({}, null, '/')
