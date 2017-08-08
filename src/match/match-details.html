@@ -50,7 +50,7 @@
     </firebase-document>
 
     <section class="paper-material" elevation="1">
-      <div class="layout horizontal  center-center">
+      <div class="layout horizontal center-center">
         <div class="player-1">
           <div class="info">
             <a href="/players/[[details.player1Uid]]">
@@ -58,7 +58,6 @@
               <h1>[[player1.displayName]]</h1>
             </a>
           </div>
-          <span class="match-score">[[details.player1Games]]</span>
         </div>
         <div class="player-2">
           <div class="info">
@@ -67,25 +66,20 @@
               <h1>[[player2.displayName]]</h1>
             </a>
           </div>
-          <span class="match-score">[[details.player2Games]]</span>
         </div>
       </div>
-    </section>
-    <section class="paper-material" elevation="1">
-      <div class="layout horizontal center">
-        <h2>Games</h2>
-      </div>
-      <template is="dom-repeat" items="{{details.scores}}">
-        <div class="layout horizontal center-center">
-          <span class="score">[[item.player1]]</span>
-          <div class="divider layout vertical center-center">
-            <h2>-</h2>
+      <div class="scores layout vertical">
+        <template is="dom-repeat" items="{{details.scores}}">
+          <div class="layout horizontal center-center">
+            <span class="score">[[item.player1]]</span>
+            <div class="divider layout vertical center-center">
+              <h2>-</h2>
+            </div>
+            <span class="score">[[item.player2]]</span>
           </div>
-          <span class="score">[[item.player2]]</span>
-        </div>
-      </template>
+        </template>
+      </div>
     </section>
-
   </template>
   <script>
     class MatchDetails extends Polymer.Element {
