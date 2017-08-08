@@ -41,22 +41,29 @@
       @apply --ppaer-font-body1;
       color: var(--secondary-text-color);
     }
-    .score {
-      font-size: 2rem;
+    .scores {
+      text-align: center;
+      @apply --layout-vertical;
+      @apply --layout-center-justified;
+    }
+    .match-score {
+      font-size: 1.5rem;
       margin: 0;
+    }
+    .game-scores {
+      font-size: 0.8rem;
+      margin: 0;
+      color: var(--secondary-text-color);
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .divider {
       margin: 0.5rem;
     }
     player-avatar + .info {
       margin: 1rem;
-    }
-
-    :host([player-uid][player-uid-won]) .score {
-      color: var(--paper-green-900);
-    }
-    :host([player-uid]:not([player-uid-won])) .score {
-      color: var(--paper-red-900);
     }
 
     :host([flipped]) .container {
@@ -104,6 +111,9 @@
       .rating {
         font-size: 0.7rem;
       }
+      .game-scores {
+        max-width: 75px;
+      }
     }
     </style>
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
@@ -140,9 +150,16 @@
           </span>
           <i class="rating">[[player1.rating]]</i>
         </div>
-        <p class="score">[[player1Score]]</p>
+
+
       </div>
-      <span class="divider">-</span>
+      <div class="scores">
+        <div class="match-score">
+          <span>[[player1WinsCount]] - [[player2WinsCount]]</span>
+        </div>
+        <span class="game-scores">[[gameScoresSummary]]
+        </span>
+      </div>
       <div class="player-2">
         <div class="avatar">
           <player-avatar src="[[player2.photoURL]]"></player-avatar>
@@ -158,7 +175,7 @@
           </span>
           <i class="rating">[[player2.rating]]</i>
         </div>
-        <span class="score">[[player2Score]]</span>
+
       </div>
     </div>
 
@@ -172,25 +189,17 @@
           details: Object,
           player1WinsCount: Number,
           player2WinsCount: Number,
-          player1Score: {
-            type: Number,
-            computed: '_computePlayer1Score(details.scores, player1WinsCount, details.scores.*)'
-          },
-          player2Score: {
-            type: Number,
-            computed: '_computePlayer2Score(details.scores, player2WinsCount, details.scores.*)'
+          gameScoresSummary: {
+            type: String,
+            computed: '_computeGameScoresSummary(details.scores, details.scores.*)'
           }
         }
       }
-      _computePlayer1Score (scores, player1WinsCount) {
-        if (!scores || scores.length === 0) return
-        if (scores.length === 1) return scores[0].player1
-        return player1WinsCount
-      }
-      _computePlayer2Score (scores, player2WinsCount) {
-        if (!scores || scores.length === 0) return
-        if (scores.length === 1) return scores[0].player2
-        return player2WinsCount
+      _computeGameScoresSummary (scores) {
+        if (!scores) return
+        return scores
+          .map((score) => `${Number(score.player1)}-${Number(score.player2)}`)
+          .join(' , ')
       }
     }
 
