@@ -115,13 +115,13 @@
         </div>
       </div>
       <div class="scores layout vertical">
-        <app-toolbar class="layout horizontal">
+        <div class="layout horizontal">
           <paper-tabs selected="{{games}}" attr-for-selected="games" class="flex">
             <paper-tab games="1">1 Game</paper-tab>
             <paper-tab games="3">3 Games</paper-tab>
             <paper-tab games="5">5 Games</paper-tab>
           </paper-tabs>
-        </app-toolbar>
+        </div>
         <template is="dom-repeat" items="{{details.scores}}">
           <div class="layout horizontal center-center">
             <paper-input
