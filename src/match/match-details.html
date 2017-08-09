@@ -19,15 +19,25 @@
       font-size: 3rem;
       margin:0 2rem;
     }
-    .danger {
-      color: var(--primary-background-color);
-      background-color: var(--error-color);
-    }
     .score {
       font-size: 2.5rem;
     }
     .divider {
       margin: 0 2rem;
+    }
+    .avatar {
+      position: relative;
+    }
+    .avatar > iron-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: var(--accent-color);
+      background-color: var(--primary-background-color);
+      border-radius: 50%;
+      @apply --shadow-elevation-2dp;
+      height: 40px;
+      width: 40px;
     }
     @media (max-width: 599px) {
       .player-1, .player-2 {
@@ -54,7 +64,10 @@
         <div class="player-1">
           <div class="info">
             <a href="/players/[[details.player1Uid]]">
-              <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+              <div class="avatar">
+                <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+                <iron-icon hidden="[[!player1Won]]" icon="star"></iron-icon>
+              </div>
               <h1>[[player1.displayName]]</h1>
             </a>
           </div>
@@ -63,7 +76,10 @@
         <div class="player-2">
           <div class="info">
             <a href="/players/[[details.player2Uid]]">
-              <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+              <div class="avatar">
+                <player-avatar src="[[player2.photoURL]]" big></player-avatar>
+                <iron-icon hidden="[[player1Won]]" icon="star"></iron-icon>
+              </div>
               <h1>[[player2.displayName]]</h1>
             </a>
           </div>
@@ -87,8 +103,15 @@
       static get is () { return 'match-details' }
       static get properties () {
         return {
-          matchUid: String
+          matchUid: String,
+          player1Won: {
+            type: Boolean,
+            computed: '_computePlayer1Won(details.player1Games, details.player2Games)'
+          }
         }
+      }
+      _computePlayer1Won (player1Games, player2Games) {
+        return player1Games > player2Games
       }
     }
 
