@@ -4,99 +4,13 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../match/match-item-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
 
 <dom-module id="match-item">
   <template>
-    <style include="app-styles"></style>
-    <style>
-    :host {
-      display: block;
-      @apply --layout-flex;
-    }
-    .container {
-      @apply --layout-flex;
-      @apply --layout-horizontal;
-      @apply --layout-center-center;
-    }
-    .player-1, .player-2 {
-      @apply --layout-flex;
-      @apply --layout-horizontal;
-      @apply --layout-center-center;
-    }
-    .player-2 {
-      @apply --layout-horizontal-reverse;
-    }
-    .info {
-      @apply --layout-flex;
-      @apply --layout-vertical;
-      @apply --layout-center-justified;
-    }
-    .player-2 .info {
-      text-align: right;
-    }
-    .ratings {
-      @apply --ppaer-font-body1;
-      color: var(--secondary-text-color);
-    }
-
-    player-avatar + .info {
-      margin: 1rem;
-    }
-
-    .scores {
-      text-align: center;
-      @apply --layout-vertical;
-      @apply --layout-center-justified;
-    }
-    .match-score {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    .game-scores {
-      font-size: 0.8rem;
-      margin: 0;
-      color: var(--secondary-text-color);
-      max-width: 100px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    :host([flipped]) .container {
-      @apply --layout-horizontal-reverse;
-    }
-    :host([flipped]) .player-1 {
-      @apply --layout-horizontal-reverse;
-    }
-    :host([flipped]) .player-2 {
-      @apply --layout-horizontal;
-    }
-    :host([flipped]) .player-2 .info {
-      text-align: left;
-    }
-    :host([flipped]) .player-1 .info {
-      text-align: right;
-    }
-
-    @media (max-width: 479px) {
-      .ratings {
-        display: none;
-      }
-    }
-    @media (max-width: 599px) {
-      .score {
-        font-size: 1.5rem;
-      }
-      .ratings {
-        font-size: 0.7rem;
-      }
-      .game-scores {
-        max-width: 75px;
-      }
-    }
-    </style>
+    <style include="app-styles match-item-styles"></style>
 
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
     <iron-media-query query="(max-width: 599px)" query-matches="{{mediumMobile}}"></iron-media-query>
@@ -108,7 +22,7 @@
 
     <div class="container">
       <div class="player-1">
-        <player-avatar src="[[player1.photoURL]]"></player-avatar>
+        <player-avatar class="avatar" src="[[player1.photoURL]]"></player-avatar>
           <div class="info">
             <span>
               <player-display-name
@@ -135,7 +49,7 @@
         </span>
       </div>
       <div class="player-2">
-        <player-avatar src="[[player2.photoURL]]"></player-avatar>
+        <player-avatar class="avatar" src="[[player2.photoURL]]"></player-avatar>
           <div class="info">
             <span>
               <player-display-name
