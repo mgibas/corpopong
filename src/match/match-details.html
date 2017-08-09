@@ -24,6 +24,9 @@
     .score {
       font-size: 2.5rem;
     }
+    .score[winning] {
+      font-weight: bolder;
+    }
     .divider {
       margin: 0 2rem;
     }
@@ -93,11 +96,11 @@
       <div class="scores layout vertical">
         <template is="dom-repeat" items="{{details.scores}}">
           <div class="layout horizontal center-center">
-            <span class="score">[[item.player1]]</span>
+            <span class="score" winning$="[[_isWinningScore(item.player1, item.player2)]]">[[item.player1]]</span>
             <div class="divider layout vertical center-center">
               <h2>-</h2>
             </div>
-            <span class="score">[[item.player2]]</span>
+            <span class="score" winning$="[[_isWinningScore(item.player2, item.player1)]]">[[item.player2]]</span>
           </div>
         </template>
       </div>
@@ -117,6 +120,9 @@
       }
       _computePlayer1Won (player1Games, player2Games) {
         return player1Games > player2Games
+      }
+      _isWinningScore (score1, score2) {
+        return score1 > score2
       }
     }
 
