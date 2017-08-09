@@ -1,9 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../common/corpopong-icons.html">
 
 <dom-module id="match-details">
   <template>
@@ -34,12 +34,15 @@
       position: absolute;
       right: 0;
       bottom: 0;
-      color: var(--accent-color);
-      background-color: var(--primary-background-color);
+      color: var(--primary-background-color);
+      background-color: var(--primary-color);
       border-radius: 50%;
+      border-width: 8px;
+      border-color: var(--primary-color);
+      border-style: solid;
       @apply --shadow-elevation-2dp;
-      height: 40px;
-      width: 40px;
+      height: 30px;
+      width: 30px;
     }
     @media (max-width: 599px) {
       .player-1, .player-2 {
@@ -68,7 +71,7 @@
             <a href="/players/[[details.player1Uid]]">
               <div class="avatar">
                 <player-avatar src="[[player1.photoURL]]" big></player-avatar>
-                <iron-icon hidden="[[!player1Won]]" icon="star"></iron-icon>
+                <iron-icon hidden="[[!player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player1.displayName]]</h1>
             </a>
@@ -80,7 +83,7 @@
             <a href="/players/[[details.player2Uid]]">
               <div class="avatar">
                 <player-avatar src="[[player2.photoURL]]" big></player-avatar>
-                <iron-icon hidden="[[player1Won]]" icon="star"></iron-icon>
+                <iron-icon hidden="[[player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player2.displayName]]</h1>
             </a>
