@@ -23,9 +23,6 @@
   },
   "builds": [{
     "preset": "es5-bundled",
-    "js": {
-      "minify": false
-    },
     "swPrecacheConfig" : "sw-precache-config.js"
   }]
 }
