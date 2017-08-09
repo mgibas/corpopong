@@ -21,14 +21,14 @@
       font-size: 3rem;
       margin:0 2rem;
     }
-    .score {
+    .divider {
+      margin: 0 1rem;
+    }
+    .score, .divider {
       font-size: 2.5rem;
     }
     .score[winning] {
       font-weight: bolder;
-    }
-    .divider {
-      margin: 0 2rem;
     }
     .avatar {
       position: relative;
@@ -97,9 +97,7 @@
         <template is="dom-repeat" items="{{details.scores}}">
           <div class="layout horizontal center-center">
             <span class="score" winning$="[[_isWinningScore(item.player1, item.player2)]]">[[item.player1]]</span>
-            <div class="divider layout vertical center-center">
-              <h2>-</h2>
-            </div>
+            <span class="divider">-</span>
             <span class="score" winning$="[[_isWinningScore(item.player2, item.player1)]]">[[item.player2]]</span>
           </div>
         </template>

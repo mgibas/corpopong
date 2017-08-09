@@ -28,6 +28,10 @@
         font-size: 2.5rem;
       };
     }
+    .divider {
+      font-size: 2.5rem;
+      margin: 0 1rem;
+    }
     .buttons {
       margin-top:1rem;
       @apply --layout-horizontal;
@@ -49,6 +53,7 @@
       border-radius: 50%;
       @apply --shadow-elevation-2dp;
     }
+
     @media (max-width: 599px) {
       .player-1, .player-2 {
         @apply --layout-vertical;
@@ -122,9 +127,7 @@
               max="99"
               label="Score">
             </paper-input>
-            <div class="divider layout vertical center-center">
-              <h2>-</h2>
-            </div>
+            <span class="divider">-</span>
             <paper-input
               value="{{item.player2}}"
               type="number"
