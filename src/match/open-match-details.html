@@ -138,11 +138,10 @@
           </div>
         </template>
       </div>
-      <div class="buttons">
-        <paper-button class="danger" on-tap="_remove">Remove</paper-button>
-        <paper-button raised on-tap="_approve" disabled="[[approved]]">Approve</paper-button>
-      </div>
     </section>
+
+    <paper-fab icon="done" on-tap="_approve" disabled="[[approved]]" title="Approve"></paper-fab>
+
   </template>
   <script>
     class OpenMatchDetails extends Polymer.Element {
@@ -169,7 +168,7 @@
         }
         this._back()
       }
-      _remove () {
+      remove () {
         this.set('details.removed', true)
         this._back()
       }
