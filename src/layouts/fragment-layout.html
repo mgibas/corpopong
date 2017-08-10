@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../layouts/user-menu.html">
 
 <dom-module id="fragment-layout">
   <template>
@@ -33,16 +34,6 @@
       --paper-icon-button-ink-color: var(--text-primary-color);
     }
 
-    app-toolbar {
-      position: relative;
-    }
-
-    app-toolbar ::slotted([slot=fab]) {
-      position: absolute;
-      right: 1rem;
-      bottom: -28px;
-    }
-
     @media (max-width: 425px) {
       .content {
         padding: 0;
@@ -54,7 +45,7 @@
         <app-toolbar>
           <paper-icon-button hidden$=[[!backButton]] icon="arrow-back" on-tap="_back"></paper-icon-button>
           <div main-title>[[title]]</div>
-          <slot name="fab"></slot>
+          <user-menu></user-menu>
         </app-toolbar>
       </app-header>
       <div class="content">

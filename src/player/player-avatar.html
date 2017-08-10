@@ -8,20 +8,21 @@
     <style>
     :host {
       display: block;
+      height: 42px;
+      width: 42px;
     }
-    iron-image {
-      border-radius: 50%;
-      height: 48px;
-      width: 48px;
-      @apply --shadow-elevation-2dp;
-    }
-    iron-image[big] {
+    :host([big]), :host([big]) iron-image {
       height: 128px;
       width: 128px;
     }
+    iron-image {
+      border-radius: 50%;
+      height: 42px;
+      width: 42px;
+      @apply --shadow-elevation-2dp;
+    }
     </style>
     <iron-image
-      big$="[[big]]"
       src="[[src]]"
       sizing="cover"
       fade>
@@ -33,7 +34,10 @@
       static get properties () {
         return {
           src: String,
-          big: Boolean
+          big: {
+            type: Boolean,
+            reflectToAttribute: true
+          }
         }
       }
     }
