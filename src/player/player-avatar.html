@@ -8,25 +8,36 @@
     <style>
     :host {
       display: block;
+    }
+    :host,
+    iron-image,
+    .circle-frame {
       height: 42px;
       width: 42px;
     }
-    :host([big]), :host([big]) iron-image {
+    :host([big]),
+    :host([big]) iron-image,
+    :host([big]) .circle-frame {
       height: 128px;
       width: 128px;
     }
-    iron-image {
+    .circle-frame, iron-image {
+      z-index: 0;
       border-radius: 50%;
-      height: 42px;
-      width: 42px;
+      overflow: hidden;
+    }
+    iron-image {
       @apply --shadow-elevation-2dp;
     }
     </style>
-    <iron-image
-      src="[[src]]"
-      sizing="cover"
-      fade>
-    </iron-image>
+    <div class="circle-frame">
+      <iron-image
+        src="[[src]]"
+        sizing="cover"
+        fade>
+      </iron-image>
+    </div>
+
   </template>
   <script>
     class PlayerAvatar extends Polymer.Element {
