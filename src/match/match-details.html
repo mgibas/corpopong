@@ -30,6 +30,10 @@
     .score[winning] {
       font-weight: bolder;
     }
+    .info {
+      @apply --layout-vertical;
+      @apply --layout-center-center;
+    }
     .avatar {
       position: relative;
     }
@@ -44,8 +48,6 @@
       border-color: var(--primary-color);
       border-style: solid;
       @apply --shadow-elevation-2dp;
-      height: 30px;
-      width: 30px;
     }
     @media (max-width: 599px) {
       .player-1, .player-2 {
@@ -70,27 +72,27 @@
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">
         <div class="player-1">
-          <div class="info">
-            <a href="/players/[[details.player1Uid]]">
+          <a href="/players/[[details.player1Uid]]">
+            <div class="info">
               <div class="avatar">
                 <player-avatar src="[[player1.photoURL]]" big></player-avatar>
                 <iron-icon hidden="[[!player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player1.displayName]]</h1>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
         <span>VS</span>
         <div class="player-2">
-          <div class="info">
-            <a href="/players/[[details.player2Uid]]">
+          <a href="/players/[[details.player2Uid]]">
+            <div class="info">
               <div class="avatar">
                 <player-avatar src="[[player2.photoURL]]" big></player-avatar>
                 <iron-icon hidden="[[player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player2.displayName]]</h1>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
       </div>
       <div class="scores layout vertical">
