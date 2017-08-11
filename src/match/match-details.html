@@ -120,7 +120,7 @@
         return player1Games > player2Games
       }
       _isWinningScore (score1, score2) {
-        return score1 > score2
+        return Number(score1) > Number(score2)
       }
     }
 
