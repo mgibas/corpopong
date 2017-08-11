@@ -1,9 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../imports/d3-import.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../common/corpopong-icons.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-matches-summary.html">
 <link rel="import" href="../match/match-item.html">
@@ -52,8 +54,12 @@
           border-top: 1px solid var(--divider-color);
         }
       }
+      paper-fab[hidden] {
+        display: none;
+      }
     </style>
 
+    <firebase-document id="fb"></firebase-document>
     <firebase-document path="/players/[[playerUid]]" data="{{player}}"></firebase-document>
     <firebase-query path="/users/[[playerUid]]/matches" data="{{matches}}"></firebase-query>
 
@@ -86,6 +92,8 @@
       <player-matches-summary player-uid="[[playerUid]]"></player-matches-summary>
     </section>
 
+    <paper-fab icon="corpopong:paddles" hidden="[[_samePlayer(playerUid, userUid)]]" on-tap="_createMatch"></paper-fab>
+
   </template>
   <script>
     class PlayerDetails extends Polymer.Element {
@@ -93,12 +101,10 @@
       static get properties () {
         return {
           playerUid: String,
+          matches: Array,
           player: {
             type: Object,
             notify: true
-          },
-          matches: {
-            type: Array
           },
           wins: {
             type: Number,
@@ -126,6 +132,21 @@
       }
       _computeNoData (length) {
         return !length
+      }
+      _samePlayer (uid1, uid2) {
+        return uid1 === uid2
+      }
+      _createMatch () {
+        this.$.fb.data = {
+          player1Uid: this.userUid,
+          player2Uid: this.playerUid
+        }
+        this.$.fb.saveValue(`/users/${this.userUid}/open-matches`)
+          .then(() => {
+            this.$.fb.reset()
+            window.history.pushState({}, null, '/')
+            window.dispatchEvent(new CustomEvent('location-changed'))
+          })
       }
     }
 
