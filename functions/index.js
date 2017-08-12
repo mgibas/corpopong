@@ -18,26 +18,33 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
   .onWrite(event => {
     if (event.auth.admin || event.data.previous.exists() || !event.data.exists()) { return }
 
-    let match = {
-      player1Uid: event.params.userUid,
-      createdDate: new Date().toISOString()
-    }
-    let details = Object.assign({
-      approvals: {player1: '', player2: ''},
-      scores: [{player1: 0, player2: 0}]
-    }, match)
+    let playersPromise = admin.database().ref(`/players`).once('value')
+    let matchesPromise = admin.database().ref(`/users/${event.params.userUid}/matches/`).once('value')
 
-    return Promise.all([
-      admin.database()
-        .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
-        .set(match)
-      // admin.database()
-      //   .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
-      //   .set(match),
-      // admin.database()
-      //   .ref(`/open-match-details/${event.params.matchUid}`)
-      //   .set(details)
-    ])
+    return Promise.all([playersPromise, matchesPromise])
+      .then((snaps) => {
+        console.log(snaps)
+        let match = {
+          player1Uid: event.params.userUid,
+          createdDate: new Date().toISOString()
+        }
+        // let details = Object.assign({
+        //   approvals: {player1: '', player2: ''},
+        //   scores: [{player1: 0, player2: 0}]
+        // }, match)
+
+        return Promise.all([
+          admin.database()
+            .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
+            .set(match)
+          // admin.database()
+          //   .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
+          //   .set(match),
+          // admin.database()
+          //   .ref(`/open-match-details/${event.params.matchUid}`)
+          //   .set(details)
+        ])
+      })
   })
 exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/removed')
   .onWrite(event => {
