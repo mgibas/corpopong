@@ -14,34 +14,29 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       rated: false
     })
 })
-exports.createMatch = functions.database.ref('/users/{userUid}/open-matches/{matchUid}')
+exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{matchUid}')
   .onWrite(event => {
     if (event.auth.admin || event.data.previous.exists() || !event.data.exists()) { return }
 
-    let match = event.data.val()
-    if (match.player1Uid === match.player2Uid) { return }
-
-    match.createdDate = new Date().toISOString()
-    let details = {
-      player1Uid: match.player1Uid,
-      player2Uid: match.player2Uid,
-      createdDate: match.createdDate,
+    let match = {
+      player1Uid: event.params.userUid,
+      createdDate: new Date().toISOString()
+    }
+    let details = Object.assign({
       approvals: {player1: '', player2: ''},
       scores: [{player1: 0, player2: 0}]
-    }
+    }, match)
 
     return Promise.all([
       admin.database()
-        .ref(`/users/${match.player1Uid}/open-matches`)
-        .child(event.params.matchUid)
-        .set(match),
-      admin.database()
-        .ref(`/users/${match.player2Uid}/open-matches`)
-        .child(event.params.matchUid)
-        .set(match),
-      admin.database()
-        .ref(`/open-match-details/${event.params.matchUid}`)
-        .set(details)
+        .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
+        .set(match)
+      // admin.database()
+      //   .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
+      //   .set(match),
+      // admin.database()
+      //   .ref(`/open-match-details/${event.params.matchUid}`)
+      //   .set(details)
     ])
   })
 exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/removed')
