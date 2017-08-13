@@ -20,8 +20,9 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
 
     let playersPromise = admin.database().ref(`/players`).once('value')
     let matchesPromise = admin.database().ref(`/users/${event.params.userUid}/matches/`).once('value')
+    let openMatchesPromise = admin.database().ref('/open-match-details').once('value')
 
-    return Promise.all([playersPromise, matchesPromise])
+    return Promise.all([playersPromise, matchesPromise, openMatchesPromise])
       .then((snaps) => {
         let players = {}
         let playerRating = 0
@@ -41,14 +42,25 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
             players[match.player1Uid].matchesCount++
           }
         })
+        snaps[2].forEach((openMatchSnapshot) => {
+          let openMatch = openMatchSnapshot.val()
+          if (openMatch.player1Uid === event.params.userUid) {
+            players[match.player2Uid].matchesCount++
+          } else if (openMatch.player2Uid === event.params.userUid) {
+            players[match.player1Uid].hasOpenMatch = true
+          }
+          players[openMatch.player1Uid].openMatchesCount++
+          players[openMatch.player2Uid].openMatchesCount++
+        })
 
         let oponents = Object.keys(players)
           .map(key => players[key])
           .filter((p) => p.rated && p.uid !== event.params.userUid)
+          .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
           .sort((a, b) => a.matchesCount - b.matchesCount ||
             Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
-        console.log(oponents)
+        oponents.forEach((o) => console.log(o))
 
         let match = {
           player1Uid: event.params.userUid,
