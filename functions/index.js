@@ -23,7 +23,24 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
 
     return Promise.all([playersPromise, matchesPromise])
       .then((snaps) => {
-        console.log(snaps)
+        let players = {}
+
+        snaps[0].forEach((playerSnapshot) => {
+          let player = playerSnapshot.val()
+          player.matchesCount = 0
+          if (player.rated) {
+            players[playerSnapshot.key] = player
+          }
+        })
+        snaps[1].forEach((matchSnapshot) => {
+          let match = matchSnapshot.val()
+          if (match.player1Uid === event.params.userUid) {
+            players[match.player2Uid].matchesCount++
+          } else {
+            players[match.player1Uid].matchesCount++
+          }
+        })
+        console.log(players)
         let match = {
           player1Uid: event.params.userUid,
           createdDate: new Date().toISOString()
