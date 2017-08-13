@@ -24,12 +24,14 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
     return Promise.all([playersPromise, matchesPromise])
       .then((snaps) => {
         let players = {}
+        let playerRating = 0
 
         snaps[0].forEach((playerSnapshot) => {
           let player = playerSnapshot.val()
           player.matchesCount = 0
           player.uid = playerSnapshot.key
           players[playerSnapshot.key] = player
+          if (playerSnapshot.key === event.params.userUid) { playerRating = player.rating }
         })
         snaps[1].forEach((matchSnapshot) => {
           let match = matchSnapshot.val()
@@ -43,7 +45,8 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
         let oponents = Object.keys(players)
           .map(key => players[key])
           .filter((p) => p.rated && p.uid !== event.params.userUid)
-          .sort((a, b) => a.matchesCount - b.matchesCount || a.rating - b.rating)
+          .sort((a, b) => a.matchesCount - b.matchesCount ||
+            Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
         console.log(oponents)
 
