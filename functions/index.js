@@ -30,6 +30,7 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
         snaps[0].forEach((playerSnapshot) => {
           let player = playerSnapshot.val()
           player.matchesCount = 0
+          player.openMatchesCount = 0
           player.uid = playerSnapshot.key
           players[playerSnapshot.key] = player
           if (playerSnapshot.key === event.params.userUid) { playerRating = player.rating }
