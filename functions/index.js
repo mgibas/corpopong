@@ -46,9 +46,9 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
         snaps[2].forEach((openMatchSnapshot) => {
           let openMatch = openMatchSnapshot.val()
           if (openMatch.player1Uid === event.params.userUid) {
-            players[match.player2Uid].matchesCount++
+            players[openMatch.player2Uid].hasOpenMatch = true
           } else if (openMatch.player2Uid === event.params.userUid) {
-            players[match.player1Uid].hasOpenMatch = true
+            players[openMatch.player1Uid].hasOpenMatch = true
           }
           players[openMatch.player1Uid].openMatchesCount++
           players[openMatch.player2Uid].openMatchesCount++
