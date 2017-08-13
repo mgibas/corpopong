@@ -28,9 +28,8 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
         snaps[0].forEach((playerSnapshot) => {
           let player = playerSnapshot.val()
           player.matchesCount = 0
-          if (player.rated) {
-            players[playerSnapshot.key] = player
-          }
+          player.uid = playerSnapshot.key
+          players[playerSnapshot.key] = player
         })
         snaps[1].forEach((matchSnapshot) => {
           let match = matchSnapshot.val()
@@ -40,26 +39,37 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
             players[match.player1Uid].matchesCount++
           }
         })
-        console.log(players)
+
+        let oponents = Object.keys(players)
+          .map(key => players[key])
+          .filter((p) => p.rated && p.uid !== event.params.userUid)
+          .sort((a, b) => a.matchesCount - b.matchesCount || a.rating - b.rating)
+
+        console.log(oponents)
+
         let match = {
           player1Uid: event.params.userUid,
+          player2Uid: oponents[0].uid,
           createdDate: new Date().toISOString()
         }
-        // let details = Object.assign({
-        //   approvals: {player1: '', player2: ''},
-        //   scores: [{player1: 0, player2: 0}]
-        // }, match)
+        let details = Object.assign({
+          approvals: {player1: '', player2: ''},
+          scores: [{player1: 0, player2: 0}]
+        }, match)
 
         return Promise.all([
           admin.database()
             .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
-            .set(match)
-          // admin.database()
-          //   .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
-          //   .set(match),
-          // admin.database()
-          //   .ref(`/open-match-details/${event.params.matchUid}`)
-          //   .set(details)
+            .set(match),
+          admin.database()
+            .ref(`/users/${match.player1Uid}/create-match/${event.params.matchUid}`)
+            .set(null),
+          admin.database()
+            .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
+            .set(match),
+          admin.database()
+            .ref(`/open-match-details/${event.params.matchUid}`)
+            .set(details)
         ])
       })
   })
