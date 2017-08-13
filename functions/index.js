@@ -61,8 +61,6 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
           .sort((a, b) => a.matchesCount - b.matchesCount ||
             Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
-        oponents.forEach((o) => console.log(o))
-
         let match = {
           player1Uid: event.params.userUid,
           player2Uid: oponents[0].uid,
