@@ -14,7 +14,7 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       rated: false
     })
 })
-exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{matchUid}')
+exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}')
   .onWrite(event => {
     if (event.auth.admin || event.data.previous.exists() || !event.data.exists()) { return }
 
@@ -58,12 +58,36 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
           .map(key => players[key])
           .filter((p) => p.rated && p.uid !== event.params.userUid)
           .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
+          .filter((p) => Math.abs(p.rating - playerRating) <= 300)
           .sort((a, b) => a.matchesCount - b.matchesCount ||
             Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
-        let match = {
+        let draft = {
           player1Uid: event.params.userUid,
           player2Uid: oponents[0].uid,
+          createdDate: new Date().toISOString()
+        }
+
+        return admin.database()
+          .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
+          .set(draft)
+      })
+  })
+exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}/accept')
+  .onWrite(event => {
+    if (event.auth.admin || !event.data.exists()) { return }
+
+    let accepted = event.data.val()
+    if (!accepted) return
+
+    return admin.database()
+      .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
+      .once('value')
+      .then((snap) => {
+        let draft = snap.val()
+        let match = {
+          player1Uid: draft.player1Uid,
+          player2Uid: draft.player2Uid,
           createdDate: new Date().toISOString()
         }
         let details = Object.assign({
@@ -76,14 +100,14 @@ exports.createMatch = functions.database.ref('/users/{userUid}/create-match/{mat
             .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
             .set(match),
           admin.database()
-            .ref(`/users/${match.player1Uid}/create-match/${event.params.matchUid}`)
-            .set(null),
-          admin.database()
             .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
             .set(match),
           admin.database()
             .ref(`/open-match-details/${event.params.matchUid}`)
-            .set(details)
+            .set(details),
+          admin.database()
+            .ref(`/users/${match.player1Uid}/draft-matches`)
+            .set(null)
         ])
       })
   })
