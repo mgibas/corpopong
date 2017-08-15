@@ -64,7 +64,9 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
 
         let draft = {
           player1Uid: event.params.userUid,
+          player1UidProbability: calcProbability(playerRating, oponents[0].rating),
           player2Uid: oponents[0].uid,
+          player2UidProbability: calcProbability(oponents[0].rating, playerRating),
           createdDate: new Date().toISOString()
         }
 
