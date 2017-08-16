@@ -1,0 +1,119 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../common/paper-timeoutable-fab.html">
+
+<dom-module id="match-create">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    .player-1, .player-2 {
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+      @apply --paper-font-headline;
+    }
+    .player-2 {
+      @apply --layout-horizontal-reverse;
+    }
+    .info {
+      @apply --layout-vertical;
+      @apply --layout-center-center;
+    }
+    .secondary {
+      @apply --paper-font-body1;
+      @apply --secondary-text-color;
+    }
+    </style>
+    <firebase-document path="/users/[[userUid]]/draft-matches/[[draftUid]]" data="{{draft}}"></firebase-document>
+    <firebase-document path="/players/[[userUid]]" data="{{player1}}"></firebase-document>
+    <firebase-document path="/players/[[draft.player2Uid]]" data="{{player2}}"></firebase-document>
+
+    <section class="paper-material" elevation="1">
+        <div class="layout horizontal center-center">
+          <div class="player-1">
+            <div class="info">
+              <player-avatar src="[[player1.photoURL]]" big></player-avatar>
+              <span>[[player1.displayName]]</span>
+              <span class="secondary">[[player1.rating]] ([[_formatPercent(draft.player1Probability)]])</span>
+            </div>
+          </div>
+          <span>VS</span>
+          <div class="player-2">
+            <div class="info">
+              <player-avatar src="[[player2.photoURL]]" big spinner></player-avatar>
+              <span>[[player2.displayName]]</span>
+              <span class="secondary">[[player2.rating]] ([[_formatPercent(draft.player2Probability)]])</span>
+            </div>
+          </div>
+        </div>
+        <paper-timeoutable-fab
+          id="accept"
+          disabled="[[!draftCreated]]"
+          timeout="60000"
+          icon="done"
+          timeouted-icon="refresh"
+          on-not-timeouted-tap="_accept"
+          on-timeouted-tap="_refresh">
+        </paper-timeoutable-fab>
+    </section>
+
+
+  </template>
+  <script>
+    class MatchCreate extends Polymer.mixinBehaviors([Polymer.FirebaseDatabaseBehavior], Polymer.Element) {
+      static get is () { return 'match-create' }
+      static get properties () {
+        return {
+          userUid: String,
+          draftUid: String,
+          draft: Object,
+          draftCreated: {
+            type: Boolean,
+            computed: '_computedraftCreated(draft.player2Uid)',
+            reflectToAttribute: true,
+            observer: '_draftCreatedChanged'
+          }
+        }
+      }
+      reset () {
+        this.draftUid = null
+        this.$.accept.reset()
+      }
+      createDraft () {
+        let newDraft = window.firebase.database(this.app)
+          .ref(`/users/${this.userUid}/draft-matches`)
+          .push()
+
+        newDraft.set({create: 'create'})
+        this.draftUid = newDraft.key
+      }
+      _computedraftCreated (oponentUid) {
+        return !!oponentUid
+      }
+      _accept () {
+        this.set('draft.accept', true)
+        window.history.pushState({}, null, '/')
+        window.dispatchEvent(new CustomEvent('location-changed'))
+      }
+      _refresh () {
+        this.reset()
+        this.createDraft()
+      }
+      _formatPercent (value) {
+        if (!value) return
+        return new Intl.NumberFormat(undefined, { style: 'percent' }).format(value)
+      }
+      _draftCreatedChanged (draftCreated) {
+        if (draftCreated) {
+          this.$.accept.reset()
+          this.$.accept.start()
+        }
+      }
+    }
+
+    window.customElements.define(MatchCreate.is, MatchCreate)
+  </script>
+</dom-module>

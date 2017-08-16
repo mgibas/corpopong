@@ -1,0 +1,127 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="paper-timeoutable-fab">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      position: relative;
+      width: var(--paper-timeoutable-fab-size, 56px);
+      height: var(--paper-timeoutable-fab-size, 56px);
+    }
+    paper-fab {
+      position: absolute;
+      pointer-events:all;
+      top:0;
+      left:0;
+    }
+    svg {
+      position: absolute;
+      pointer-events: none;
+      height: var(--paper-timeoutable-fab-size, 56px);
+      width: var(--paper-timeoutable-fab-size, 56px);
+      z-index: 2;
+      transform-origin:center center;
+      transform: rotate(-90deg);
+    }
+    circle {
+      stroke: var(--light-accent-color);
+      stroke-width: 6px;
+      fill: transparent;
+    }
+    :host([timeouted]) svg {
+      display: none;
+    }
+    :host([disabled]) circle {
+      stroke: var(--dark-theme-disabled-color);
+    }
+    </style>
+    <paper-fab id="fab" icon="[[_icon]]" hidden="[[timeouted]]" on-tap="_onTap" disabled="[[disabled]]"></paper-fab>
+    <svg id="svg">
+      <circle id="circle" r="25px" cx="28px" cy="28px"></circle>
+    </svg>
+  </template>
+  <script>
+    class PaperTimeoutableFab extends Polymer.Element {
+      static get is () { return 'paper-timeoutable-fab' }
+      static get properties () {
+        return {
+          timeout: Number,
+          timeouted: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          icon: String,
+          timeoutedIcon: String,
+          disabled: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          _counter: {
+            type: Number,
+            observer: '_counterChanged'
+          },
+          _progress: {
+            type: Number,
+            value: 1
+          },
+          _icon: {
+            type: String,
+            computed: '_computeIcon(timeouted, icon, timeoutedIcon)'
+          },
+          _timerId: Number
+        }
+      }
+      reset () {
+        clearTimeout(this._timerId)
+        this._counter = this.timeout
+        this.timeouted = false
+      }
+      start () {
+        this._countDown()
+      }
+      _countDown () {
+        if (this._counter > 0) {
+          this._counter = this._counter - 10
+          this._timerId = setTimeout(() => this._countDown(), 10)
+        }
+      }
+      _counterChanged (counter) {
+        if (counter > 0) {
+          this._progress = counter / this.timeout
+          this.$.circle.style.strokeDasharray = (25 * 2 * Math.PI) + 'px'
+          this.$.circle.style.strokeDashoffset = (25 * 2 * Math.PI) * (1 - this._progress) + 'px'
+        } else {
+          this.$.fab.animate([
+            { transform: 'scale(1.2)' },
+            { transform: 'scale(0.9)' },
+            { transform: 'scale(1)' }
+          ], {
+            duration: 200, easing: 'ease-in-out'
+          })
+          this.timeouted = true
+        }
+      }
+      _computeIcon (timeouted, icon, timeoutedIcon) {
+        if (timeouted) return timeoutedIcon
+        return icon
+      }
+      _onTap (e) {
+        e.preventDefault()
+        if (this.timeouted) {
+          this.dispatchEvent(new CustomEvent('timeouted-tap'))
+        } else {
+          this.dispatchEvent(new CustomEvent('not-timeouted-tap'))
+        }
+      }
+    }
+
+    window.customElements.define(PaperTimeoutableFab.is, PaperTimeoutableFab)
+  </script>
+</dom-module>

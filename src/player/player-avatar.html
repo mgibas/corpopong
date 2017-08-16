@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/progress-spinner/progress-spinner.html">
 <link rel="import" href="../styles/app-styles.html">
 
 <dom-module id="player-avatar">
@@ -8,6 +9,7 @@
     <style>
     :host {
       display: block;
+      position:relative;
     }
     :host,
     iron-image,
@@ -27,6 +29,11 @@
       overflow: hidden;
       @apply --shadow-elevation-3dp;
     }
+    progress-spinner {
+      position: absolute;
+      left: -3px;
+      top: -3px;
+    }
     </style>
     <div class="circle-frame">
       <iron-image
@@ -35,7 +42,9 @@
         fade>
       </iron-image>
     </div>
-
+    <template is="dom-if" if="[[spinner]]">
+      <progress-spinner size="134" bar-size="6" active="[[_spinnerActive]]"></progress-spinner>
+    </template>
   </template>
   <script>
     class PlayerAvatar extends Polymer.Element {
@@ -46,8 +55,17 @@
           big: {
             type: Boolean,
             reflectToAttribute: true
+          },
+          spinner: Boolean,
+          _spinnerActive: {
+            type: Boolean,
+            value: true,
+            computed: '_computeSpinnerActive(src)'
           }
         }
+      }
+      _computeSpinnerActive (src) {
+        return !src
       }
     }
 
