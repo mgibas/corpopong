@@ -11,7 +11,8 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       displayName: event.data.displayName,
       photoURL: event.data.photoURL,
       rating: 750,
-      rated: false
+      rated: false,
+      active: true
     })
 })
 exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}')
@@ -76,11 +77,8 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
       })
   })
 exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}/accept')
-  .onWrite(event => {
-    if (event.auth.admin || !event.data.exists()) { return }
-
-    let accepted = event.data.val()
-    if (!accepted) return
+  .onCreate(event => {
+    if (event.auth.admin || !event.data.val()) { return }
 
     return admin.database()
       .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
@@ -107,6 +105,9 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
           admin.database()
             .ref(`/open-match-details/${event.params.matchUid}`)
             .set(details),
+          admin.database()
+            .ref(`/players/${match.player1Uid}/active`)
+            .set(true),
           admin.database()
             .ref(`/users/${match.player1Uid}/draft-matches`)
             .set(null)
