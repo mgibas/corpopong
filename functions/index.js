@@ -15,8 +15,8 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
     })
 })
 exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}')
-  .onWrite(event => {
-    if (event.auth.admin || event.data.previous.exists() || !event.data.exists()) { return }
+  .onCreate(event => {
+    if (event.auth.admin) { return }
 
     let playersPromise = admin.database().ref(`/players`).once('value')
     let matchesPromise = admin.database().ref(`/users/${event.params.userUid}/matches/`).once('value')
@@ -114,8 +114,8 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
       })
   })
 exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid}/approvals')
-  .onWrite((event) => {
-    if (event.auth.admin || !event.data.exists() || !event.data.previous.exists()) { return }
+  .onUpdate((event) => {
+    if (event.auth.admin) { return }
 
     let approvals = event.data.val()
     if (!approvals.player1 || !approvals.player2) { return }
@@ -157,9 +157,7 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
   })
 
 exports.updateRating = functions.database.ref('/matches/{matchUid}')
-  .onWrite(event => {
-    if (event.data.previous.exists() || !event.data.exists()) { return }
-
+  .onCreate(event => {
     let match = event.data.val()
     return Promise.all([
       admin.database().ref(`/players/${match.player1Uid}`).once('value'),
