@@ -113,27 +113,6 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
         ])
       })
   })
-exports.rejectMatch = functions.database.ref('/open-match-details/{matchUid}/removed')
-  .onWrite(event => {
-    if (event.auth.admin || !event.data.exists() || !event.data.val()) { return }
-
-    return admin.database().ref(`/open-match-details/${event.params.matchUid}`)
-      .once('value')
-      .then((snap) => {
-        let details = snap.val()
-        return Promise.all([
-          admin.database()
-            .ref(`/users/${details.player1Uid}/open-matches/${event.params.matchUid}`)
-            .set(null),
-          admin.database()
-            .ref(`/users/${details.player2Uid}/open-matches/${event.params.matchUid}`)
-            .set(null),
-          admin.database()
-            .ref(`/open-match-details/${event.params.matchUid}`)
-            .set(null)
-        ])
-      })
-  })
 exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid}/approvals')
   .onWrite((event) => {
     if (event.auth.admin || !event.data.exists() || !event.data.previous.exists()) { return }
