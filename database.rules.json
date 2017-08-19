@@ -21,7 +21,11 @@
     },
     "players": {
       ".read": "auth != null",
-      ".write": false
+      "$uid": {
+        "active": {
+          ".write": "$uid === auth.uid"
+        }
+      }
     },
     "matches": {
       ".read": "auth != null",

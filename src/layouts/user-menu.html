@@ -1,7 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 
@@ -28,6 +31,7 @@
     }
     </style>
     <firebase-auth id="auth" user="{{user}}" provider="google"></firebase-auth>
+    <firebase-document path="/players/[[user.uid]]" data="{{profile}}"></firebase-document>
 
     <paper-menu-button horizontal-align="right" vertical-offset="64">
       <player-avatar src="[[user.photoURL]]" slot="dropdown-trigger"></player-avatar>
@@ -35,6 +39,10 @@
         <div class="paper-material" elevation="1">
           <p>[[user.displayName]]</p>
           <p class="email">[[user.email]]</p>
+        </div>
+        <div class="paper-material layout horizontal" elevation="1">
+          <span class="flex">Active</span>
+          <paper-toggle-button checked="{{profile.active}}"></paper-toggle-button>
         </div>
         <div class="paper-material buttons" elevation="1">
           <paper-button on-tap="signOut">
@@ -47,14 +55,6 @@
   <script>
     class UserMenu extends Polymer.Element {
       static get is () { return 'user-menu' }
-      // static get properties () {
-      //   return {
-      //     user: {
-      //       type: Object,
-      //       observer: 'test'
-      //     }
-      //   }
-      // }
       signOut () {
         this.$.auth.signOut()
       }

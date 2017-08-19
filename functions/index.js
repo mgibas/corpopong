@@ -56,7 +56,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
 
         let oponents = Object.keys(players)
           .map(key => players[key])
-          .filter((p) => p.rated && p.uid !== event.params.userUid)
+          .filter((p) => p.active && p.rated && p.uid !== event.params.userUid)
           .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
           .filter((p) => Math.abs(p.rating - playerRating) <= 300)
           .sort((a, b) => a.matchesCount - b.matchesCount ||
