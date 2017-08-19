@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../bower_components/progress-spinner/progress-spinner.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../common/paper-progress-circle.html">
 
 <dom-module id="player-avatar">
   <template>
@@ -29,10 +29,12 @@
       overflow: hidden;
       @apply --shadow-elevation-3dp;
     }
-    progress-spinner {
+    paper-progress-circle {
       position: absolute;
-      left: -3px;
-      top: -3px;
+      left: 0px;
+      top: 0px;
+      --paper-progress-circle-size: 128px;
+      --paper-progress-circle-color: var(--primary-color);
     }
     </style>
     <div class="circle-frame">
@@ -43,7 +45,7 @@
       </iron-image>
     </div>
     <template is="dom-if" if="[[spinner]]">
-      <progress-spinner size="134" bar-size="6" active="[[_spinnerActive]]"></progress-spinner>
+      <paper-progress-circle indeterminate active="[[_spinnerActive]]"></paper-progress-circle>
     </template>
   </template>
   <script>
@@ -60,12 +62,12 @@
           _spinnerActive: {
             type: Boolean,
             value: true,
-            computed: '_computeSpinnerActive(src)'
+            computed: '_computeSpinnerActive(spinner, src)'
           }
         }
       }
-      _computeSpinnerActive (src) {
-        return !src
+      _computeSpinnerActive (spinner, src) {
+        return spinner && !src
       }
     }
 
