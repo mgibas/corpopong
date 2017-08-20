@@ -15,7 +15,7 @@
   },
   "scripts": {
     "install": "bower install --allow-root",
-    "lint": "eslint . --ext js,html --ignore-path .gitignore && polymer lint",
+    "lint": "eslint . --ext js,html --ignore-path .gitignore",
     "build": "polymer build",
     "start": "polymer serve"
   }
