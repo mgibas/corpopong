@@ -68,6 +68,7 @@
         clearTimeout(this._timerId)
         this._counter = this.timeout
         this.timeouted = false
+        this._progress = null
       }
       start () {
         this._countDown()

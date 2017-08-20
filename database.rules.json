@@ -43,11 +43,7 @@
         },
         "draft-matches": {
           "$draftUid": {
-            ".write": "$uid === auth.uid && !data.exists()",
-            ".validate": "data.parent().parent()",
-            "accept": {
-  						".write": "$uid === auth.uid && now <= data.parent().child('timestamp').val() + 120000"
-            }
+            ".write": "$uid === auth.uid && !data.exists()"
           }
         }
       }

@@ -85,9 +85,8 @@
       createDraft () {
         let newDraft = window.firebase.database(this.app)
           .ref(`/users/${this.userUid}/draft-matches`)
-          .push()
+          .push({create: 'create'})
 
-        newDraft.set({create: 'create'})
         this.draftUid = newDraft.key
       }
       _computedraftCreated (oponentUid) {
