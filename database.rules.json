@@ -34,8 +34,22 @@
     },
     "users": {
       "$uid": {
-        ".read": "auth != null",
-        ".write": "$uid === auth.uid"
+      	".read": "auth != null",
+        "matches": {
+          ".write": "$uid === auth.uid && !data.exists()",
+        },
+        "open-matches": {
+          ".write": "false",
+        },
+        "draft-matches": {
+          "$draftUid": {
+            ".write": "$uid === auth.uid && !data.exists()",
+            ".validate": "data.parent().parent()",
+            "accept": {
+  						".write": "$uid === auth.uid && now <= data.parent().child('timestamp').val() + 120000"
+            }
+          }
+        }
       }
     }
   }

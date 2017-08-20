@@ -22,11 +22,18 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
     let playersPromise = admin.database().ref(`/players`).once('value')
     let matchesPromise = admin.database().ref(`/users/${event.params.userUid}/matches/`).once('value')
     let openMatchesPromise = admin.database().ref('/open-match-details').once('value')
+    let userOpenMatchesPromise = admin.database().ref(`/users/${event.params.userUid}/open-matches/`).once('value')
 
-    return Promise.all([playersPromise, matchesPromise, openMatchesPromise])
+    return Promise.all([playersPromise, matchesPromise, openMatchesPromise, userOpenMatchesPromise])
       .then((snaps) => {
         let players = {}
         let playerRating = 0
+
+        if (snaps[0].numChildren() >= 5) {
+          return admin.database()
+            .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
+            .set(null)
+        }
 
         snaps[0].forEach((playerSnapshot) => {
           let player = playerSnapshot.val()
