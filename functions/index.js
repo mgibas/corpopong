@@ -68,7 +68,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
           player1Probability: calcProbability(playerRating, oponents[0].rating),
           player2Uid: oponents[0].uid,
           player2Probability: calcProbability(oponents[0].rating, playerRating),
-          createdDate: new Date().toISOString()
+          timestamp: admin.database.ServerValue.TIMESTAMP
         }
 
         return admin.database()
