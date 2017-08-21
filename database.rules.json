@@ -34,7 +34,7 @@
     },
     "users": {
       "$uid": {
-      	".read": "auth != null",
+      	".read": "$uid === auth.uid",
         "matches": {
           ".write": "false"
         },
