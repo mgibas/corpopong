@@ -72,7 +72,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
 
         if (oponents.length === 0) {
           return admin.database()
-            .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details/noOponents`)
+            .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}/noOponents`)
             .set(true)
         }
 
@@ -85,7 +85,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
         }
 
         return admin.database()
-          .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details`)
+          .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}`)
           .set(details)
       })
   })
@@ -94,7 +94,7 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
     if (event.auth.admin) { return }
 
     return admin.database()
-      .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details`)
+      .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}`)
       .once('value')
       .then((snap) => {
         let draftDetails = snap.val()
@@ -123,6 +123,9 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
             .set(true),
           admin.database()
             .ref(`/users/${match.player1Uid}/draft-matches`)
+            .set(null),
+          admin.database()
+            .ref(`/users/${match.player1Uid}/draft-match-details`)
             .set(null)
         ])
       })
