@@ -29,9 +29,6 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
         let players = {}
         let playerRating = 0
 
-        console.log(snaps[3])
-        console.log(snaps[3].numChildren())
-        console.log(snaps[3].val())
         if (snaps[3].numChildren() >= 5) {
           return admin.database()
             .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
@@ -73,7 +70,13 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
           .sort((a, b) => a.matchesCount - b.matchesCount ||
             Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
-        let draft = {
+        if (oponents.length === 0) {
+          return admin.database()
+            .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details/noOponents`)
+            .set(true)
+        }
+
+        let details = {
           player1Uid: event.params.userUid,
           player1Probability: calcProbability(playerRating, oponents[0].rating),
           player2Uid: oponents[0].uid,
@@ -82,22 +85,22 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
         }
 
         return admin.database()
-          .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
-          .set(draft)
+          .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details`)
+          .set(details)
       })
   })
 exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}/accept')
   .onCreate(event => {
-    if (event.auth.admin || !event.data.val()) { return }
+    if (event.auth.admin) { return }
 
     return admin.database()
-      .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
+      .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}/details`)
       .once('value')
       .then((snap) => {
-        let draft = snap.val()
+        let draftDetails = snap.val()
         let match = {
-          player1Uid: draft.player1Uid,
-          player2Uid: draft.player2Uid,
+          player1Uid: draftDetails.player1Uid,
+          player2Uid: draftDetails.player2Uid,
           createdDate: new Date().toISOString()
         }
         let details = Object.assign({
