@@ -83,11 +83,20 @@
         this.$.accept.reset()
       }
       createDraft () {
-        let newDraft = window.firebase.database(this.app)
-          .ref(`/users/${this.userUid}/draft-matches`)
-          .push({create: 'create'})
+        window.firebase.database(this.app)
+          .ref(`/users/${this.userUid}/open-matches`)
+          .once('value')
+          .then((snap) => {
+            if (snap.numChildren() >= 5) {
+              this._limitReached = true
+            } else {
+              let newDraft = window.firebase.database(this.app)
+                .ref(`/users/${this.userUid}/draft-matches`)
+                .push({create: 'create'})
 
-        this.draftUid = newDraft.key
+              this.draftUid = newDraft.key
+            }
+          })
       }
       _computedraftCreated (oponentUid) {
         return !!oponentUid

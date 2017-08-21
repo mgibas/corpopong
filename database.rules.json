@@ -36,14 +36,26 @@
       "$uid": {
       	".read": "auth != null",
         "matches": {
-          ".write": "$uid === auth.uid && !data.exists()",
+          ".write": "false"
         },
         "open-matches": {
-          ".write": "false",
+          ".write": "false"
         },
         "draft-matches": {
           "$draftUid": {
-            ".write": "$uid === auth.uid && !data.exists()"
+            ".write": "$uid === auth.uid",
+            "player1Uid": {
+              ".validate": "!data.exists()"
+            },
+            "player2Uid": {
+              ".validate": "!data.exists()"
+            },
+            "timestamp": {
+              ".validate": "!data.exists()"
+            },
+            "accept": {
+              ".validate": "now <= data.parent().child('timestamp').val() + 120000"
+            }
           }
         }
       }
