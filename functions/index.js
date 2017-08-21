@@ -29,7 +29,10 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
         let players = {}
         let playerRating = 0
 
-        if (snaps[0].numChildren() >= 5) {
+        console.log(snaps[3])
+        console.log(snaps[3].numChildren())
+        console.log(snaps[3].val())
+        if (snaps[3].numChildren() >= 5) {
           return admin.database()
             .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
             .set(null)
