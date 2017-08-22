@@ -9,6 +9,31 @@
   <template>
     <style include="app-styles"></style>
     <style>
+    :host {
+      position: relative;
+      display: block;
+      --message-overlay: {
+        position: absolute;
+        left: 0;
+        top:0;
+        right:0;
+        bottom:0;
+        background-color: #fff;
+        text-align: center;
+        white-space: pre;
+        @apply --layout;
+        @apply --layout-center-center;
+        @apply --paper-font-subhead;
+      }
+    }
+    :host([open-matches-limit-reached])::after {
+      content:'Slow down a bit!\APlease close your open matches frist.';
+      @apply --message-overlay;
+    }
+    :host([no-oponents-found])::after {
+      content:'Take a break champ! \A No oponent for you at the moment - come back later.';
+      @apply --message-overlay;
+    }
     .player-1, .player-2 {
       @apply --layout-flex;
       @apply --layout-horizontal;
@@ -26,10 +51,13 @@
       @apply --paper-font-body1;
       @apply --secondary-text-color;
     }
+
     </style>
+    <firebase-query path="/users/[[userUid]]/open-matches" data="{{openMatches}}"></firebase-query>
     <firebase-document path="/users/[[userUid]]/draft-matches/[[draftUid]]" data="{{draft}}"></firebase-document>
+    <firebase-document path="/users/[[userUid]]/draft-match-details/[[draftUid]]" data="{{draftDetails}}"></firebase-document>
     <firebase-document path="/players/[[userUid]]" data="{{player1}}"></firebase-document>
-    <firebase-document path="/players/[[draft.player2Uid]]" data="{{player2}}"></firebase-document>
+    <firebase-document path="/players/[[draftDetails.player2Uid]]" data="{{player2}}"></firebase-document>
 
     <section class="paper-material" elevation="1">
         <div class="layout horizontal center-center">
@@ -37,7 +65,7 @@
             <div class="info">
               <player-avatar src="[[player1.photoURL]]" big></player-avatar>
               <span>[[player1.displayName]]</span>
-              <span class="secondary">[[player1.rating]] ([[_formatPercent(draft.player1Probability)]])</span>
+              <span class="secondary">[[player1.rating]] ([[_formatPercent(draftDetails.player1Probability)]])</span>
             </div>
           </div>
           <span>VS</span>
@@ -45,13 +73,13 @@
             <div class="info">
               <player-avatar src="[[player2.photoURL]]" big spinner></player-avatar>
               <span>[[player2.displayName]]</span>
-              <span class="secondary">[[player2.rating]] ([[_formatPercent(draft.player2Probability)]])</span>
+              <span class="secondary">[[player2.rating]] ([[_formatPercent(draftDetails.player2Probability)]])</span>
             </div>
           </div>
         </div>
         <paper-timeoutable-fab
           id="accept"
-          disabled="[[!draftCreated]]"
+          disabled="[[!validDraftCreated]]"
           timeout="60000"
           icon="done"
           timeouted-icon="refresh"
@@ -70,11 +98,21 @@
           userUid: String,
           draftUid: String,
           draft: Object,
-          draftCreated: {
+          validDraftCreated: {
             type: Boolean,
-            computed: '_computedraftCreated(draft.player2Uid)',
+            computed: '_computeValidDraftCreated(draftDetails.player2Uid)',
+            observer: '_validDraftCreatedChanged'
+          },
+          openMatches: Object,
+          openMatchesLimitReached: {
+            type: Boolean,
             reflectToAttribute: true,
-            observer: '_draftCreatedChanged'
+            computed: '_computeOpenMatchesLimitReached(openMatches.length)'
+          },
+          noOponentsFound: {
+            type: Boolean,
+            reflectToAttribute: true,
+            computed: '_computeNoOponentsFound(draftDetails.noOponents)'
           }
         }
       }
@@ -83,23 +121,12 @@
         this.$.accept.reset()
       }
       createDraft () {
-        window.firebase.database(this.app)
-          .ref(`/users/${this.userUid}/open-matches`)
-          .once('value')
-          .then((snap) => {
-            if (snap.numChildren() >= 5) {
-              this._limitReached = true
-            } else {
-              let newDraft = window.firebase.database(this.app)
-                .ref(`/users/${this.userUid}/draft-matches`)
-                .push({create: 'create'})
+        if (this.openMatchesLimitReached) return
+        let newDraft = window.firebase.database(this.app)
+          .ref(`/users/${this.userUid}/draft-matches`)
+          .push({create: 'create'})
 
-              this.draftUid = newDraft.key
-            }
-          })
-      }
-      _computedraftCreated (oponentUid) {
-        return !!oponentUid
+        this.draftUid = newDraft.key
       }
       _accept () {
         this.set('draft.accept', true)
@@ -114,11 +141,18 @@
         if (!value) return
         return new Intl.NumberFormat(undefined, { style: 'percent' }).format(value)
       }
-      _draftCreatedChanged (draftCreated) {
-        if (draftCreated) {
-          this.$.accept.reset()
-          this.$.accept.start()
-        }
+      _computeValidDraftCreated (oponentUid) {
+        return !!oponentUid
+      }
+      _validDraftCreatedChanged (created) {
+        this.$.accept.reset()
+        if (created) { this.$.accept.start() }
+      }
+      _computeOpenMatchesLimitReached (count) {
+        return count >= 5
+      }
+      _computeNoOponentsFound (noOponents) {
+        return noOponents
       }
     }
 
