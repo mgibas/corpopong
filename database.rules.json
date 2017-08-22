@@ -45,7 +45,7 @@
           ".write": "$uid === auth.uid",
           "$draftUid": {
             "accept": {
-              ".validate": "now <= data.parent().parent().child('draft-match-details').child($draftUid).child('timestamp').val() + 120000"
+              ".validate": "now <= root.child('users/'+$uid+'/draft-match-details/'+$draftUid+'/timestamp').val() + 120000"
             }
           }
         },
