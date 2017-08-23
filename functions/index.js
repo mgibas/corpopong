@@ -141,6 +141,8 @@ exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{m
     ]).then((playerRefs) => {
       let player1 = playerRefs[0].val()
       let player2 = playerRefs[1].val()
+      console.log(player2)
+      console.log(player2.messagingToken)
       if (!player2.messagingToken) return
 
       let notificationPayload = {
@@ -149,6 +151,7 @@ exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{m
           body: `${player1.displayName} created ranked match with you. Go and win!`
         }
       }
+      console.log(notificationPayload)
 
       return admin.messaging().sendToDevice([player2.messagingToken], notificationPayload)
     })
