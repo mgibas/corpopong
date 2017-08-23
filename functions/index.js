@@ -108,13 +108,6 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
           scores: [{player1: 0, player2: 0}]
         }, match)
 
-        let notificationPayload = {
-          notification: {
-            title: 'Match has been created!',
-            body: `Blah is now following you.`
-          }
-        }
-
         return Promise.all([
           admin.database()
             .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
@@ -133,10 +126,32 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
             .set(null),
           admin.database()
             .ref(`/users/${match.player1Uid}/draft-match-details`)
-            .set(null),
-          admin.messaging().sendToDevice(['dWT7wYRZA8s:APA91bEWyco-EKbbItPQhtvO8ybj1EGy_-hdaVnjQTDnj2UNida1entdkxP9elyya02_1070QQU9B2wYt5ExGq3HSAg5ZbuTyWzc88Hlg_md-F1-krq-L6diV4PUfAf5VHn24qKgwcHj'], notificationPayload)
+            .set(null)
         ])
       })
+  })
+exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{matchUid}')
+  .onCreate(event => {
+    if (event.auth.admin) { return }
+
+    let match = event.data.val()
+    return Promise.all([
+      admin.database().ref(`/players/${match.player1Uid}`).once('value'),
+      admin.database().ref(`/players/${match.player2Uid}`).once('value')
+    ]).then((playerRefs) => {
+      let player1 = playerRefs[0].val()
+      let player2 = playerRefs[1].val()
+      if (!player2.messagingToken) return
+
+      let notificationPayload = {
+        notification: {
+          title: 'Match Created!',
+          body: `${player1.displayName} created ranked match with you. Go and win!`
+        }
+      }
+
+      return admin.messaging().sendToDevice([player2.messagingToken], notificationPayload)
+    })
   })
 exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid}/approvals')
   .onUpdate((event) => {
