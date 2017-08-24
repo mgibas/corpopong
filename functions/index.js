@@ -135,6 +135,7 @@ exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{m
     if (event.auth.admin) { return }
 
     let match = event.data.val()
+    console.log(match)
     return Promise.all([
       admin.database().ref(`/players/${match.player1Uid}`).once('value'),
       admin.database().ref(`/players/${match.player2Uid}`).once('value')
