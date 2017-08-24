@@ -29,6 +29,9 @@
     "js": {
       "minify": false
     },
+    "html": {
+      "minify": false
+    },
     "swPrecacheConfig" : "sw-precache-config.js"
   }]
 }
