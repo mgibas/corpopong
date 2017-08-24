@@ -4,6 +4,7 @@
   "description": "Corporate grade ping-pong leaderboard!",
   "start_url": "/",
   "display": "standalone",
+  "gcm_sender_id": "103953800507",
   "background_color": "#eeeeee",
   "theme_color": "#607d8b",
   "icons": [{

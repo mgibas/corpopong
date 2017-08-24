@@ -6,7 +6,8 @@
     "src/match/open-match-fragment.html",
     "src/match/match-create-fragment.html",
     "src/match/match-fragment.html",
-    "src/player/player-fragment.html"
+    "src/player/player-fragment.html",
+    "src/common/notifications-component.html"
   ],
   "sources": [
     "src/**/*",

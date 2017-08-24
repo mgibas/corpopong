@@ -1,5 +1,11 @@
 {
   "rules": {
+    "messaging": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
     "open-match-details": {
       "$uid": {
         ".read": "auth.uid === data.child('player1Uid').val() || auth.uid === data.child('player2Uid').val()",
@@ -34,7 +40,7 @@
     },
     "users": {
       "$uid": {
-      	".read": "auth != null",
+        ".read": "auth != null",
         "matches": {
           ".write": "false"
         },

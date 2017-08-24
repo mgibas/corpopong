@@ -17,6 +17,7 @@
   <link rel="lazy-import" group="lazy" href="../match/match-fragment.html">
   <link rel="lazy-import" group="lazy" href="../player/player-fragment.html">
   <link rel="lazy-import" group="lazy" href="../player/players-history-fragment.html">
+  <link rel="lazy-import" group="lazy" href="../common/notifications-component.html">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -31,8 +32,10 @@
       api-key="AIzaSyB1jdeJaOejjpVtL5SOQrkiARsmAdeyuOk"
       messaging-sender-id="414017409980">
     </firebase-app>
+
     <app-location route="{{route}}"></app-location>
     <login-component user="{{user}}"></login-component>
+    <notifications-component user-uid="[[user.uid]]"></notifications-component>
 
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/matches/create"></app-route>

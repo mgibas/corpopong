@@ -1,0 +1,44 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-messaging.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
+
+<dom-module id="notifications-component">
+  <template>
+    <firebase-messaging id="messaging"
+      token="{{_token}}"
+      on-message="_handleMessage">
+    </firebase-messaging>
+  </template>
+  <script>
+    class NotificationsComponent extends Polymer.mixinBehaviors([Polymer.FirebaseDatabaseBehavior], Polymer.Element) {
+      static get is () { return 'notifications-component' }
+      static get properties () {
+        return {
+          userUid: String,
+          _token: String
+        }
+      }
+      static get observers () {
+        return ['_updateToken(_token, userUid)']
+      }
+      ready () {
+        super.ready()
+        this.$.messaging.requestPermission()
+      }
+      _updateToken (_token, userUid) {
+        if (!_token || !userUid) return
+        window.firebase.database(this.app)
+          .ref(`/messaging/${this.userUid}/token`)
+          .set(_token)
+      }
+      _handleMessage (e, data) {
+        let options = Object.assign({
+          icon: '/images/icon128.png'
+        }, data.message.notification)
+        window.Notification(options.title, options)
+      }
+    }
+
+    window.customElements.define(NotificationsComponent.is, NotificationsComponent)
+  </script>
+</dom-module>
