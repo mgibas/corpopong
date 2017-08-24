@@ -16,7 +16,8 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "firebase-messaging-sw.js"
+    "firebase-messaging-sw.js",
+    "bower_components/firebase/*.js"
   ],
   "lint": {
     "rules": [

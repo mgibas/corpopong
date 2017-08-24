@@ -1,11 +1,11 @@
-window.importScripts('/bower_components/firebase/firebase-app.js')
-window.importScripts('/bower_components/firebase/firebase-messaging.js')
+importScripts('/bower_components/firebase/firebase-app.js')
+importScripts('/bower_components/firebase/firebase-messaging.js')
 
-window.firebase.initializeApp({
+firebase.initializeApp({
   'messagingSenderId': '414017409980'
 })
 
-const messaging = window.firebase.messaging()
+const messaging = firebase.messaging()
 
 messaging.setBackgroundMessageHandler((payload) => {
   let options = Object.assign({
