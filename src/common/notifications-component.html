@@ -35,7 +35,7 @@
         let options = Object.assign({
           icon: '/images/icon128.png'
         }, data.message.notification)
-        window.Notification(options.title, options)
+        return new window.Notification(options.title, options)
       }
     }
 
