@@ -16,8 +16,7 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "firebase-messaging-sw.js",
-    "bower_components/firebase/*.js"
+    "firebase-messaging-sw.js"
   ],
   "lint": {
     "rules": [
@@ -27,9 +26,6 @@
   "builds": [{
     "preset": "es5-bundled",
     "js": {
-      "minify": false
-    },
-    "html": {
       "minify": false
     },
     "swPrecacheConfig" : "sw-precache-config.js"

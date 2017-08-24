@@ -1,4 +1,5 @@
-self.importScripts('/bower_components/firebase/firebase-app.js', '/bower_components/firebase/firebase-messaging.js')
+self.importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js')
+self.importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js')
 
 self.firebase.initializeApp({
   'messagingSenderId': '414017409980'
