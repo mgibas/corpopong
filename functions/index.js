@@ -132,19 +132,17 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
   })
 exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{matchUid}')
   .onCreate(event => {
-    if (event.auth.admin) { return }
-
     let match = event.data.val()
-    console.log(match)
+
     return Promise.all([
       admin.database().ref(`/players/${match.player1Uid}`).once('value'),
-      admin.database().ref(`/players/${match.player2Uid}`).once('value')
-    ]).then((playerRefs) => {
-      let player1 = playerRefs[0].val()
-      let player2 = playerRefs[1].val()
-      console.log(player2)
-      console.log(player2.messagingToken)
-      if (!player2.messagingToken) return
+      admin.database().ref(`/messaging/${match.player2Uid}`).once('value')
+    ]).then((snaps) => {
+      let player1 = snaps[0].val()
+      let player2Messaging = snaps[1].val()
+      console.log(player1)
+      console.log(player2Messaging)
+      if (!player2Messaging.token) return
 
       let notificationPayload = {
         notification: {
@@ -154,7 +152,7 @@ exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{m
       }
       console.log(notificationPayload)
 
-      return admin.messaging().sendToDevice([player2.messagingToken], notificationPayload)
+      return admin.messaging().sendToDevice([player2Messaging.token], notificationPayload)
     })
   })
 exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid}/approvals')
