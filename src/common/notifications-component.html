@@ -3,15 +3,17 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
 
 <dom-module id="notifications-component">
-  <template>
-    <firebase-messaging id="messaging"
-      token="{{_token}}"
-      on-message="_handleMessage">
-    </firebase-messaging>
-  </template>
   <script>
     class NotificationsComponent extends Polymer.mixinBehaviors([Polymer.FirebaseDatabaseBehavior], Polymer.Element) {
       static get is () { return 'notifications-component' }
+      static get template () {
+        return `
+          <firebase-messaging id="messaging"
+            token="{{_token}}"
+            on-message="_handleMessage">
+          </firebase-messaging>
+        `
+      }
       static get properties () {
         return {
           userUid: String,
