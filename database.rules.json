@@ -17,10 +17,12 @@
         },
         "approvals": {
           "player1": {
-            ".write": "auth.uid === data.parent().parent().child('player1Uid').val()"
+            ".write": "auth.uid === data.parent().parent().child('player1Uid').val()",
+            ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
           },
           "player2": {
-            ".write": "auth.uid === data.parent().parent().child('player2Uid').val()"
+            ".write": "auth.uid === data.parent().parent().child('player2Uid').val()",
+            ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
           }
         }
       }
