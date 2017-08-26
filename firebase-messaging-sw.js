@@ -9,7 +9,8 @@ const messaging = self.firebase.messaging()
 
 messaging.setBackgroundMessageHandler((payload) => {
   let options = Object.assign({
-    icon: 'https://corpopong.com/images/icon128.png'
+    icon: 'https://corpopong.com/images/icon128.png',
+    requireInteraction: true
   }, payload.notification)
 
   return self.registration.showNotification(payload.notification.title, options)

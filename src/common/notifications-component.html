@@ -35,7 +35,8 @@
       }
       _handleMessage (e, data) {
         let options = Object.assign({
-          icon: '/images/icon128.png'
+          icon: '/images/icon128.png',
+          requireInteraction: true
         }, data.message.notification)
         return new window.Notification(options.title, options)
       }
