@@ -19,8 +19,10 @@
         navigator.serviceWorker.register('/service-worker.js')
           .then((reg) => {
             reg.onupdatefound = () => {
-              reg.installing.onstatechange = () => {
-                if (reg.installing.state === 'installed' && navigator.serviceWorker.controller) {
+              let installingWorker = reg.installing
+
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   document.querySelector('#app').dispatchEvent(new CustomEvent('sw-updated'))
                 }
               }
