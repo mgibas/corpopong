@@ -24,6 +24,7 @@
               installingWorker.onstatechange = () => {
                 if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   window.__swUpdated = true
+                  if (window.__appLoaded) { notifySwUpdate() }
                 }
               }
             }
@@ -37,11 +38,15 @@
         document.querySelector('.loader .img img').style.opacity = 1
       }
       function appLoaded () { // eslint-disable-line no-unused-vars
+        window.__appLoaded = true
+        if (window.__swUpdated) { notifySwUpdate() }
         setTimeout(() => {
           document.querySelector('.loader').remove()
-          if (window.__swUpdated) {
-            document.querySelector('#app').dispatchEvent(new CustomEvent('sw-updated'))
-          }
+        }, 500)
+      }
+      function notifySwUpdate () {
+        setTimeout(() => {
+          document.querySelector('#app').dispatchEvent(new CustomEvent('sw-updated'))
         }, 500)
       }
     </script>
