@@ -17,6 +17,18 @@
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
+          .then((reg) => {
+            reg.onupdatefound = () => {
+              reg.installing.onstatechange = () => {
+                if (reg.installing.state === 'installed' && navigator.serviceWorker.controller) {
+                  document.querySelector('#app').dispatchEvent(new CustomEvent('sw-updated'))
+                }
+              }
+            }
+          })
+          .catch((e) => {
+            console.error('Error during service worker registration:', e)
+          })
       }
       function imageLoaded () { // eslint-disable-line no-unused-vars
         document.querySelector('.loader .img .placeholder').style.opacity = 0
@@ -167,7 +179,7 @@
       <h1 hero-title>CorpoPong</h1>
       <div class="spinner"></div>
     </div>
-    <corpopong-app></corpopong-app>
+    <corpopong-app id="app"></corpopong-app>
     <noscript>
       <div class="overlay">
         <h1>Oops - no JavaScript :(</h1>

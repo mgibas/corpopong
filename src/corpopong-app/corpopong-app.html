@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../corpopong-app/login-component.html">
 <link rel="import" href="../styles/app-theme.html">
@@ -36,6 +37,9 @@
     <app-location route="{{route}}"></app-location>
     <login-component user="{{user}}"></login-component>
     <notifications-component user-uid="[[user.uid]]"></notifications-component>
+    <paper-toast text="New version available!" duration="-1" id="swToast">
+      <a href="#" on-tap="_refresh">Refresh</a>
+    </paper-toast>
 
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/matches/create"></app-route>
@@ -64,6 +68,17 @@
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.importLazyGroup('lazy').then(() => this.$.pages.notifyResize())
         })
+      }
+      static get listeners () {
+        return {
+          'sw-updated': '_notifyUpdate'
+        }
+      }
+      _notifyUpdate () {
+        console.log('new version!')
+      }
+      _refresh () {
+        window.location.reload()
       }
     }
     window.customElements.define(CorpopongApp.is, CorpopongApp)
