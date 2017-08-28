@@ -25,6 +25,12 @@
       :host {
         display: block;
       }
+      paper-toast, paper-toast a {
+        color: #f1f1f1;
+      }
+      paper-toast a {
+        text-decoration: underline;
+      }
     </style>
     <firebase-app
       auth-domain="corpopong-dev.firebaseapp.com"
@@ -65,17 +71,13 @@
       static get is () { return 'corpopong-app' }
       ready () {
         super.ready()
+        this.addEventListener('sw-updated', () => this._notifyUpdate())
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.importLazyGroup('lazy').then(() => this.$.pages.notifyResize())
         })
       }
-      static get listeners () {
-        return {
-          'sw-updated': '_notifyUpdate'
-        }
-      }
       _notifyUpdate () {
-        console.log('new version!')
+        this.$.swToast.show()
       }
       _refresh () {
         window.location.reload()
