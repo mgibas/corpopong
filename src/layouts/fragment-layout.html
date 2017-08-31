@@ -14,8 +14,16 @@
   <template>
     <style include="app-styles"></style>
     <style>
+    .content-wrapper {
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
+    }
     .content {
+      @apply --layout-flex;
       padding: 1rem;
+    }
+    :host(:not([fullbleed])) .content {
+      max-width: var(--corpopong-content-max-width);
     }
     [hidden] {
       display: none !important;
@@ -62,8 +70,10 @@
           <user-menu></user-menu>
         </app-toolbar>
       </app-header>
-      <div class="content">
-        <slot></slot>
+      <div class="content-wrapper">
+        <div class="content">
+          <slot></slot>
+        </div>
       </div>
     </app-header-layout>
   </template>
