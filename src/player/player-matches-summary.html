@@ -10,11 +10,6 @@
 <dom-module id="player-matches-summary">
   <template>
     <style include="app-styles"></style>
-    <style>
-      .stats {
-        text-align: right;
-      }
-    </style>
     <firebase-query
       path="/players"
       data="{{_players}}"
@@ -43,10 +38,8 @@
                 [[item.rating]]
               </span>
             </paper-item-body>
-            <div class="stats flex">
-              <span>
-                [[_getWinsCount(item)]] / [[_getLossesCount(item)]] / [[item.matches.length]]
-              </span>
+            <div class="stats">
+              [[_getWinsCount(item)]] / [[_getLossesCount(item)]] / [[item.matches.length]]
             </div>
           </div>
         </paper-icon-item>
