@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../styles/app-styles.html">
@@ -30,9 +31,14 @@
     .score[winning] {
       font-weight: bolder;
     }
+    .ratings {
+      @apply --ppaer-font-body1;
+      color: var(--secondary-text-color);
+    }
     .info {
       @apply --layout-vertical;
       @apply --layout-center-center;
+      text-align: center;
     }
     .avatar {
       position: relative;
@@ -79,6 +85,13 @@
                 <iron-icon hidden="[[!player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player1.displayName]]</h1>
+              <div class="ratings">
+                <span>
+                  [[details.ratings.player1Prev]]
+                  <iron-icon icon="[[player1Icon]]"></iron-icon>
+                  [[details.ratings.player1New]]
+                </span>
+              </div>
             </div>
           </a>
         </div>
@@ -91,6 +104,13 @@
                 <iron-icon hidden="[[player1Won]]" icon="corpopong:trophy"></iron-icon>
               </div>
               <h1>[[player2.displayName]]</h1>
+              <div class="ratings">
+                <span>
+                  [[details.ratings.player2Prev]]
+                  <iron-icon icon="[[player2Icon]]"></iron-icon>
+                  [[details.ratings.player2New]]
+                </span>
+              </div>
             </div>
           </a>
         </div>
@@ -115,6 +135,14 @@
           player1Won: {
             type: Boolean,
             computed: '_computePlayer1Won(details.player1Games, details.player2Games)'
+          },
+          player1Icon: {
+            type: Boolean,
+            computed: '_computePlayerIcon(details.ratings.player1New, details.ratings.player1Prev)'
+          },
+          player2Icon: {
+            type: Boolean,
+            computed: '_computePlayerIcon(details.ratings.player2New, details.ratings.player2Prev)'
           }
         }
       }
@@ -123,6 +151,10 @@
       }
       _isWinningScore (score1, score2) {
         return Number(score1) > Number(score2)
+      }
+      _computePlayerIcon (newRating, prevRating) {
+        if (newRating === prevRating) return 'trending-flat'
+        return newRating > prevRating ? 'trending-up' : 'trending-down'
       }
     }
 
