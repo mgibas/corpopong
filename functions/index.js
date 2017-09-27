@@ -3,6 +3,7 @@ const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
 exports.createPlayer = functions.auth.user().onCreate(event => {
+  console.log(event)
   return admin.database()
     .ref('/players')
     .child(event.data.uid)
@@ -15,14 +16,14 @@ exports.createPlayer = functions.auth.user().onCreate(event => {
       active: true
     })
 })
-exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}')
+exports.draftMatch = functions.database.ref('/orgs/{org}/users/{userUid}/draft-matches/{matchUid}')
   .onCreate(event => {
     if (event.auth.admin) { return }
-
-    let playersPromise = admin.database().ref(`/players`).once('value')
-    let matchesPromise = admin.database().ref(`/users/${event.params.userUid}/matches/`).once('value')
-    let openMatchesPromise = admin.database().ref('/open-match-details').once('value')
-    let userOpenMatchesPromise = admin.database().ref(`/users/${event.params.userUid}/open-matches/`).once('value')
+    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
+    let playersPromise = orgRef.ref(`/players`).once('value')
+    let matchesPromise = orgRef.ref(`/users/${event.params.userUid}/matches/`).once('value')
+    let openMatchesPromise = orgRef.ref('/open-match-details').once('value')
+    let userOpenMatchesPromise = orgRef.ref(`/users/${event.params.userUid}/open-matches/`).once('value')
 
     return Promise.all([playersPromise, matchesPromise, openMatchesPromise, userOpenMatchesPromise])
       .then((snaps) => {
@@ -30,7 +31,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
         let playerRating = 0
 
         if (snaps[3].numChildren() >= 5) {
-          return admin.database()
+          return orgRef
             .ref(`/users/${event.params.userUid}/draft-matches/${event.params.matchUid}`)
             .set(null)
         }
@@ -71,7 +72,7 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
             Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
         if (oponents.length === 0) {
-          return admin.database()
+          return orgRef
             .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}/noOponents`)
             .set(true)
         }
@@ -84,16 +85,17 @@ exports.draftMatch = functions.database.ref('/users/{userUid}/draft-matches/{mat
           timestamp: admin.database.ServerValue.TIMESTAMP
         }
 
-        return admin.database()
+        return orgRef
           .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}`)
           .set(details)
       })
   })
-exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matches/{matchUid}/accept')
+exports.acceptDraftMatch = functions.database.ref('/orgs/{org}/users/{userUid}/draft-matches/{matchUid}/accept')
   .onCreate(event => {
     if (event.auth.admin) { return }
+    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
 
-    return admin.database()
+    return orgRef
       .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}`)
       .once('value')
       .then((snap) => {
@@ -109,34 +111,35 @@ exports.acceptDraftMatch = functions.database.ref('/users/{userUid}/draft-matche
         }, match)
 
         return Promise.all([
-          admin.database()
+          orgRef
             .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
             .set(match),
-          admin.database()
+          orgRef
             .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
             .set(match),
-          admin.database()
+          orgRef
             .ref(`/open-match-details/${event.params.matchUid}`)
             .set(details),
-          admin.database()
+          orgRef
             .ref(`/players/${match.player1Uid}/active`)
             .set(true),
-          admin.database()
+          orgRef
             .ref(`/users/${match.player1Uid}/draft-matches`)
             .set(null),
-          admin.database()
+          orgRef
             .ref(`/users/${match.player1Uid}/draft-match-details`)
             .set(null)
         ])
       })
   })
-exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{matchUid}')
+exports.openMatchDetailsCreated = functions.database.ref('/orgs/{org}/open-match-details/{matchUid}')
   .onCreate(event => {
     let match = event.data.val()
+    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
 
     return Promise.all([
-      admin.database().ref(`/players/${match.player1Uid}`).once('value'),
-      admin.database().ref(`/messaging/${match.player2Uid}`).once('value')
+      orgRef.ref(`/players/${match.player1Uid}`).once('value'),
+      orgRef.ref(`/messaging/${match.player2Uid}`).once('value')
     ]).then((snaps) => {
       let player1 = snaps[0].val()
       let player2Messaging = snaps[1].val()
@@ -152,14 +155,15 @@ exports.openMatchDetailsCreated = functions.database.ref('/open-match-details/{m
       return admin.messaging().sendToDevice([player2Messaging.token], notificationPayload)
     })
   })
-exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid}/approvals')
+exports.approvalsChanged = functions.database.ref('/orgs/{org}/open-match-details/{matchUid}/approvals')
   .onUpdate((event) => {
     if (event.auth.admin) { return }
+    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
 
     let approvals = event.data.val()
     if (!approvals.player1 || !approvals.player2) { return }
 
-    return admin.database().ref(`/open-match-details/${event.params.matchUid}`)
+    return orgRef.ref(`/open-match-details/${event.params.matchUid}`)
       .once('value')
       .then((snap) => {
         let details = snap.val()
@@ -185,22 +189,22 @@ exports.approvalsChanged = functions.database.ref('/open-match-details/{matchUid
           winnerUid: player1Games > player2Games ? details.player1Uid : details.player2Uid
         }
         return Promise.all([
-          admin.database().ref(`/matches/${event.params.matchUid}`).set(finalMatch),
-          admin.database().ref(`/users/${details.player1Uid}/matches/${event.params.matchUid}`).set(finalMatch),
-          admin.database().ref(`/users/${details.player2Uid}/matches/${event.params.matchUid}`).set(finalMatch),
-          admin.database().ref(`/users/${details.player1Uid}/open-matches/${event.params.matchUid}`).set(null),
-          admin.database().ref(`/users/${details.player2Uid}/open-matches/${event.params.matchUid}`).set(null),
-          admin.database().ref(`/open-match-details/${event.params.matchUid}`).set(null)
+          orgRef.ref(`/matches/${event.params.matchUid}`).set(finalMatch),
+          orgRef.ref(`/users/${details.player1Uid}/matches/${event.params.matchUid}`).set(finalMatch),
+          orgRef.ref(`/users/${details.player2Uid}/matches/${event.params.matchUid}`).set(finalMatch),
+          orgRef.ref(`/users/${details.player1Uid}/open-matches/${event.params.matchUid}`).set(null),
+          orgRef.ref(`/users/${details.player2Uid}/open-matches/${event.params.matchUid}`).set(null),
+          orgRef.ref(`/open-match-details/${event.params.matchUid}`).set(null)
         ])
       })
   })
-
-exports.updateRating = functions.database.ref('/matches/{matchUid}')
+exports.updateRating = functions.database.ref('/orgs/{org}/matches/{matchUid}')
   .onCreate(event => {
+    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
     let match = event.data.val()
     return Promise.all([
-      admin.database().ref(`/players/${match.player1Uid}`).once('value'),
-      admin.database().ref(`/players/${match.player2Uid}`).once('value')
+      orgRef.ref(`/players/${match.player1Uid}`).once('value'),
+      orgRef.ref(`/players/${match.player2Uid}`).once('value')
     ]).then((playerRefs) => {
       let p1Rating = playerRefs[0].val().rating
       let p2Rating = playerRefs[1].val().rating
@@ -221,19 +225,19 @@ exports.updateRating = functions.database.ref('/matches/{matchUid}')
       }
 
       return Promise.all([
-        admin.database().ref(`/players/${match.player1Uid}/rating`)
+        orgRef.ref(`/players/${match.player1Uid}/rating`)
           .set(player1NewRating),
-        admin.database().ref(`/players/${match.player2Uid}/rating`)
+        orgRef.ref(`/players/${match.player2Uid}/rating`)
           .set(player2NewRating),
-        admin.database().ref(`/matches/${event.params.matchUid}/ratings`)
+        orgRef.ref(`/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        admin.database().ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/ratings`)
+        orgRef.ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        admin.database().ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
+        orgRef.ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        admin.database().ref(`/players/${match.player1Uid}/rated`)
+        orgRef.ref(`/players/${match.player1Uid}/rated`)
           .set(true),
-        admin.database().ref(`/players/${match.player2Uid}/rated`)
+        orgRef.ref(`/players/${match.player2Uid}/rated`)
           .set(true)
       ])
     })
