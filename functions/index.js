@@ -4,6 +4,7 @@ admin.initializeApp(functions.config().firebase)
 
 exports.createPlayer = functions.auth.user().onCreate(event => {
   console.log(event)
+  console.log(event.data.providerData)
   return admin.database()
     .ref('/players')
     .child(event.data.uid)
