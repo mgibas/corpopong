@@ -2,19 +2,17 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
-exports.createPlayer = functions.auth.user().onCreate(event => {
-  console.log(event)
-  console.log(event.data.providerData)
+exports.createUser = functions.auth.user().onCreate(event => {
   return admin.database()
-    .ref('/players')
+    .ref('/users')
     .child(event.data.uid)
     .set({
       email: event.data.email,
       displayName: event.data.displayName,
-      photoURL: event.data.photoURL,
-      rating: 750,
-      rated: false,
-      active: true
+      photoURL: event.data.photoURL
+      // rating: 750,
+      // rated: false,
+      // active: true
     })
 })
 exports.draftMatch = functions.database.ref('/orgs/{org}/users/{userUid}/draft-matches/{matchUid}')
