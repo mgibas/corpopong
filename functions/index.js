@@ -1,8 +1,10 @@
-require('./api')
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const api = require('./api')(admin)
 admin.initializeApp(functions.config().firebase)
+
+exports.api = functions.https.onRequest(api.handler)
 
 exports.createUser = functions.auth.user().onCreate(event => {
   return admin.database()
@@ -243,7 +245,6 @@ exports.updateRating = functions.database.ref('/orgs/{org}/matches/{matchUid}')
       ])
     })
   })
-
 let calcKFactorMultiplier = (score1, score2, rating1, rating2) => {
   let diff = Math.log(Math.abs(score1 - score2) + 1)
   let ratingDiff = score1 > score2 ? rating1 - rating2 : rating2 - rating1
