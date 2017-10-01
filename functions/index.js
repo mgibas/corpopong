@@ -1,11 +1,11 @@
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-const api = require('./api')(admin)
+const Api = require('./api')
+
 admin.initializeApp(functions.config().firebase)
 
-exports.api = functions.https.onRequest(api.handler)
-
+exports.api = functions.https.onRequest((new Api(admin)).handler)
 exports.createUser = functions.auth.user().onCreate(event => {
   return admin.database()
     .ref('/users')
