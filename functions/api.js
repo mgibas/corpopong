@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')({origin: true})
 
-exports = class Api {
+class Api {
   constructor (admin) {
     this._admin = admin
     this.handler = express()
@@ -31,3 +31,5 @@ exports = class Api {
     })
   }
 }
+
+module.exports = Api
