@@ -32,4 +32,4 @@ class Api {
   }
 }
 
-exports.api = Api
+exports = Api
