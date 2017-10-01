@@ -1,10 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+require('api.js')
 admin.initializeApp(functions.config().firebase)
-
-exports.createCorpo = functions.https.onRequest((req, res) => {
-  res.sendStatus(200)
-})
 
 exports.createUser = functions.auth.user().onCreate(event => {
   return admin.database()
