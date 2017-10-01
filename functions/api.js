@@ -1,9 +1,9 @@
 const functions = require('firebase-functions')
-const admin = require('firebase-admin')
+// const admin = require('firebase-admin')
 const express = require('express')
 const cors = require('cors')({origin: true})
 const api = express()
-admin.initializeApp(functions.config().firebase)
+// admin.initializeApp(functions.config().firebase, 'api')
 
 // const validateFirebaseIdToken = (req, res, next) => {
 //   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer '))) {
