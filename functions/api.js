@@ -22,12 +22,9 @@ admin.initializeApp(functions.config().firebase)
 // }
 api.use(cors)
 // api.use(validateFirebaseIdToken)
-exports.api = functions.https.onRequest(api)
 
 api.post('/corpos', (req, res) => {
   res.status(200).send(`Hello Maciej`)
 })
 
-exports.createCorpo = functions.https.onRequest((req, res) => {
-  res.sendStatus(200)
-})
+exports.api = functions.https.onRequest(api)
