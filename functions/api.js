@@ -27,15 +27,35 @@ class Api {
       })
   }
   _configureRoutes () {
-    this.handler.get('/orgs/:name/exists', (req, res) => {
-      this._admin.database()
-        .ref(`/orgs/${req.params.name}`)
-        .once('value', (snap) => {
-          return res.send({exists: !!snap.val()})
-        })
-    })
     this.handler.post('/orgs', (req, res) => {
-      console.log(req.body)
+      let newPlayer = {
+        email: req.user.email,
+        displayName: req.user.displayName,
+        photoURL: req.user.photoURL,
+        rating: 750,
+        rated: false,
+        active: true,
+        admin: true
+      }
+      let newOrg = {
+        name: req.body.name,
+        players: {}
+      }
+      let orgInfo = {
+        name: req.body.name
+      }
+      newOrg.players[req.user.uid] = newPlayer
+
+      Promise.all([
+        this._admin.database().ref(`/orgs/${req.body.name}`)
+          .set(newOrg),
+        this._admin.database().ref(`/org-infos/${req.body.name}`)
+          .set(orgInfo),
+        this._admin.database().ref(`/users/${req.user.uid}/orgs/${req.body.name}`)
+          .set(true)
+      ]).then(() => {
+        res.sendStatus(200)
+      })
     })
   }
 }
