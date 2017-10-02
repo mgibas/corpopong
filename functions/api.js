@@ -27,8 +27,15 @@ class Api {
       })
   }
   _configureRoutes () {
-    this.handler.post('/corpos', (req, res) => {
-      res.status(200).send(`Hello ${req.user.name}`)
+    this.handler.get('/orgs/:name/exists', (req, res) => {
+      this._admin.database()
+        .ref(`/orgs/${req.params.name}`)
+        .once('value', (snap) => {
+          return res.send({exists: !!snap.val()})
+        })
+    })
+    this.handler.post('/orgs', (req, res) => {
+      console.log(req.body)
     })
   }
 }
