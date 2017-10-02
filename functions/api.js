@@ -6,7 +6,7 @@ class Api {
     this._admin = admin
     this.handler = express()
     this.handler.use(cors)
-    this.handler.use(this.validateToken)
+    this.handler.use((req, res, next) => this.validateToken(req, res, next))
     this._configureRoutes()
   }
 
