@@ -28,6 +28,8 @@ class Api {
   }
   _configureRoutes () {
     this.handler.post('/orgs', (req, res) => {
+      console.log(req)
+      console.log(req.user)
       let newPlayer = {
         email: req.user.email,
         displayName: req.user.displayName,
@@ -56,6 +58,12 @@ class Api {
       ]).then(() => {
         res.sendStatus(200)
       })
+    })
+    this.handler.post('/orgs/:name/players', (req, res) => {
+      res.sendStatus(200)
+      // user domain == org-info.auto-accept-domain
+      // body invitation url == org.invitation-url
+      // user
     })
   }
 }
