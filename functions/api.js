@@ -44,7 +44,7 @@ class Api {
             admin: true
           }
           let newOrg = {
-            name: req.body.name.toLawerCase(),
+            name: req.body.name.toLowerCase(),
             admin: {
               invitationCode: uuid()
             },
