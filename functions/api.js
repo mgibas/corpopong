@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')({origin: true})
+const uuid = require('uuid/v4')
 
 class Api {
   constructor (admin) {
@@ -32,6 +33,7 @@ class Api {
         .once('value')
         .then((snap) => {
           if (snap.val()) return res.status(400).send(`org ${req.body.name} already exists`)
+
           let newPlayer = {
             email: req.user.email,
             displayName: req.user.name,
@@ -42,11 +44,14 @@ class Api {
             admin: true
           }
           let newOrg = {
-            name: req.body.name,
+            name: req.body.name.toLawerCase(),
+            admin: {
+              invitationCode: uuid()
+            },
             players: {}
           }
           let orgInfo = {
-            name: req.body.name
+            name: newOrg.name
           }
           newOrg.players[req.user.uid] = newPlayer
           Promise.all([
@@ -57,7 +62,10 @@ class Api {
             this._admin.database().ref(`/users/${req.user.uid}/orgs/${req.body.name}`)
               .set(true)
           ]).then(() => {
-            res.sendStatus(200)
+            res.status(200).send({
+              name: newOrg.name,
+              invitationCode: newOrg.admin.invitationCode
+            })
           })
         })
     })
