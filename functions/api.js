@@ -31,7 +31,7 @@ class Api {
       this._admin.database().ref(`/orgs/${req.body.name}`)
         .once('value')
         .then((snap) => {
-          if (snap) return res.status(400).send(`org ${req.body.name} already exists`)
+          if (snap.val()) return res.status(400).send(`org ${req.body.name} already exists`)
           let newPlayer = {
             email: req.user.email,
             displayName: req.user.name,
