@@ -32,8 +32,8 @@ class Api {
       console.log(req.user)
       let newPlayer = {
         email: req.user.email,
-        displayName: req.user.displayName,
-        photoURL: req.user.photoURL,
+        displayName: req.user.name,
+        photoURL: req.user.picture,
         rating: 750,
         rated: false,
         active: true,
