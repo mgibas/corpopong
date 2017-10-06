@@ -1,5 +1,9 @@
 {
   "rules": {
+    "org-infos": {
+      ".read": "auth != null",
+      ".write": "false"
+    },
     "messaging": {
       "$uid": {
         ".read": "$uid === auth.uid",
