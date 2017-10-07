@@ -28,21 +28,29 @@ class Api {
       })
   }
   _configureRoutes () {
+    let createPlayer = (email, displayName, photoUrl, admin) => {
+      return {
+        email: email,
+        displayName: displayName,
+        photoURL: photoUrl,
+        rating: 750,
+        rated: false,
+        active: true,
+        admin: admin
+      }
+    }
     this.handler.post('/orgs', (req, res) => {
       this._admin.database().ref(`/orgs/${req.body.name}`)
         .once('value')
         .then((snap) => {
           if (snap.val()) return res.status(400).send(`org ${req.body.name} already exists`)
 
-          let newPlayer = {
-            email: req.user.email,
-            displayName: req.user.name,
-            photoURL: req.user.picture,
-            rating: 750,
-            rated: false,
-            active: true,
-            admin: true
-          }
+          let newPlayer = createPlayer(
+            req.user.email,
+            req.user.name,
+            req.user.picture,
+            true
+          )
           let newOrg = {
             name: req.body.name.toLowerCase(),
             admin: {
@@ -77,20 +85,12 @@ class Api {
           if (!org) return res.status(400).send(`org ${req.params.name} does not exists`)
           if (req.user.email.split('@')[1] !== org.admin.autoAcceptDomain &&
             (!req.body || !req.body.invitation || !req.body.invitation.split('code=')[1] !== org.admin.invitationCode)) {
-            return res.status(403).send(`Invalid invitation or domain`)
+            return res.status(403).send({error: 'invitation_required'})
           }
           if (org.players[req.user.uid]) return res.sendStatus(200)
           Promise.all([
             this._admin.database().ref(`/orgs/${org.name}/players/${req.user.uid}`)
-              .set({
-                email: req.user.email,
-                displayName: req.user.name,
-                photoURL: req.user.picture,
-                rating: 750,
-                rated: false,
-                active: true,
-                admin: true
-              }),
+              .set(createPlayer(req.user.email, req.user.name, req.user.picture)),
             this._admin.database().ref(`/users/${req.user.uid}/orgs/${org.name}`)
               .set(false)
           ]).then(() => {
