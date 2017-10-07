@@ -70,10 +70,33 @@ class Api {
         })
     })
     this.handler.post('/orgs/:name/players', (req, res) => {
-      res.sendStatus(200)
-      // user domain == org-info.auto-accept-domain
-      // body invitation url == org.invitation-url
-      // user
+      this._admin.database().ref(`/orgs/${req.params.name}`)
+        .once('value')
+        .then((snap) => {
+          let org = snap.val()
+          if (!org) return res.status(400).send(`org ${req.params.name} does not exists`)
+          if (req.user.email.split('@')[1] !== org.admin.autoAcceptDomain &&
+            (!req.body || !req.body.invitation.split('code=')[1] !== org.admin.invitationCode)) {
+            return res.status(403).send(`Invalid invitation or domain`)
+          }
+          if (org.players[req.user.uid]) return res.sendStatus(200)
+          Promise.all([
+            this._admin.database().ref(`/orgs/${org.name}/players/${req.user.uid}`)
+              .set({
+                email: req.user.email,
+                displayName: req.user.name,
+                photoURL: req.user.picture,
+                rating: 750,
+                rated: false,
+                active: true,
+                admin: true
+              }),
+            this._admin.database().ref(`/users/${req.user.uid}/orgs/${org.name}`)
+              .set(false)
+          ]).then(() => {
+            return res.sendStatus(200)
+          })
+        })
     })
   }
 }
