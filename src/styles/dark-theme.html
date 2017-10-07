@@ -1,0 +1,20 @@
+<dom-module id="dark-theme">
+  <template>
+    <style>
+    :host {
+      --primary-text-color: var(--dark-theme-text-color);
+      --primary-background-color: var(--primary-color);
+      color: var(--primary-text-color);
+    }
+    paper-button {
+      background-color: var(--primary-text-color);
+      color: var(--primary-background-color);
+    }
+    paper-input {
+      --paper-input-container-color: var(--dark-theme-text-color);
+      --paper-input-container-focus-color: var(--dark-theme-text-color);
+      --paper-input-container-input-color: var(--dark-theme-text-color);
+    }
+    </style>
+  </template>
+</dom-module>
