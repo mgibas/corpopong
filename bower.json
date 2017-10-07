@@ -26,6 +26,8 @@
     "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0",
     "web-animations-js": "web-animations/web-animations-js#^2.3.1",
-    "paper-toast": "^2.0.0"
+    "paper-toast": "^2.0.0",
+    "iron-selector": "polymerelements/iron-selector#^2.0.0",
+    "iron-ajax": "polymerelements/iron-ajax#^2.0.5"
   }
 }
