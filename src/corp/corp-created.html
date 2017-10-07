@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../corp/corp-wizard-shared-styles.html">
+
+<dom-module id="corp-created">
+  <template>
+    <style include="corp-wizard-shared-styles"></style>
+    <style>
+      paper-fab {
+        margin-top: 2rem;
+      }
+    </style>
+
+    <firebase-document path="/orgs/[[createdOrg.name]]/admin" data="{{admin}}"></firebase-document>
+
+    <h2>'[[createdOrg.name]]' corp created!</h2>
+    <p>Invite your friends by sharing this link:</p>
+    <code>http://corpopong.com/join/[[createdOrg.name]]?code=[[createdOrg.invitationCode]]</code>
+    <p>You can also automatically accept anyone with an email in given domain</p>
+    <paper-input label="domain" value="{{admin.autoAcceptDomain}}">
+      <div slot="prefix">@</div>
+    </paper-input>
+    <paper-fab icon="done" on-tap="submit"></paper-fab>
+
+  </template>
+  <script>
+    class CorpCreated extends Polymer.Element {
+      static get is () { return 'corp-created' }
+      static get properties () {
+        return {
+          createdOrg: Object
+        }
+      }
+      submit () {
+        this.dispatchEvent(new CustomEvent('advanced'))
+      }
+    }
+
+    window.customElements.define(CorpCreated.is, CorpCreated)
+  </script>
+</dom-module>

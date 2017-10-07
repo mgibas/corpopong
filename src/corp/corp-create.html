@@ -1,0 +1,65 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../common/api-ajax.html">
+<link rel="import" href="../corp/corp-wizard-shared-styles.html">
+
+<dom-module id="corp-create">
+  <template>
+    <style include="corp-wizard-shared-styles"></style>
+
+    <api-ajax id="post" method="post" url="/orgs" body="[[body]]"></api-ajax>
+    <firebase-document path="/org-infos/[[body.name]]" data="{{existingOrg}}"></firebase-document>
+
+    <h2>Create new organization</h2>
+    <paper-input
+      label="Name"
+      type="text"
+      value="{{body.name}}">
+    </paper-input>
+    <span class="error-message" hidden="[[!existingOrg.name]]">[[body.name]] already exisits.</span>
+    <paper-fab class="advance-button" icon="arrow-forward" on-tap="submit" disabled="[[!valid]]"></paper-fab>
+
+  </template>
+  <script>
+    class CorpCreate extends Polymer.Element {
+      static get is () { return 'corp-create' }
+      static get properties () {
+        return {
+          body: {
+            type: Boolean,
+            value: {}
+          },
+          valid: {
+            type: Boolean,
+            computed: '_computeValid(body.name, existingOrg.name)'
+          },
+          createdOrg: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
+      static get observers () {
+        return ['_fixName(body.name)']
+      }
+      submit () {
+        this.$.post.generateRequest().completes
+          .then((req) => {
+            this.set('createdOrg', req.response)
+            this.dispatchEvent(new CustomEvent('advanced'))
+          })
+      }
+      _fixName (name) {
+        if (!name || name === name.toLowerCase()) return
+        this.set('body.name', name.toLowerCase())
+      }
+      _computeValid (name, existingName) {
+        return !!name && !existingName
+      }
+    }
+
+    window.customElements.define(CorpCreate.is, CorpCreate)
+  </script>
+</dom-module>
