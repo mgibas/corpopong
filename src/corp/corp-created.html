@@ -7,11 +7,6 @@
 <dom-module id="corp-created">
   <template>
     <style include="corp-wizard-shared-styles"></style>
-    <style>
-      paper-fab {
-        margin-top: 2rem;
-      }
-    </style>
 
     <firebase-document path="/orgs/[[createdOrg.name]]/admin" data="{{admin}}"></firebase-document>
 
@@ -22,7 +17,7 @@
     <paper-input label="domain" value="{{admin.autoAcceptDomain}}">
       <div slot="prefix">@</div>
     </paper-input>
-    <paper-fab icon="done" on-tap="submit"></paper-fab>
+    <paper-fab class="advance-button" icon="done" on-tap="submit"></paper-fab>
 
   </template>
   <script>

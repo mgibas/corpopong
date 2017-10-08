@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="corp-join">
+  <template>
+    <style include="corp-wizard-shared-styles"></style>
+    <style>
+      .invitation {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 200ms ease-in-out;
+      }
+      .invitation[required] {
+        max-height: 100px;
+      }
+    </style>
+
+    <api-ajax id="post" method="post" url="/orgs/[[org.name]]/players" body="[[body]]"></api-ajax>
+    <firebase-document path="/org-infos/[[name]]" data="{{org}}"></firebase-document>
+
+    <h2>Join existing Corpo</h2>
+    <paper-input
+      label="Name"
+      value="{{name}}"
+      required
+      auto-validate
+      error-message="Name is required">
+    </paper-input>
+    <span class="error-message" hidden="[[!showNoOrgMessage]]">We could not find '[[name]]' corp.</span>
+    <div class="invitation" required$="[[invitationRequired]]">
+      <paper-input
+        label="Invitation url"
+        value="{{body.invitation}}"
+        required
+        auto-validate
+        error-message="Invitation is required">
+      </paper-input>
+      <span class="error-message" hidden="[[!invalidInvitation]]">Something wrong with this invitation</span>
+    </div>
+    <paper-fab
+      class="advance-button"
+      icon="arrow-forward"
+      on-tap="submit"
+      disabled="[[!valid]]">
+    </paper-fab>
+
+  </template>
+  <script>
+    class CorpJoin extends Polymer.Element {
+      static get is () { return 'corp-join' }
+      static get properties () {
+        return {
+          name: String,
+          joinedOrg: {type: Object, notify: true},
+          invitationRequired: {type: Boolean, value: false},
+          body: {type: Object, value: {}},
+          showNoOrgMessage: {type: Boolean, value: false},
+          invalidInvitation: {type: Boolean, value: false},
+          valid: {
+            type: Boolean,
+            value: false,
+            computed: '_computeValid(name, invitationRequired, body.invitation)'
+          }
+        }
+      }
+      static get observers () {
+        return ['_nameChanged(name)']
+      }
+      submit () {
+        if (!this.org.name) {
+          this.showNoOrgMessage = true
+          return
+        }
+        this.$.post.generateRequest().completes
+          .then((req) => {
+            this.set('joinedOrg', this.name)
+            this.dispatchEvent(new CustomEvent('advanced'))
+          })
+          .catch(() => {
+            if (!this.invitationRequired) {
+              this.invitationRequired = true
+            } else {
+              this.invalidInvitation = true
+            }
+          })
+      }
+      _computeValid (name, invitationRequired, invitation) {
+        return !!name && (!invitationRequired || !!invitation)
+      }
+      _nameChanged (name) {
+        this.showNoOrgMessage = false
+        if (!name || name === name.toLowerCase()) return
+        this.set('name', name.toLowerCase())
+      }
+    }
+    window.customElements.define(CorpJoin.is, CorpJoin)
+  </script>
+</dom-module>

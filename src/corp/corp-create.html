@@ -16,7 +16,10 @@
     <paper-input
       label="Name"
       type="text"
-      value="{{body.name}}">
+      value="{{body.name}}"
+      required
+      auto-validate
+      error-message="Provide a name">
     </paper-input>
     <span class="error-message" hidden="[[!existingOrg.name]]">[[body.name]] already exisits.</span>
     <paper-fab class="advance-button" icon="arrow-forward" on-tap="submit" disabled="[[!valid]]"></paper-fab>

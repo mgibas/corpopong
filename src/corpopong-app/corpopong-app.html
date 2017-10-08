@@ -8,6 +8,7 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../corpopong-app/login-component.html">
+<link rel="import" href="../corpopong-app/welcome-component.html">
 <link rel="import" href="../styles/app-theme.html">
 <link rel="import" href="../styles/app-styles.html">
 
@@ -42,6 +43,8 @@
 
     <app-location route="{{route}}"></app-location>
     <login-component user="{{user}}"></login-component>
+    <welcome-component id="corpo" user="{{user}}" opened></welcome-component>
+
     <notifications-component user-uid="[[user.uid]]"></notifications-component>
     <paper-toast text="New version available!" duration="-1" id="swToast">
       <a href="#" on-tap="_refresh">Refresh</a>

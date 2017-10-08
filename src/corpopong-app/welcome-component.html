@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../styles/dark-theme.html">
+<link rel="import" href="../styles/overlay-styles.html">
+<link rel="import" href="../corp/corp-wizard.html">
+
+<dom-module id="welcome-component">
+  <template>
+    <style include="app-styles overlay-styles dark-theme"></style>
+    <style>
+    :host {
+      @apply --overlay;
+    }
+    header {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+    iron-image {
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+      margin-right: 1rem;
+      height: 64px;
+      width: 64px;
+      background-color: var(--primary-text-color);
+      border-radius: 50%;
+      --iron-image-height: 48px;
+      --iron-image-width: 48px;
+      --iron-image-placeholder: {
+        border-radius: 50%;
+
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      };
+    }
+    corp-wizard {
+      height: 100%;
+    }
+    </style>
+    <header>
+      <iron-image
+        src="/images/logo.svg"
+        preload
+        fade
+        placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAPYQAAD2EBqD+naQAAAEVJREFUCB1jPHnuYiT79ZvZ+muW32L49q2EOezNOwO9G1fz2Rj+GzKwsFxh2i2p9LNRUPL71/8Mzxj+/dvHkFDTGcCABABezRs8JlBzTwAAAABJRU5ErkJggg==">
+      </iron-image>
+      <h1>CorpoPong</h1>
+    </header>
+    <corp-wizard on-finished="close"></corp-wizard>
+  </template>
+  <script>
+    class WelcomeComponent extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
+      static get is () { return 'welcome-component' }
+      static get properties () {
+        return {
+          user: Object
+        }
+      }
+      ready () {
+        super.ready()
+        this.noCancelOnEscKey = true
+        this.noCancelOnOutsideClick = true
+        this.alwaysOnTop = true
+      }
+    }
+
+    window.customElements.define(WelcomeComponent.is, WelcomeComponent)
+  </script>
+</dom-module>

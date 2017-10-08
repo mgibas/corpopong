@@ -1,0 +1,22 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="corp-joined">
+  <template>
+    <style include="corp-wizard-shared-styles"></style>
+
+    <h2>You just joined '[[joinedOrg]]' corp!</h2>
+    <h3>Have fun!</h3>
+    <paper-fab class="advance-button" icon="done" on-tap="submit"></paper-fab>
+
+  </template>
+  <script>
+    class CorpJoined extends Polymer.Element {
+      static get is () { return 'corp-joined' }
+      submit () {
+        this.dispatchEvent(new CustomEvent('advanced'))
+      }
+    }
+
+    window.customElements.define(CorpJoined.is, CorpJoined)
+  </script>
+</dom-module>
