@@ -1,0 +1,96 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-behaviors/paper-button-behavior.html">
+<link rel="import" href="../common/paper-progress-circle.html">
+
+<dom-module id="paper-submit-fab">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      position: relative;
+      outline: none;
+      width:56px;
+      height:56px;
+      border-radius: 50%;
+    }
+    paper-fab {
+      position: absolute;
+      pointer-events: none;
+      top:0;
+      left:0;
+    }
+    .morpher {
+      position: absolute;
+      top:0;
+      left:0;
+      height:56px;
+      width:56px;
+      border-radius: 50%;
+      display: none;
+      box-shadow: inset 0 0 0 6px var(--accent-color);
+    }
+
+    paper-progress-circle {
+      --paper-progress-circle-color: var(--accent-color);
+      --paper-progress-circle-opacity-transition-time: 0ms;
+    }
+    </style>
+    <paper-fab id="fab" icon="[[icon]]" disabled="[[disabled]]"></paper-fab>
+    <paper-progress-circle
+      id="progress"
+      size="56"
+      indeterminate
+      fast
+      active="[[loading]]">
+    </paper-progress-circle>
+    <div id="morpher" class="morpher"></div>
+  </template>
+  <script>
+    class PaperSubmitFab extends Polymer.mixinBehaviors([Polymer.PaperButtonBehavior], Polymer.Element) {
+      static get is () { return 'paper-submit-fab' }
+      static get properties () {
+        return {
+          icon: String,
+          loading: {type: Boolean, observer: '_loadingChanged'}
+        }
+      }
+      _loadingChanged (loading) {
+        if (loading) {
+          this.transitionToLoading()
+        } else {
+          this.transitionFromLoading()
+        }
+      }
+      transitionToLoading () {
+        this.$.morpher.style.display = 'block'
+        this.$.fab.style.display = 'none'
+        this.$.morpher.animate([
+          { boxShadow: 'inset 0 0 0 28px var(--accent-color)' },
+          { boxShadow: 'inset 0 0 0 6px var(--accent-color)' }
+        ], {
+          duration: 200,
+          easing: 'ease-in-out'
+        }).onfinish = () => {
+          this.$.morpher.style.display = 'none'
+        }
+      }
+      transitionFromLoading () {
+        this.$.morpher.style.display = 'block'
+        this.$.morpher.animate([
+          { boxShadow: 'inset 0 0 0 6px var(--accent-color)' },
+          { boxShadow: 'inset 0 0 0 28px var(--accent-color)' }
+        ], {
+          duration: 200,
+          delay: 100,
+          easing: 'ease-in-out'
+        }).onfinish = () => {
+          this.$.fab.style.display = 'block'
+          this.$.morpher.style.display = 'none'
+        }
+      }
+    }
+
+    window.customElements.define(PaperSubmitFab.is, PaperSubmitFab)
+  </script>
+</dom-module>
