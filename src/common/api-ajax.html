@@ -12,7 +12,8 @@
       content-type="application/json"
       url="https://us-central1-corpopong-dev.cloudfunctions.net/api[[url]]"
       body="[[body]]"
-      loading="{{loading}}">
+      loading="{{loading}}"
+      last-error="{{lastError}}">
     </iron-ajax>
 
   </template>
@@ -25,10 +26,8 @@
           method: String,
           url: String,
           body: Object,
-          loading: {
-            type: Boolean,
-            notify: true
-          }
+          lastError: {type: Object, notify: true},
+          loading: {type: Boolean, notify: true}
         }
       }
       generateRequest () {
