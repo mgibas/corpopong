@@ -36,7 +36,7 @@ class Api {
         rating: 750,
         rated: false,
         active: true,
-        admin: admin
+        admin: admin || false
       }
     }
     this.handler.post('/orgs', (req, res) => {
