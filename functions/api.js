@@ -81,7 +81,7 @@ class Api {
       this._admin.database().ref(`/orgs/${req.params.name}`)
         .once('value')
         .then((snap) => {
-          console.log(req)
+          console.log(req.body)
           let org = snap.val()
           if (!org) return res.status(400).send(`org ${req.params.name} does not exists`)
           if (req.user.email.split('@')[1] !== org.admin.autoAcceptDomain &&
