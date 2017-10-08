@@ -83,7 +83,7 @@ class Api {
         .then((snap) => {
           let org = snap.val()
           if (!org) return res.status(400).send(`org ${req.params.name} does not exists`)
-          if (org.players[req.user.uid]) return res.sendStatus(200)
+          if (org.players && org.players[req.user.uid]) return res.sendStatus(200)
           if (req.user.email.split('@')[1] !== org.admin.autoAcceptDomain &&
             (!req.body || !req.body.invitation || req.body.invitation.split('code=')[1] !== org.admin.invitationCode)) {
             return res.status(403).send({error: 'invitation_required'})
