@@ -3,15 +3,15 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../styles/dark-theme.html">
-<link rel="import" href="../corp/corp-wizard-shared-styles.html">
-<link rel="import" href="../corp/corp-join.html">
-<link rel="import" href="../corp/corp-joined.html">
-<link rel="import" href="../corp/corp-create.html">
-<link rel="import" href="../corp/corp-created.html">
+<link rel="import" href="../org/org-wizard-shared-styles.html">
+<link rel="import" href="../org/org-join.html">
+<link rel="import" href="../org/org-joined.html">
+<link rel="import" href="../org/org-create.html">
+<link rel="import" href="../org/org-created.html">
 
-<dom-module id="corp-wizard">
+<dom-module id="org-wizard">
   <template>
-    <style include="corp-wizard-shared-styles"></style>
+    <style include="org-wizard-shared-styles"></style>
     <style>
       section {
         @apply --layout-flex;
@@ -40,16 +40,16 @@
         <a on-tap="_create">or create new one</a>
       </section>
       <section name="create">
-        <corp-create created-org="{{createdOrg}}" on-advanced="_advance"></corp-create>
+        <org-create created-org="{{createdOrg}}" on-advanced="_advance"></org-create>
       </section>
       <section name="created">
-        <corp-created created-org="[[createdOrg]]" on-advanced="_advance"></corp-created>
+        <org-created created-org="[[createdOrg]]" on-advanced="_advance"></org-created>
       </section>
       <section name="join">
-        <corp-join joined-org="{{joinedOrg}}" on-advanced="_advance"></corp-join>
+        <org-join joined-org="{{joinedOrg}}" on-advanced="_advance"></org-join>
       </section>
       <section name="joined">
-        <corp-joined  joined-org="[[joinedOrg]]" on-advanced="_advance"></corp-joined>
+        <org-joined  joined-org="[[joinedOrg]]" on-advanced="_advance"></org-joined>
       </section>
     </iron-selector>
     <paper-icon-button
@@ -61,8 +61,8 @@
 
   </template>
   <script>
-    class CorpWizard extends Polymer.Element {
-      static get is () { return 'corp-wizard' }
+    class OrgWizard extends Polymer.Element {
+      static get is () { return 'org-wizard' }
       static get properties () {
         return {
           step: {
@@ -112,6 +112,6 @@
       }
     }
 
-    window.customElements.define(CorpWizard.is, CorpWizard)
+    window.customElements.define(OrgWizard.is, OrgWizard)
   </script>
 </dom-module>

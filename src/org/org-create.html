@@ -3,11 +3,11 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../common/api-ajax.html">
 <link rel="import" href="../common/paper-loading-fab.html">
-<link rel="import" href="../corp/corp-wizard-shared-styles.html">
+<link rel="import" href="../org/org-wizard-shared-styles.html">
 
-<dom-module id="corp-create">
+<dom-module id="org-create">
   <template>
-    <style include="corp-wizard-shared-styles"></style>
+    <style include="org-wizard-shared-styles"></style>
 
     <api-ajax id="post" method="post" url="/orgs" body="[[body]]" loading="{{loading}}"></api-ajax>
     <firebase-document path="/org-infos/[[body.name]]" data="{{existingOrg}}"></firebase-document>
@@ -32,8 +32,8 @@
 
   </template>
   <script>
-    class CorpCreate extends Polymer.Element {
-      static get is () { return 'corp-create' }
+    class OrgCreate extends Polymer.Element {
+      static get is () { return 'org-create' }
       static get properties () {
         return {
           body: {
@@ -69,6 +69,6 @@
       }
     }
 
-    window.customElements.define(CorpCreate.is, CorpCreate)
+    window.customElements.define(OrgCreate.is, OrgCreate)
   </script>
 </dom-module>

@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../corp/corp-wizard-shared-styles.html">
+<link rel="import" href="../org/org-wizard-shared-styles.html">
 
-<dom-module id="corp-joined">
+<dom-module id="org-joined">
   <template>
-    <style include="corp-wizard-shared-styles"></style>
+    <style include="org-wizard-shared-styles"></style>
 
     <h2>You just joined '[[joinedOrg]]' corp!</h2>
     <h3>Have fun!</h3>
@@ -12,8 +12,8 @@
 
   </template>
   <script>
-    class CorpJoined extends Polymer.Element {
-      static get is () { return 'corp-joined' }
+    class OrgJoined extends Polymer.Element {
+      static get is () { return 'org-joined' }
       static get properties () {
         return {
           joinedOrg: String
@@ -24,6 +24,6 @@
       }
     }
 
-    window.customElements.define(CorpJoined.is, CorpJoined)
+    window.customElements.define(OrgJoined.is, OrgJoined)
   </script>
 </dom-module>

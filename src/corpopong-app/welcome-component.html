@@ -4,7 +4,7 @@
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../styles/dark-theme.html">
 <link rel="import" href="../styles/overlay-styles.html">
-<link rel="import" href="../corp/corp-wizard.html">
+<link rel="import" href="../org/org-wizard.html">
 
 <dom-module id="welcome-component">
   <template>
@@ -35,7 +35,7 @@
         background-repeat: no-repeat;
       };
     }
-    corp-wizard {
+    org-wizard {
       height: 100%;
     }
     </style>
@@ -48,7 +48,7 @@
       </iron-image>
       <h1>CorpoPong</h1>
     </header>
-    <corp-wizard on-finished="close"></corp-wizard>
+    <org-wizard on-finished="close"></org-wizard>
   </template>
   <script>
     class WelcomeComponent extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {

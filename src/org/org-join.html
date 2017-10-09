@@ -5,9 +5,9 @@
 <link rel="import" href="../common/api-ajax.html">
 <link rel="import" href="../common/paper-loading-fab.html">
 
-<dom-module id="corp-join">
+<dom-module id="org-join">
   <template>
-    <style include="corp-wizard-shared-styles"></style>
+    <style include="org-wizard-shared-styles"></style>
     <style>
       .invitation {
         overflow: hidden;
@@ -51,8 +51,8 @@
 
   </template>
   <script>
-    class CorpJoin extends Polymer.Element {
-      static get is () { return 'corp-join' }
+    class OrgJoin extends Polymer.Element {
+      static get is () { return 'org-join' }
       static get properties () {
         return {
           name: String,
@@ -98,6 +98,6 @@
         this.set('name', name.toLowerCase())
       }
     }
-    window.customElements.define(CorpJoin.is, CorpJoin)
+    window.customElements.define(OrgJoin.is, OrgJoin)
   </script>
 </dom-module>

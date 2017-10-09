@@ -2,11 +2,11 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../corp/corp-wizard-shared-styles.html">
+<link rel="import" href="../org/org-wizard-shared-styles.html">
 
-<dom-module id="corp-created">
+<dom-module id="org-created">
   <template>
-    <style include="corp-wizard-shared-styles"></style>
+    <style include="org-wizard-shared-styles"></style>
 
     <firebase-document path="/orgs/[[createdOrg.name]]/admin" data="{{admin}}"></firebase-document>
 
@@ -21,8 +21,8 @@
 
   </template>
   <script>
-    class CorpCreated extends Polymer.Element {
-      static get is () { return 'corp-created' }
+    class OrgCreated extends Polymer.Element {
+      static get is () { return 'org-created' }
       static get properties () {
         return {
           createdOrg: String
@@ -33,6 +33,6 @@
       }
     }
 
-    window.customElements.define(CorpCreated.is, CorpCreated)
+    window.customElements.define(OrgCreated.is, OrgCreated)
   </script>
 </dom-module>
