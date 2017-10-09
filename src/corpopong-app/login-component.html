@@ -1,30 +1,25 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../common/corpopong-auth.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../styles/overlay-styles.html">
 
 <dom-module id="login-component">
   <template>
-    <style include="app-styles overlay-styles"></style>
+    <style include="app-styles overlay-styles dark-theme"></style>
     <style>
-    :host([authenticated]) {
-      opacity: 0;
-      pointer-events: none;
-    }
     :host {
       @apply --overlay;
     }
-
     section {
       @apply --layout-flex;
       @apply --layout-vertical;
       @apply --layout-center-center;
     }
-
     iron-image {
       @apply --layout-horizontal;
       @apply --layout-center-center;
@@ -32,13 +27,12 @@
       margin-bottom: 2rem;
       height: 280px;
       width: 280px;
-      background-color: var(--primary-background-color);
+      background-color: var(--primary-text-color);
       border-radius: 50%;
       --iron-image-height: 210px;
       --iron-image-width: 210px;
       --iron-image-placeholder: {
         border-radius: 50%;
-
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -46,8 +40,8 @@
     }
     </style>
 
-    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
-    </firebase-auth>
+    <corpopong-auth id="auth" user="{{user}}" provider="google">
+    </corpopong-auth>
 
     <section>
       <iron-image
@@ -63,27 +57,29 @@
     </section>
   </template>
   <script>
-    class LoginComponent extends Polymer.Element {
+    class LoginComponent extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
       static get is () { return 'login-component' }
       static get properties () {
         return {
-          authenticated: {
-            type: Boolean,
-            computed: '_computeAuthenticated(user)',
-            reflectToAttribute: true
-          },
           user: {
             type: Object,
-            notify: true
+            notify: true,
+            observer: '_userChanged'
           }
         }
+      }
+      ready () {
+        super.ready()
+        this.opened = true
+        this.noCancelOnEscKey = true
+        this.noCancelOnOutsideClick = true
       }
       _login () {
         this.$.auth.signOut()
         this.$.auth.signInWithRedirect()
       }
-      _computeAuthenticated (user) {
-        return !!user
+      _userChanged (user) {
+        user ? this.close() : this.open()
       }
     }
 

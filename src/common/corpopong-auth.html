@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<dom-module id="corpopong-auth">
+  <template>
+    <firebase-auth id="auth" user="{{_firebaseUser}}" provider="[[provider]]">
+    </firebase-auth>
+    <firebase-document path="/users/[[_firebaseUser.uid]]" data="{{user}}"></firebase-document>
+  </template>
+  <script>
+    class CorpoPongAuth extends Polymer.Element {
+      static get is () { return 'corpopong-auth' }
+      static get properties () {
+        return {
+          user: {type: Object, notify: true},
+          provider: String,
+          _firebaseUser: {
+            type: Object,
+            observer: '_firebaseUserChanged'
+          }
+        }
+      }
+      _firebaseUserChanged (firebaseUser) {
+        if (!firebaseUser) this.user = null
+      }
+      signOut () {
+        this.$.auth.signOut()
+      }
+      signInWithRedirect () {
+        this.$.auth.signInWithRedirect()
+      }
+    }
+
+    window.customElements.define(CorpoPongAuth.is, CorpoPongAuth)
+  </script>
+</dom-module>

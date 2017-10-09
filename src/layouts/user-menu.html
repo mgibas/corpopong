@@ -2,11 +2,10 @@
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
-
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../common/corpopong-auth.html">
 
 <dom-module id="user-menu">
   <template>
@@ -30,8 +29,8 @@
       @apply --paper-font-button;
     }
     </style>
-    <firebase-auth id="auth" user="{{user}}" provider="google"></firebase-auth>
-    <firebase-document path="/players/[[user.uid]]" data="{{profile}}"></firebase-document>
+    <corpopong-auth id="auth" user="{{user}}"></corpopong-auth>
+    <!-- <firebase-document path="/players/[[user.uid]]" data="{{profile}}"></firebase-document> -->
 
     <paper-menu-button horizontal-align="right" vertical-offset="64">
       <player-avatar src="[[user.photoURL]]" slot="dropdown-trigger"></player-avatar>
