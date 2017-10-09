@@ -70,9 +70,9 @@
       }
       ready () {
         super.ready()
-        this.opened = true
         this.noCancelOnEscKey = true
         this.noCancelOnOutsideClick = true
+        this.alwaysOnTop = true
       }
       _login () {
         this.$.auth.signOut()
