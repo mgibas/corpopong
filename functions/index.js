@@ -11,6 +11,7 @@ exports.createUser = functions.auth.user().onCreate(event => {
     .ref('/users')
     .child(event.data.uid)
     .set({
+      uid: event.data.uid,
       email: event.data.email,
       displayName: event.data.displayName,
       photoURL: event.data.photoURL
