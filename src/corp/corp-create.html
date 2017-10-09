@@ -1,15 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../common/api-ajax.html">
+<link rel="import" href="../common/paper-loading-fab.html">
 <link rel="import" href="../corp/corp-wizard-shared-styles.html">
 
 <dom-module id="corp-create">
   <template>
     <style include="corp-wizard-shared-styles"></style>
 
-    <api-ajax id="post" method="post" url="/orgs" body="[[body]]"></api-ajax>
+    <api-ajax id="post" method="post" url="/orgs" body="[[body]]" loading="{{loading}}"></api-ajax>
     <firebase-document path="/org-infos/[[body.name]]" data="{{existingOrg}}"></firebase-document>
 
     <h2>Create new organization</h2>
@@ -22,7 +22,13 @@
       error-message="Provide a name">
     </paper-input>
     <span class="error-message" hidden="[[!existingOrg.name]]">[[body.name]] already exisits.</span>
-    <paper-fab class="advance-button" icon="arrow-forward" on-tap="submit" disabled="[[!valid]]"></paper-fab>
+    <paper-loading-fab
+      class="advance-button"
+      icon="arrow-forward"
+      on-tap="submit"
+      loading="[[loading]]"
+      disabled="[[!valid]]">
+    </paper-loading-fab>
 
   </template>
   <script>

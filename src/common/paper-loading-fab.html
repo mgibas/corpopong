@@ -3,7 +3,7 @@
 <link rel="import" href="../../bower_components/paper-behaviors/paper-button-behavior.html">
 <link rel="import" href="../common/paper-progress-circle.html">
 
-<dom-module id="paper-submit-fab">
+<dom-module id="paper-loading-fab">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -47,8 +47,8 @@
     <div id="morpher" class="morpher"></div>
   </template>
   <script>
-    class PaperSubmitFab extends Polymer.mixinBehaviors([Polymer.PaperButtonBehavior], Polymer.Element) {
-      static get is () { return 'paper-submit-fab' }
+    class PaperLoadingFab extends Polymer.mixinBehaviors([Polymer.PaperButtonBehavior], Polymer.Element) {
+      static get is () { return 'paper-loading-fab' }
       static get properties () {
         return {
           icon: String,
@@ -91,6 +91,6 @@
       }
     }
 
-    window.customElements.define(PaperSubmitFab.is, PaperSubmitFab)
+    window.customElements.define(PaperLoadingFab.is, PaperLoadingFab)
   </script>
 </dom-module>

@@ -3,7 +3,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../common/api-ajax.html">
-<link rel="import" href="../common/paper-submit-fab.html">
+<link rel="import" href="../common/paper-loading-fab.html">
 
 <dom-module id="corp-join">
   <template>
@@ -41,13 +41,13 @@
       </paper-input>
       <span class="error-message" hidden="[[!invalidInvitation]]">Something wrong with this invitation</span>
     </div>
-    <paper-submit-fab
+    <paper-loading-fab
       class="advance-button"
       icon="arrow-forward"
       disabled="[[!valid]]"
       loading="[[loading]]"
       on-tap="submit">
-    </paper-submit-fab>
+    </paper-loading-fab>
 
   </template>
   <script>
