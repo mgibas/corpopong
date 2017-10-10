@@ -63,7 +63,7 @@
         this.noCancelOnOutsideClick = true
       }
       _userChanged (user) {
-        if (!user || (user.orgs && user.orgs.length > 0)) {
+        if (!user || (user.orgs && Object.keys(user.orgs).length > 0)) {
           return this.close()
         }
         this.open()
