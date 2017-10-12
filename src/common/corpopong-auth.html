@@ -28,7 +28,9 @@
         this.$.auth.signOut()
       }
       signInWithRedirect () {
-        this.$.auth.signInWithRedirect()
+        var provider = new window.firebase.auth.GoogleAuthProvider()
+        provider.setCustomParameters({prompt: 'select_account'})
+        this.$.auth.signInWithRedirect(provider)
       }
     }
 
