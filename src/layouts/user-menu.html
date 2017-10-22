@@ -30,7 +30,7 @@
     }
     </style>
     <corpopong-auth id="auth" user="{{user}}"></corpopong-auth>
-    <!-- <firebase-document path="/players/[[user.uid]]" data="{{profile}}"></firebase-document> -->
+    <firebase-document path="/[[org]]/players/[[user.uid]]" data="{{profile}}"></firebase-document>
 
     <paper-menu-button horizontal-align="right" vertical-offset="64">
       <player-avatar slot="dropdown-trigger" src="[[user.photoURL]]" ></player-avatar>

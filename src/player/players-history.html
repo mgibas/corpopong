@@ -17,9 +17,9 @@
       text-align: center;
     }
     </style>
-    <firebase-document path="/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
-    <firebase-document path="/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
-    <firebase-query path="/users/[[player1Uid]]/matches" data="{{_player1Matches}}"></firebase-query>
+    <firebase-document path="/[[org]]/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
+    <firebase-document path="/[[org]]/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
+    <firebase-query path="/[[org]]/users/[[player1Uid]]/matches" data="{{_player1Matches}}"></firebase-query>
 
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">
@@ -81,7 +81,6 @@
         return matches.filter((m) => m.winnerUid === playerUid).length
       }
       _shouldFlip (match) {
-        console.log(match.player1Uid !== this.player1Uid)
         return match.player1Uid !== this.player1Uid
       }
       _sort (a, b) {

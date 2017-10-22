@@ -54,11 +54,11 @@
     }
 
     </style>
-    <firebase-query path="/users/[[userUid]]/open-matches" data="{{openMatches}}"></firebase-query>
-    <firebase-document path="/users/[[userUid]]/draft-matches/[[draftUid]]" data="{{draft}}"></firebase-document>
-    <firebase-document path="/users/[[userUid]]/draft-match-details/[[draftUid]]" data="{{draftDetails}}"></firebase-document>
-    <firebase-document path="/players/[[userUid]]" data="{{player1}}"></firebase-document>
-    <firebase-document path="/players/[[draftDetails.player2Uid]]" data="{{player2}}"></firebase-document>
+    <firebase-query path="/[[org]]/users/[[userUid]]/open-matches" data="{{openMatches}}"></firebase-query>
+    <firebase-document path="/[[org]]/users/[[userUid]]/draft-matches/[[draftUid]]" data="{{draft}}"></firebase-document>
+    <firebase-document path="/[[org]]/users/[[userUid]]/draft-match-details/[[draftUid]]" data="{{draftDetails}}"></firebase-document>
+    <firebase-document path="/[[org]]/players/[[userUid]]" data="{{player1}}"></firebase-document>
+    <firebase-document path="/[[org]]/players/[[draftDetails.player2Uid]]" data="{{player2}}"></firebase-document>
 
     <section class="paper-material" elevation="1">
         <div class="layout horizontal center-center">
@@ -125,7 +125,7 @@
       createDraft () {
         if (this.openMatchesLimitReached) return
         let newDraft = window.firebase.database(this.app)
-          .ref(`/users/${this.userUid}/draft-matches`)
+          .ref(`/[[org]]/users/${this.userUid}/draft-matches`)
           .push({create: 'create'})
 
         this.draftUid = newDraft.key

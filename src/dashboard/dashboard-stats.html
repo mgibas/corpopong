@@ -33,12 +33,12 @@
     </style>
 
     <firebase-query
-      path="/players"
+      path="/[[org]]/players"
       data="{{players}}"
       order-by-child="rated"
       equal-to="true">
     </firebase-query>
-    <firebase-query path="/matches" data="{{matches}}"></firebase-query>
+    <firebase-query path="/[[org]]/matches" data="{{matches}}"></firebase-query>
 
     <section class="paper-material" elevation="1">
       <header>

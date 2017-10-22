@@ -11,13 +11,13 @@
   <template>
     <style include="app-styles"></style>
     <firebase-query
-      path="/players"
+      path="/[[org]]/players"
       data="{{_players}}"
       order-by-child="rated"
       equal-to="true">
     </firebase-query>
     <firebase-query
-      path="/users/[[playerUid]]/matches"
+      path="/[[org]]/users/[[playerUid]]/matches"
       data="{{_matches}}">
     </firebase-query>
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>

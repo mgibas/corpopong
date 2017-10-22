@@ -29,11 +29,11 @@
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
     <iron-media-query query="(max-width: 599px)" query-matches="{{mediumMobile}}"></iron-media-query>
 
-    <firebase-document data="{{player1}}" path="/players/[[match.player1Uid]]">
+    <firebase-document data="{{player1}}" path="/[[org]]/players/[[match.player1Uid]]">
     </firebase-document>
-    <firebase-document data="{{player2}}" path="/players/[[match.player2Uid]]">
+    <firebase-document data="{{player2}}" path="/[[org]]/players/[[match.player2Uid]]">
     </firebase-document>
-    <firebase-document data="{{details}}" path="/open-match-details/[[match.$key]]">
+    <firebase-document data="{{details}}" path="/[[org]]/open-match-details/[[match.$key]]">
     </firebase-document>
 
     <open-match-calculator

@@ -64,15 +64,15 @@
 
     <firebase-document
       data="{{details}}"
-      path="/matches/[[matchUid]]">
+      path="/[[org]]/matches/[[matchUid]]">
     </firebase-document>
     <firebase-document
       data="{{player1}}"
-      path="/players/[[details.player1Uid]]">
+      path="/[[org]]/players/[[details.player1Uid]]">
     </firebase-document>
     <firebase-document
       data="{{player2}}"
-      path="/players/[[details.player2Uid]]">
+      path="/[[org]]/players/[[details.player2Uid]]">
     </firebase-document>
 
     <section class="paper-material" elevation="1">
