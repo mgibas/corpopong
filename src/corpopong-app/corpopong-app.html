@@ -8,9 +8,10 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../corpopong-app/login-component.html">
-<link rel="import" href="../corpopong-app/welcome-component.html">
 <link rel="import" href="../styles/app-theme.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-switcher-overlay.html">
+<link rel="import" href="../org/org-creator-overlay.html">
 
 <dom-module id="corpopong-app">
   <link rel="lazy-import" group="lazy" href="../dashboard/dashboard-fragment.html">
@@ -43,7 +44,18 @@
 
     <app-location route="{{route}}"></app-location>
     <login-component user="{{user}}"></login-component>
-    <welcome-component user="[[user]]"></welcome-component>
+    <org-creator-overlay
+      id="welcom"
+      user="[[user]]"
+      on-org-created="_handleOrgAdded"
+      on-org-joined="_handleOrgAdded">
+    </org-creator-overlay>
+    <org-switcher-overlay
+      id="switcher"
+      user="[[user]]"
+      org="{{org}}"
+      on-show-org-wizard="_openOrgWizard">
+    </org-switcher-overlay>
 
     <notifications-component user-uid="[[user.uid]]"></notifications-component>
     <paper-toast text="New version available!" duration="-1" id="swToast">
@@ -59,12 +71,12 @@
     </app-active-route>
 
     <iron-pages id="pages" selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
-      <dashboard-fragment for-pattern="/" user-uid="[[user.uid]]"></dashboard-fragment>
-      <match-create-fragment for-pattern="/matches/create" user-uid="[[user.uid]]"></match-create-fragment>
-      <open-match-fragment for-pattern="/open-matches/:id" user-uid="[[user.uid]]" match-uid="[[openMatchData.id]]"></open-match-fragment>
-      <match-fragment for-pattern="/matches/:id" match-uid="[[matchData.id]]"></match-fragment>
-      <player-fragment for-pattern="/players/:id" player-uid="[[playersData.id]]" user-uid="[[user.uid]]"></player-fragment>
-      <players-history-fragment for-pattern="/players/:id1/history/:id2" player1-uid="[[historyData.id1]]" player2-uid="[[historyData.id2]]"></players-history-fragment>
+      <dashboard-fragment for-pattern="/" org="[[org]]" user-uid="[[user.uid]]"></dashboard-fragment>
+      <match-create-fragment for-pattern="/matches/create" org="[[org]]" user-uid="[[user.uid]]"></match-create-fragment>
+      <open-match-fragment for-pattern="/open-matches/:id" org="[[org]]" user-uid="[[user.uid]]" match-uid="[[openMatchData.id]]"></open-match-fragment>
+      <match-fragment for-pattern="/matches/:id" org="[[org]]" match-uid="[[matchData.id]]"></match-fragment>
+      <player-fragment for-pattern="/players/:id" org="[[org]]" player-uid="[[playersData.id]]" user-uid="[[user.uid]]"></player-fragment>
+      <players-history-fragment for-pattern="/players/:id1/history/:id2" org="[[org]]" player1-uid="[[historyData.id1]]" player2-uid="[[historyData.id2]]"></players-history-fragment>
     </iron-pages>
 
   </template>
@@ -75,6 +87,7 @@
       ready () {
         super.ready()
         this.addEventListener('sw-updated', () => this._notifyUpdate())
+        this.addEventListener('switch-corpo', () => this._openSwitcher())
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.importLazyGroup('lazy').then(() => this.$.pages.notifyResize())
         })
@@ -84,6 +97,16 @@
       }
       _refresh () {
         window.location.reload()
+      }
+      _openSwitcher () {
+        this.$.switcher.open()
+      }
+      _openOrgWizard () {
+        this.$.welcom.open()
+        this.$.switcher.close()
+      }
+      _handleOrgAdded (e, detail) {
+        this.$.switcher.switch(detail.org)
       }
     }
     window.customElements.define(CorpopongApp.is, CorpopongApp)

@@ -33,7 +33,7 @@
     <!-- <firebase-document path="/players/[[user.uid]]" data="{{profile}}"></firebase-document> -->
 
     <paper-menu-button horizontal-align="right" vertical-offset="64">
-      <player-avatar src="[[user.photoURL]]" slot="dropdown-trigger"></player-avatar>
+      <player-avatar slot="dropdown-trigger" src="[[user.photoURL]]" ></player-avatar>
       <div slot="dropdown-content">
         <div class="paper-material" elevation="1">
           <p>[[user.displayName]]</p>
@@ -47,6 +47,9 @@
           <paper-button on-tap="signOut">
             Sign out
           </paper-button>
+          <paper-button on-tap="_openSwitcher">
+            Switch Corpo
+          </paper-button>
         </div>
       </div>
     </paper-menu-button>
@@ -54,8 +57,16 @@
   <script>
     class UserMenu extends Polymer.Element {
       static get is () { return 'user-menu' }
+      static get properties () {
+        return {
+          org: String
+        }
+      }
       signOut () {
         this.$.auth.signOut()
+      }
+      _openSwitcher () {
+        this.dispatchEvent(new CustomEvent('switch-corpo', {bubbles: true, composed: true}))
       }
     }
 

@@ -58,6 +58,9 @@
           .then((req) => {
             this.set('createdOrg', req.response)
             this.dispatchEvent(new CustomEvent('advanced'))
+            this.dispatchEvent(new CustomEvent('org-created', {
+              bubbles: true, composed: true, detail: {org: this.body.name}
+            }))
           })
       }
       _fixName (name) {

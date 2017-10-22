@@ -80,6 +80,9 @@
           .then((req) => {
             this.set('joinedOrg', this.name)
             this.dispatchEvent(new CustomEvent('advanced'))
+            this.dispatchEvent(new CustomEvent('org-joined', {
+              bubbles: true, composed: true, detail: {org: this.name}
+            }))
           })
           .catch(() => {
             if (!this.invitationRequired) {

@@ -40,7 +40,7 @@
     }
 
     </style>
-    <fragment-layout title="CorpoPong" fullbleed>
+    <fragment-layout title="CorpoPong" org="[[org]]" fullbleed>
       <a href="/matches/create">
         <paper-fab class="fixed-fab" icon="corpopong:paddles"></paper-fab>
       </a>
@@ -61,9 +61,10 @@
       static get is () { return 'dashboard-fragment' }
       static get properties () {
         return {
+          org: String,
           userUid: String
         }
-  }
+      }
     }
 
     window.customElements.define(DashboardFragment.is, DashboardFragment)

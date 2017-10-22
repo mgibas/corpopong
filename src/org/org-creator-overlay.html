@@ -1,42 +1,45 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../styles/dark-theme.html">
-<link rel="import" href="../org/org-wizard-shared-styles.html">
-<link rel="import" href="../org/org-join.html">
-<link rel="import" href="../org/org-joined.html">
+<link rel="import" href="../styles/overlay-styles.html">
+<link rel="import" href="../common/corpopong-overlay-header.html">
 <link rel="import" href="../org/org-create.html">
 <link rel="import" href="../org/org-created.html">
+<link rel="import" href="../org/org-join.html">
+<link rel="import" href="../org/org-joined.html">
 
-<dom-module id="org-wizard">
+<dom-module id="org-creator-overlay">
   <template>
-    <style include="org-wizard-shared-styles"></style>
+    <style include="app-styles overlay-styles dark-theme"></style>
     <style>
-      section {
-        @apply --layout-flex;
-        @apply --layout-vertical;
-        @apply --layout-center-center;
-      }
-      header {
-        margin: 1rem;
-      }
-      iron-selector > :not(.iron-selected) {
-        display: none;
-      }
-      .back-button {
-        position: fixed;
-        left: 1rem;
-        bottom: 1rem;
-      }
+    :host {
+      @apply --overlay;
+    }
+    .steps {
+      height: 100%;
+    }
+    section {
+      @apply --layout-flex;
+      @apply --layout-vertical;
+      @apply --layout-center-center;
+    }
+    iron-selector > :not(.iron-selected) {
+      display: none;
+    }
+    .back-button {
+      position: fixed;
+      left: 1rem;
+      bottom: 1rem;
+    }
     </style>
-
-    <iron-selector id="selector" selected="[[step]]" attr-for-selected="name" activate-event="">
+    <corpopong-overlay-header on-close-tap="close"></corpopong-overlay-header>
+    <iron-selector id="selector" class="steps" selected="[[step]]" attr-for-selected="name" activate-event="" fallback-selection="start">
       <section name="start">
-        <header>
-          <h2>First time at CorpoPong?</h2>
-        </header>
-        <paper-button raised on-tap="_join">Join existing corp</paper-button>
+        <paper-button raised on-tap="_join">Join existing corpo</paper-button>
         <a on-tap="_create">or create new one</a>
       </section>
       <section name="create">
@@ -52,34 +55,43 @@
         <org-joined  joined-org="[[joinedOrg]]" on-advanced="_advance"></org-joined>
       </section>
     </iron-selector>
+
     <paper-icon-button
       class="back-button"
       icon="arrow-back"
       on-tap="_decrease"
       hidden="[[!_canDecrease]]">
     </paper-icon-button>
-
   </template>
   <script>
-    class OrgWizard extends Polymer.Element {
-      static get is () { return 'org-wizard' }
+    class OrgCreatorOverlay extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
+      static get is () { return 'org-creator-overlay' }
       static get properties () {
         return {
+          user: {type: Object, observer: '_userChanged'},
           step: {
             type: String,
             notify: true,
             value: () => 'start'
           },
-          _steps: {
-            type: Array,
-            value: []
-          },
+          _steps: {type: Array, value: []},
           _canDecrease: {
             type: Boolean,
             value: false,
             computed: '_computeCanDecrease(_steps.length)'
           }
         }
+      }
+      ready () {
+        super.ready()
+        this.noCancelOnEscKey = true
+        this.noCancelOnOutsideClick = true
+      }
+      _userChanged (user) {
+        if (!user || (user.orgs && Object.keys(user.orgs).length > 0)) {
+          return this.close()
+        }
+        this.open()
       }
       _create () {
         this.push('_steps', this.step)
@@ -102,6 +114,8 @@
             break
           default:
             this.dispatchEvent(new CustomEvent('finished'))
+            this.step = 'start'
+            this._steps = []
         }
       }
       _decrease () {
@@ -112,6 +126,6 @@
       }
     }
 
-    window.customElements.define(OrgWizard.is, OrgWizard)
+    window.customElements.define(OrgCreatorOverlay.is, OrgCreatorOverlay)
   </script>
 </dom-module>

@@ -1,0 +1,50 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../common/corpopong-logo.html">
+
+<dom-module id="corpopong-overlay-header">
+  <template>
+    <style include="app-styles dark-theme"></style>
+    <style>
+    :host {
+      display: block;
+    }
+    .container {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+    h1 {
+      @apply --layout-flex;
+    }
+    paper-icon-button {
+      border-radius: 50%;
+      transition: background-color 100ms ease-in;
+    }
+    paper-icon-button:hover {
+      background-color: var(--accent-color);
+    }
+    </style>
+
+    <div class="container">
+      <corpopong-logo></corpopong-logo>
+      <h1>CorpoPong</h1>
+      <paper-icon-button icon="close" hidden="[[!closeButton]]" on-tap="_handleTap"></paper-icon-button>
+    </div>
+
+  </template>
+  <script>
+    class CorpopongOverlayHeader extends Polymer.Element {
+      static get is () { return 'corpopong-overlay-header' }
+      static get properties () {
+        return {
+          closeButton: {type: Boolean, value: true}
+        }
+      }
+      _handleTap () {
+        this.dispatchEvent(new CustomEvent('close-tap'))
+      }
+    }
+
+    window.customElements.define(CorpopongOverlayHeader.is, CorpopongOverlayHeader)
+  </script>
+</dom-module>

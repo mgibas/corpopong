@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../styles/dark-theme.html">
+<link rel="import" href="../styles/overlay-styles.html">
+<link rel="import" href="../common/corpopong-logo.html">
+
+<dom-module id="org-switcher-overlay">
+  <template>
+    <style include="app-styles overlay-styles dark-theme"></style>
+    <style>
+    :host {
+      @apply --overlay;
+    }
+    org-wizard {
+      height: 100%;
+    }
+    paper-icon-item {
+      cursor:pointer;
+    }
+    </style>
+
+    <corpopong-overlay-header on-close-tap="close"></corpopong-overlay-header>
+    <h2>
+      Available Corpos
+      <paper-icon-button icon="add" on-tap="_showOrgWizard"></paper-icon-button>
+    </h2>
+
+    <paper-listbox>
+      <template is="dom-repeat" items="[[_availableOrgs]]">
+        <paper-icon-item item="[[item]]" class="layout" on-tap="_switchOrg">
+          <iron-icon hidden="[[!currentOrg(item, org)]]" slot="item-icon" icon="done"></iron-icon>
+          <div class="layout horizontal flex center">
+            <span class="flex">[[item]]</span>
+          </div>
+        </paper-icon-item>
+      </template>
+    </paper-listbox>
+
+  </template>
+  <script>
+    class OrgSwitcherOverlay extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
+      static get is () { return 'org-switcher-overlay' }
+      static get properties () {
+        return {
+          user: {type: Object, observer: '_userChanged'},
+          org: {type: String, notify: true},
+          _availableOrgs: {type: Array, computed: '_computeAvailableOrgs(user.orgs)'}
+        }
+      }
+      switch (org) {
+        window.localStorage.setItem('com.corpopong.org', org)
+        this.org = org
+      }
+      _userChanged (user) {
+        if (!user) {
+          this.org = null
+        } else {
+          let storred = window.localStorage.getItem('com.corpopong.org')
+          if (!storred && Object.keys(user.orgs).length > 0) {
+            storred = Object.keys(user.orgs)[0]
+            window.localStorage.setItem('com.corpopong.org', storred)
+          }
+          this.org = storred
+        }
+      }
+      _computeAvailableOrgs (orgs) {
+        return orgs ? Object.keys(orgs) : []
+      }
+      _switchOrg (e) {
+        let org = e.currentTarget.item
+        this.switch(org)
+        this.close()
+      }
+      _showOrgWizard () {
+        this.dispatchEvent(new CustomEvent('show-org-wizard'))
+      }
+      currentOrg (item, org) {
+        return item === org
+      }
+      ready () {
+        super.ready()
+        this.noCancelOnOutsideClick = true
+      }
+    }
+
+    window.customElements.define(OrgSwitcherOverlay.is, OrgSwitcherOverlay)
+  </script>
+</dom-module>

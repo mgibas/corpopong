@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+<dom-module id="corpopong-logo">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      --size: var(--logo-size, 64px);
+    }
+    iron-image {
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+      margin-right: 1rem;
+      height: var(--size);
+      width: var(--size);
+      background-color: var(--primary-text-color);
+      border-radius: 50%;
+      --iron-image-height: calc(var(--size) * 0.75);
+      --iron-image-width:  calc(var(--size) * 0.75);
+      --iron-image-placeholder: {
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      };
+    }
+    </style>
+    <iron-image
+      src="/images/logo.svg"
+      preload
+      fade
+      placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAPYQAAD2EBqD+naQAAAEVJREFUCB1jPHnuYiT79ZvZ+muW32L49q2EOezNOwO9G1fz2Rj+GzKwsFxh2i2p9LNRUPL71/8Mzxj+/dvHkFDTGcCABABezRs8JlBzTwAAAABJRU5ErkJggg==">
+    </iron-image>
+  </template>
+  <script>
+    class CorpopongLogo extends Polymer.Element {
+      static get is () { return 'corpopong-logo' }
+    }
+
+    window.customElements.define(CorpopongLogo.is, CorpopongLogo)
+  </script>
+</dom-module>

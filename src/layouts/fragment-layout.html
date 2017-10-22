@@ -55,19 +55,26 @@
       color: var(--primary-text-color);
       cursor: pointer;
     }
+
+    .org-name {
+      @apply --paper-font-body1;
+    }
     </style>
     <app-header-layout has-scrolling-region>
       <app-header slot="header" fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button hidden$=[[!backButton]] icon="arrow-back" on-tap="_back"></paper-icon-button>
+          <paper-icon-button hidden$="[[!backButton]]" icon="arrow-back" on-tap="_back"></paper-icon-button>
           <div main-title>[[title]]</div>
-          <paper-menu-button hidden$=[[!menuButton]] horizontal-align="right">
+          <paper-menu-button hidden$="[[!menuButton]]" horizontal-align="right">
             <paper-icon-button icon="more-vert" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content">
               <slot name="menu-item"></slot>
             </paper-listbox>
           </paper-menu-button>
-          <user-menu></user-menu>
+          <div class="layout horizontal center">
+            <span class="org-name">[[org]]</span>
+            <user-menu org="[[org]]"></user-menu>
+          </div>
         </app-toolbar>
       </app-header>
       <div class="content-wrapper">
@@ -83,6 +90,7 @@
       static get properties () {
         return {
           title: String,
+          org: String,
           backButton: {
             type: Boolean,
             value: false
