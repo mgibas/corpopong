@@ -60,7 +60,7 @@
           this.org = null
         } else {
           let storred = window.localStorage.getItem('com.corpopong.org')
-          if (!storred && Object.keys(user.orgs).length > 0) {
+          if (!storred && user.orgs && Object.keys(user.orgs).length > 0) {
             storred = Object.keys(user.orgs)[0]
             window.localStorage.setItem('com.corpopong.org', storred)
           }
