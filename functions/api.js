@@ -99,12 +99,12 @@ class Api {
           })
         })
     })
-    this.handler.post('/orgs/:org/players/recommended', (req, res) => {
+    this.handler.get('/orgs/:org/players/recommended', (req, res) => {
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
-      let playersPromise = orgRef.ref(`/players`).once('value')
-      let matchesPromise = orgRef.ref(`/users/${req.user.uid}/matches/`).once('value')
-      let openMatchesPromise = orgRef.ref('/open-match-details').once('value')
-      let userOpenMatchesPromise = orgRef.ref(`/users/${req.user.uid}/open-matches/`).once('value')
+      let playersPromise = orgRef.child(`/players`).once('value')
+      let matchesPromise = orgRef.child(`/users/${req.user.uid}/matches/`).once('value')
+      let openMatchesPromise = orgRef.child('/open-match-details').once('value')
+      let userOpenMatchesPromise = orgRef.child(`/users/${req.user.uid}/open-matches/`).once('value')
 
       return Promise.all([playersPromise, matchesPromise, openMatchesPromise, userOpenMatchesPromise])
         .then((snaps) => {
