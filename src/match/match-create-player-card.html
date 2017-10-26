@@ -12,6 +12,7 @@
       margin: var(--spacing);
       background-color: var(--primary-background-color);
       border-radius: var(--radius);
+      padding: var(--spacing-m);
       overflow: hidden;
       cursor: pointer;
     }
@@ -44,25 +45,26 @@
       transform: scale(0, 0);
       transition-delay: 0ms;
     }
-    .details {
-      @apply --layout-vertical;
-      @apply --layout-center-center;
-      padding: var(--spacing);
+    .divider {
+      width: calc(100% + (2 * var(--spacing-m)));
+      border-top: 1px solid var(--divider-color);
+      margin-bottom: var(--spacing-m);
     }
     span + span {
-      margin-top: var(--spacing-s);
+      margin-top: var(--spacing);
+    }
+    player-avatar {
+      margin-bottom: var(--spacing-m);
     }
     paper-fab {
       transition: all 200ms ease-in-out;
     }
     </style>
 
-    <player-avatar square big src="https://lh6.googleusercontent.com/-PXIaWZH0bGA/AAAAAAAAAAI/AAAAAAAABH0/9jJpl3Z_8OQ/photo.jpg"></player-avatar>
-    <div class="details">
-      <span>Maciej Gibas</span>
-      <span>1120</span>
-    </div>
-
+    <player-avatar big src="https://lh6.googleusercontent.com/-PXIaWZH0bGA/AAAAAAAAAAI/AAAAAAAABH0/9jJpl3Z_8OQ/photo.jpg"></player-avatar>
+    <div class="divider"></div>
+    <span>Maciej Gibas</span>
+    <span>1120</span>
 
     <div class="fit-actions">
       <paper-fab icon="done"></paper-fab>
