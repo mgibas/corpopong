@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="match-create-player-card">
+  <template>
+    <style>
+    :host {
+      position: relative;
+      @apply --paper-material;
+      @apply --paper-material-elevation-1;
+      @apply --layout-vertical;
+      @apply --layout-center;
+      margin: var(--spacing);
+      background-color: var(--primary-background-color);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    :host .fit-actions {
+      position: absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+      background-color: var(--primary-color-transparent);
+      transition: all 200ms ease-in-out;
+    }
+    :host([selected]) .fit-actions {
+      transition-delay: 0ms;
+      opacity: 1;
+    }
+    :host(:not([selected])) .fit-actions {
+      pointer-events: none;
+      transition-delay: 200ms;
+      opacity: 0;
+    }
+    :host([selected]) paper-fab {
+      transform: scale(1, 1);
+      transition-delay: 200ms;
+    }
+    :host(:not([selected])) paper-fab {
+      transform: scale(0, 0);
+      transition-delay: 0ms;
+    }
+    .details {
+      @apply --layout-vertical;
+      @apply --layout-center-center;
+      padding: var(--spacing);
+    }
+    span + span {
+      margin-top: var(--spacing-s);
+    }
+    paper-fab {
+      transition: all 200ms ease-in-out;
+    }
+    </style>
+
+    <player-avatar square big src="https://lh6.googleusercontent.com/-PXIaWZH0bGA/AAAAAAAAAAI/AAAAAAAABH0/9jJpl3Z_8OQ/photo.jpg"></player-avatar>
+    <div class="details">
+      <span>Maciej Gibas</span>
+      <span>1120</span>
+    </div>
+
+
+    <div class="fit-actions">
+      <paper-fab icon="done"></paper-fab>
+    </div>
+  </template>
+  <script>
+    class MatchCreatePlayerCard extends Polymer.Element {
+      static get is () { return 'match-create-player-card' }
+      static get properties () {
+        return {
+          selected: {
+            type: Boolean,
+            reflectToAttribute: true
+          }
+        }
+      }
+    }
+
+    window.customElements.define(MatchCreatePlayerCard.is, MatchCreatePlayerCard)
+  </script>
+</dom-module>

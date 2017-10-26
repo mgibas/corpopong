@@ -1,160 +1,56 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
-<link rel="import" href="../common/paper-timeoutable-fab.html">
+<link rel="import" href="../match/match-create-player-card.html">
 
 <dom-module id="match-create">
   <template>
     <style include="app-styles"></style>
     <style>
-    :host {
-      position: relative;
-      display: block;
-      --message-overlay: {
-        position: absolute;
-        left: 0;
-        top:0;
-        right:0;
-        bottom:0;
-        background-color: #fff;
-        text-align: center;
-        white-space: pre;
-        @apply --layout;
-        @apply --layout-center-center;
-        @apply --paper-font-subhead;
-      }
-    }
-    :host([open-matches-limit-reached])::after {
-      content:'Slow down a bit!\APlease close your open matches first.';
-      @apply --message-overlay;
-    }
-    :host([no-oponents-found])::after {
-      content:'Take a break champ! \A No oponent for you at the moment - come back later.';
-      @apply --message-overlay;
-    }
-    .player-1, .player-2 {
-      @apply --layout-flex;
+    .grid {
       @apply --layout-horizontal;
-      @apply --layout-center-center;
-      @apply --paper-font-headline;
+      @apply --layout-wrap;
     }
-    .player-2 {
-      @apply --layout-horizontal-reverse;
-    }
-    .info {
-      @apply --layout-vertical;
-      @apply --layout-center-center;
-    }
-    .secondary {
-      @apply --paper-font-body1;
-      @apply --secondary-text-color;
-    }
-
     </style>
-    <firebase-query path="/[[org]]/users/[[userUid]]/open-matches" data="{{openMatches}}"></firebase-query>
-    <firebase-document path="/[[org]]/users/[[userUid]]/draft-matches/[[draftUid]]" data="{{draft}}"></firebase-document>
-    <firebase-document path="/[[org]]/users/[[userUid]]/draft-match-details/[[draftUid]]" data="{{draftDetails}}"></firebase-document>
-    <firebase-document path="/[[org]]/players/[[userUid]]" data="{{player1}}"></firebase-document>
-    <firebase-document path="/[[org]]/players/[[draftDetails.player2Uid]]" data="{{player2}}"></firebase-document>
 
-    <section class="paper-material" elevation="1">
-        <div class="layout horizontal center-center">
-          <div class="player-1">
-            <div class="info">
-              <player-avatar src="[[player1.photoURL]]" big></player-avatar>
-              <span>[[player1.displayName]]</span>
-              <span class="secondary">[[player1.rating]] [[_formatChanceOfWinning(draftDetails.player1Probability)]]</span>
-            </div>
-          </div>
-          <span>VS</span>
-          <div class="player-2">
-            <div class="info">
-              <player-avatar src="[[player2.photoURL]]" big spinner></player-avatar>
-              <span>[[player2.displayName]]</span>
-              <span class="secondary">[[player2.rating]] [[_formatChanceOfWinning(draftDetails.player2Probability)]]</span>
-            </div>
-          </div>
-        </div>
-        <paper-timeoutable-fab
-          id="accept"
-          class="fixed-fab"
-          disabled="[[!validDraftCreated]]"
-          timeout="60000"
-          icon="done"
-          timeouted-icon="refresh"
-          on-not-timeouted-tap="_accept"
-          on-timeouted-tap="_refresh">
-        </paper-timeoutable-fab>
+    <section>
+      <header>Recomended</header>
+      <iron-selector class="grid" selected-attribute="selected" on-iron-activate="_clearSelection">
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+      </iron-selector>
     </section>
-
-
+    <section>
+      <header>Never played</header>
+      <iron-selector class="grid" selected-attribute="selected" on-iron-activate="_clearSelection">
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+      </iron-selector>
+    </section>
+    <section>
+      <header>All Players</header>
+      <iron-selector class="grid" selected-attribute="selected" on-iron-activate="_clearSelection">
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+        <match-create-player-card></match-create-player-card>
+      </iron-selector>
+    </section>
   </template>
   <script>
-    class MatchCreate extends Polymer.mixinBehaviors([Polymer.FirebaseDatabaseBehavior], Polymer.Element) {
+    class MatchCreate extends Polymer.Element {
       static get is () { return 'match-create' }
-      static get properties () {
-        return {
-          userUid: String,
-          draftUid: String,
-          draft: Object,
-          validDraftCreated: {
-            type: Boolean,
-            computed: '_computeValidDraftCreated(draftDetails.player2Uid)',
-            observer: '_validDraftCreatedChanged'
-          },
-          openMatches: Object,
-          openMatchesLimitReached: {
-            type: Boolean,
-            reflectToAttribute: true,
-            computed: '_computeOpenMatchesLimitReached(openMatches.length)'
-          },
-          noOponentsFound: {
-            type: Boolean,
-            reflectToAttribute: true,
-            computed: '_computeNoOponentsFound(draftDetails.noOponents)'
-          }
+      _clearSelection (e, detail) {
+        if (e.currentTarget.selected === detail.selected) {
+          e.currentTarget.selected = null
+          e.preventDefault()
         }
-      }
-      reset () {
-        this.draftUid = null
-        this.$.accept.reset()
-      }
-      createDraft () {
-        if (this.openMatchesLimitReached) return
-        let newDraft = window.firebase.database(this.app)
-          .ref(`/[[org]]/users/${this.userUid}/draft-matches`)
-          .push({create: 'create'})
-
-        this.draftUid = newDraft.key
-      }
-      _accept () {
-        this.set('draft.accept', true)
-        window.history.pushState({}, null, '/')
-        window.dispatchEvent(new CustomEvent('location-changed'))
-      }
-      _refresh () {
-        this.reset()
-        this.createDraft()
-      }
-      _formatChanceOfWinning (value) {
-        if (!value) return
-        return `(${new Intl.NumberFormat(undefined, { style: 'percent' }).format(value)})`
-      }
-      _computeValidDraftCreated (oponentUid) {
-        return !!oponentUid
-      }
-      _validDraftCreatedChanged (created) {
-        this.$.accept.reset()
-        if (created) { this.$.accept.start() }
-      }
-      _computeOpenMatchesLimitReached (count) {
-        return count >= 5
-      }
-      _computeNoOponentsFound (noOponents) {
-        return noOponents
       }
     }
 

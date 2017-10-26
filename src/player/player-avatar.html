@@ -23,12 +23,18 @@
       height: 128px;
       width: 128px;
     }
-    .circle-frame, iron-image {
+    .circle-frame,
+    iron-image {
       z-index: 0;
-      border-radius: 50%;
       overflow: hidden;
+    }
+
+    :host(:not([square])) .circle-frame,
+    :host(:not([square])) iron-image {
+      border-radius: 50%;
       @apply --shadow-elevation-3dp;
     }
+
     paper-progress-circle {
       position: absolute;
       left: 0px;
@@ -59,6 +65,7 @@
             reflectToAttribute: true
           },
           spinner: Boolean,
+          square: {type: Boolean, reflectToAttribute: true},
           _spinnerActive: {
             type: Boolean,
             value: true,
