@@ -99,6 +99,56 @@ class Api {
           })
         })
     })
+    this.handler.post('/orgs/:org/players/recommended', (req, res) => {
+      let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
+      let playersPromise = orgRef.ref(`/players`).once('value')
+      let matchesPromise = orgRef.ref(`/users/${req.user.uid}/matches/`).once('value')
+      let openMatchesPromise = orgRef.ref('/open-match-details').once('value')
+      let userOpenMatchesPromise = orgRef.ref(`/users/${req.user.uid}/open-matches/`).once('value')
+
+      return Promise.all([playersPromise, matchesPromise, openMatchesPromise, userOpenMatchesPromise])
+        .then((snaps) => {
+          let players = {}
+          let playerRating = 0
+
+          snaps[0].forEach((playerSnapshot) => {
+            let player = playerSnapshot.val()
+            player.matchesCount = 0
+            player.openMatchesCount = 0
+            player.uid = playerSnapshot.key
+            players[playerSnapshot.key] = player
+            if (playerSnapshot.key === req.user.uid) { playerRating = player.rating }
+          })
+          snaps[1].forEach((matchSnapshot) => {
+            let match = matchSnapshot.val()
+            if (match.player1Uid === req.user.uid) {
+              players[match.player2Uid].matchesCount++
+            } else {
+              players[match.player1Uid].matchesCount++
+            }
+          })
+          snaps[2].forEach((openMatchSnapshot) => {
+            let openMatch = openMatchSnapshot.val()
+            if (openMatch.player1Uid === req.user.uid) {
+              players[openMatch.player2Uid].hasOpenMatch = true
+            } else if (openMatch.player2Uid === req.user.uid) {
+              players[openMatch.player1Uid].hasOpenMatch = true
+            }
+            players[openMatch.player1Uid].openMatchesCount++
+            players[openMatch.player2Uid].openMatchesCount++
+          })
+
+          let oponents = Object.keys(players)
+            .map(key => players[key])
+            .filter((p) => p.active && p.rated && p.uid !== req.user.uid)
+            .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
+            .filter((p) => Math.abs(p.rating - playerRating) <= 300)
+            .sort((a, b) => a.matchesCount - b.matchesCount ||
+              Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
+
+          res.status(200).send(oponents)
+        })
+    })
   }
 }
 
