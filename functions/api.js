@@ -99,7 +99,7 @@ class Api {
           })
         })
     })
-    this.handler.get('/orgs/:org/players/recommended', (req, res) => {
+    this.handler.get('/orgs/:org/oponents', (req, res) => {
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
       let playersPromise = orgRef.child(`/players`).once('value')
       let matchesPromise = orgRef.child(`/users/${req.user.uid}/matches/`).once('value')
@@ -138,15 +138,17 @@ class Api {
             players[openMatch.player2Uid].openMatchesCount++
           })
 
-          let oponents = Object.keys(players)
+          let all = Object.keys(players)
             .map(key => players[key])
             .filter((p) => p.active && p.rated && p.uid !== req.user.uid)
+
+          let recommended = all
             .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
             .filter((p) => Math.abs(p.rating - playerRating) <= 300)
             .sort((a, b) => a.matchesCount - b.matchesCount ||
               Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
-          res.status(200).send(oponents)
+          res.status(200).send({all: all, recommended: recommended})
         })
     })
   }

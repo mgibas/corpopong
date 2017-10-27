@@ -4,6 +4,13 @@
       ".read": "auth != null",
       ".write": "false"
     },
+    "orgs":{
+      "$org": {
+        "players": {
+          ".read": true
+        }
+      }
+    },
     "messaging": {
       "$uid": {
         ".read": "$uid === auth.uid",
