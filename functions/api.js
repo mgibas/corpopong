@@ -151,6 +151,32 @@ class Api {
           res.status(200).send({all: all, recommended: recommended})
         })
     })
+    this.handler.post('/orgs/:org/matches', (req, res) => {
+      let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
+      let match = {
+        player1Uid: req.user.uid,
+        player2Uid: req.body.uid,
+        createdDate: new Date().toISOString()
+      }
+      let details = Object.assign({
+        approvals: {player1: '', player2: ''},
+        scores: [{player1: 0, player2: 0}]
+      }, match)
+
+      let newDetails = orgRef.child('/open-match-details').push(details)
+
+      return Promise.all([
+        orgRef
+          .child(`/users/${match.player1Uid}/open-matches/${newDetails.key}`)
+          .set(match),
+        orgRef
+          .child(`/users/${match.player2Uid}/open-matches/${newDetails.key}`)
+          .set(match),
+        orgRef
+          .child(`/players/${match.player1Uid}/active`)
+          .set(true)
+      ])
+    })
   }
 }
 
