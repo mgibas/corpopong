@@ -48,17 +48,6 @@
             },
             "open-matches": {
               ".write": "false"
-            },
-            "draft-matches": {
-              ".write": "$uid === auth.uid",
-              "$draftUid": {
-                "accept": {
-                  ".validate": "now <= root.child('users/'+$uid+'/draft-match-details/'+$draftUid+'/timestamp').val() + 120000"
-                }
-              }
-            },
-            "draft-match-details": {
-              ".write": false
             }
           }
         }
@@ -68,6 +57,11 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid"
       }
     }
   }
