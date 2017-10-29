@@ -7,7 +7,60 @@
     "orgs":{
       "$org": {
         "players": {
-          ".read": true
+          ".read": "auth != null",
+          "$uid": {
+            "active": {
+              ".write": "$uid === auth.uid"
+            }
+          }
+        },
+        "open-match-details": {
+          "$uid": {
+            ".read": "auth.uid === data.child('player1Uid').val() || auth.uid === data.child('player2Uid').val()",
+            "scores": {
+              ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
+            },
+            "removed": {
+              ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
+            },
+            "approvals": {
+              "player1": {
+                ".write": "auth.uid === data.parent().parent().child('player1Uid').val()",
+                ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
+              },
+              "player2": {
+                ".write": "auth.uid === data.parent().parent().child('player2Uid').val()",
+                ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
+              }
+            }
+          }
+        },
+        "matches": {
+          ".read": "auth != null",
+          ".write": false,
+          ".indexOn": "finalizedDate"
+        },
+        "users": {
+          "$uid": {
+            ".read": "auth != null",
+            "matches": {
+              ".write": "false"
+            },
+            "open-matches": {
+              ".write": "false"
+            },
+            "draft-matches": {
+              ".write": "$uid === auth.uid",
+              "$draftUid": {
+                "accept": {
+                  ".validate": "now <= root.child('users/'+$uid+'/draft-match-details/'+$draftUid+'/timestamp').val() + 120000"
+                }
+              }
+            },
+            "draft-match-details": {
+              ".write": false
+            }
+          }
         }
       }
     },
@@ -15,62 +68,6 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
-      }
-    },
-    "open-match-details": {
-      "$uid": {
-        ".read": "auth.uid === data.child('player1Uid').val() || auth.uid === data.child('player2Uid').val()",
-        "scores": {
-          ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
-        },
-        "removed": {
-          ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
-        },
-        "approvals": {
-          "player1": {
-            ".write": "auth.uid === data.parent().parent().child('player1Uid').val()",
-            ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
-          },
-          "player2": {
-            ".write": "auth.uid === data.parent().parent().child('player2Uid').val()",
-            ".validate": "newData.isString() && newData.val().matches(/^()|(|[0-9]{1,2}){2}|(|[0-9]{1,2}){6}|(|[0-9]{1,2}){10}$/i)"
-          }
-        }
-      }
-    },
-    "players": {
-      ".read": "auth != null",
-      "$uid": {
-        "active": {
-          ".write": "$uid === auth.uid"
-        }
-      }
-    },
-    "matches": {
-      ".read": "auth != null",
-      ".write": false,
-      ".indexOn": "finalizedDate"
-    },
-    "users": {
-      "$uid": {
-        ".read": "auth != null",
-        "matches": {
-          ".write": "false"
-        },
-        "open-matches": {
-          ".write": "false"
-        },
-        "draft-matches": {
-          ".write": "$uid === auth.uid",
-          "$draftUid": {
-            "accept": {
-              ".validate": "now <= root.child('users/'+$uid+'/draft-match-details/'+$draftUid+'/timestamp').val() + 120000"
-            }
-          }
-        },
-        "draft-match-details": {
-          ".write": false
-        }
       }
     }
   }
