@@ -15,54 +15,8 @@ exports.createUser = functions.auth.user().onCreate(event => {
       email: event.data.email,
       displayName: event.data.displayName,
       photoURL: event.data.photoURL
-      // rating: 750,
-      // rated: false,
-      // active: true
     })
 })
-
-exports.acceptDraftMatch = functions.database.ref('/orgs/{org}/users/{userUid}/draft-matches/{matchUid}/accept')
-  .onCreate(event => {
-    if (event.auth.admin) { return }
-    let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
-
-    return orgRef
-      .ref(`/users/${event.params.userUid}/draft-match-details/${event.params.matchUid}`)
-      .once('value')
-      .then((snap) => {
-        let draftDetails = snap.val()
-        let match = {
-          player1Uid: draftDetails.player1Uid,
-          player2Uid: draftDetails.player2Uid,
-          createdDate: new Date().toISOString()
-        }
-        let details = Object.assign({
-          approvals: {player1: '', player2: ''},
-          scores: [{player1: 0, player2: 0}]
-        }, match)
-
-        return Promise.all([
-          orgRef
-            .ref(`/users/${match.player1Uid}/open-matches/${event.params.matchUid}`)
-            .set(match),
-          orgRef
-            .ref(`/users/${match.player2Uid}/open-matches/${event.params.matchUid}`)
-            .set(match),
-          orgRef
-            .ref(`/open-match-details/${event.params.matchUid}`)
-            .set(details),
-          orgRef
-            .ref(`/players/${match.player1Uid}/active`)
-            .set(true),
-          orgRef
-            .ref(`/users/${match.player1Uid}/draft-matches`)
-            .set(null),
-          orgRef
-            .ref(`/users/${match.player1Uid}/draft-match-details`)
-            .set(null)
-        ])
-      })
-  })
 exports.openMatchDetailsCreated = functions.database.ref('/orgs/{org}/open-match-details/{matchUid}')
   .onCreate(event => {
     let match = event.data.val()
@@ -121,10 +75,10 @@ exports.approvalsChanged = functions.database.ref('/orgs/{org}/open-match-detail
         }
         return Promise.all([
           orgRef.ref(`/matches/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/users/${details.player1Uid}/matches/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/users/${details.player2Uid}/matches/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/users/${details.player1Uid}/open-matches/${event.params.matchUid}`).set(null),
-          orgRef.ref(`/users/${details.player2Uid}/open-matches/${event.params.matchUid}`).set(null),
+          orgRef.ref(`/player-matches/${details.player1Uid}/${event.params.matchUid}`).set(finalMatch),
+          orgRef.ref(`/player-matches/${details.player2Uid}/${event.params.matchUid}`).set(finalMatch),
+          orgRef.ref(`/player-open-matches/${details.player1Uid}/${event.params.matchUid}`).set(null),
+          orgRef.ref(`/player-open-matches/${details.player2Uid}/${event.params.matchUid}`).set(null),
           orgRef.ref(`/open-match-details/${event.params.matchUid}`).set(null)
         ])
       })
@@ -162,9 +116,9 @@ exports.updateRating = functions.database.ref('/orgs/{org}/matches/{matchUid}')
           .set(player2NewRating),
         orgRef.ref(`/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        orgRef.ref(`/users/${match.player1Uid}/matches/${event.params.matchUid}/ratings`)
+        orgRef.ref(`/player-matches/${match.player1Uid}/${event.params.matchUid}/ratings`)
           .set(ratings),
-        orgRef.ref(`/users/${match.player2Uid}/matches/${event.params.matchUid}/ratings`)
+        orgRef.ref(`/player-matches/${match.player2Uid}/${event.params.matchUid}/ratings`)
           .set(ratings),
         orgRef.ref(`/players/${match.player1Uid}/rated`)
           .set(true),

@@ -102,9 +102,9 @@ class Api {
     this.handler.get('/orgs/:org/oponents', (req, res) => {
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
       let playersPromise = orgRef.child(`/players`).once('value')
-      let matchesPromise = orgRef.child(`/users/${req.user.uid}/matches/`).once('value')
+      let matchesPromise = orgRef.child(`/player-matches/${req.user.uid}`).once('value')
       let openMatchesPromise = orgRef.child('/open-match-details').once('value')
-      let userOpenMatchesPromise = orgRef.child(`/users/${req.user.uid}/open-matches/`).once('value')
+      let userOpenMatchesPromise = orgRef.child(`/player-open-matches/${req.user.uid}`).once('value')
 
       return Promise.all([playersPromise, matchesPromise, openMatchesPromise, userOpenMatchesPromise])
         .then((snaps) => {
@@ -166,10 +166,10 @@ class Api {
 
       Promise.all([
         orgRef
-          .child(`/users/${match.player1Uid}/open-matches/${newDetails.key}`)
+          .child(`/player-open-matches/${match.player1Uid}/${newDetails.key}`)
           .set(match),
         orgRef
-          .child(`/users/${match.player2Uid}/open-matches/${newDetails.key}`)
+          .child(`/player-open-matches/${match.player2Uid}/${newDetails.key}`)
           .set(match),
         orgRef
           .child(`/players/${match.player1Uid}/active`)
