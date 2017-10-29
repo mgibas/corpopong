@@ -63,8 +63,8 @@
     </style>
 
     <firebase-document id="fb"></firebase-document>
-    <firebase-document path="/[[org]]/players/[[playerUid]]" data="{{player}}"></firebase-document>
-    <firebase-query path="/[[org]]/users/[[playerUid]]/matches" data="{{matches}}"></firebase-query>
+    <firebase-document path="/orgs/[[org]]/players/[[playerUid]]" data="{{player}}"></firebase-document>
+    <firebase-query path="/orgs/[[org]]/player-matches/[[playerUid]]" data="{{matches}}"></firebase-query>
 
     <section class="paper-material layout vertical" elevation="1">
       <div class="layout horizontal center-center">
@@ -92,7 +92,7 @@
       <header>
         <h2>Matches Summary</h2>
       </header>
-      <player-matches-summary player-uid="[[playerUid]]"></player-matches-summary>
+      <player-matches-summary player-uid="[[playerUid]]" org="[[org]]"></player-matches-summary>
     </section>
   </template>
   <script>

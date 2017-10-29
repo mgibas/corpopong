@@ -17,9 +17,9 @@
       text-align: center;
     }
     </style>
-    <firebase-document path="/[[org]]/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
-    <firebase-document path="/[[org]]/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
-    <firebase-query path="/[[org]]/users/[[player1Uid]]/matches" data="{{_player1Matches}}"></firebase-query>
+    <firebase-document path="/orgs/[[org]]/players/[[player1Uid]]" data="{{player1}}"></firebase-document>
+    <firebase-document path="/orgs/[[org]]/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
+    <firebase-query path="/orgs/[[org]]/player-matches/[[player1Uid]]" data="{{_player1Matches}}"></firebase-query>
 
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">
@@ -49,7 +49,7 @@
       </header>
       <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
         <a href="/matches/[[item.$key]]" tabindex="-1">
-          <match-item match="[[item]]" flipped="[[_shouldFlip(item)]]"></match-item>
+          <match-item match="[[item]]" flipped="[[_shouldFlip(item)]]" org="[[org]]"></match-item>
         </a>
       </template>
     </section>

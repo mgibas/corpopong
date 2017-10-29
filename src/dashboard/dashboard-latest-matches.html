@@ -16,7 +16,7 @@
     }
     </style>
     <firebase-query
-      path="/[[org]]/matches"
+      path="/orgs/[[org]]/matches"
       data="{{matches}}"
       limit-to-last="5"
       order-by-child="finalizedDate">
@@ -28,7 +28,7 @@
       <paper-listbox>
         <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
           <a href="/matches/[[item.$key]]" tabindex="-1">
-            <match-item match="[[item]]"></match-item>
+            <match-item match="[[item]]" org="[[org]]"></match-item>
           </a>
         </template>
       </paper-listbox>
