@@ -72,15 +72,15 @@
 
     <firebase-document
       data="{{details}}"
-      path="/[[org]]/open-match-details/[[matchUid]]">
+      path="/orgs/[[org]]/open-match-details/[[matchUid]]">
     </firebase-document>
     <firebase-document
       data="{{player1}}"
-      path="/[[org]]/players/[[details.player1Uid]]">
+      path="/orgs/[[org]]/players/[[details.player1Uid]]">
     </firebase-document>
     <firebase-document
       data="{{player2}}"
-      path="/[[org]]/players/[[details.player2Uid]]">
+      path="/orgs/[[org]]/players/[[details.player2Uid]]">
     </firebase-document>
     <open-match-calculator
       details="[[details]]"

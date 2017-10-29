@@ -48,9 +48,9 @@
       <div class="responsive">
         <dashboard-leaderboard></dashboard-leaderboard>
         <div>
-          <dashboard-stats></dashboard-stats>
-          <dashboard-open-matches user-uid="[[userUid]]"></dashboard-open-matches>
-          <dashboard-latest-matches></dashboard-latest-matches>
+          <dashboard-stats org="[[org]]"></dashboard-stats>
+          <dashboard-open-matches user-uid="[[userUid]]" org="[[org]]"></dashboard-open-matches>
+          <dashboard-latest-matches org="[[org]]"></dashboard-latest-matches>
         </div>
       </div>
     </fragment-layout>

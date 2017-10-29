@@ -13,17 +13,17 @@
     }
     </style>
     <firebase-query
-      path="/[[org]]/users/[[userUid]]/open-matches"
+      path="/orgs/[[org]]/player-open-matches/[[userUid]]"
       data="{{matches}}">
     </firebase-query>
     <section class="paper-material" elevation="1">
       <header>
-        <h2>Open Matches</h2>
+        <h2>Open Matchesss</h2>
       </header>
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}">
           <a href="/open-matches/[[item.$key]]" tabindex="-1">
-            <open-match-item match="[[item]]"></open-match-item>
+            <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
           </a>
         </template>
       </paper-listbox>
@@ -34,7 +34,8 @@
       static get is () { return 'dashboard-open-matches' }
       static get properties () {
         return {
-          userUid: String
+          userUid: String,
+          org: String
         }
       }
     }
