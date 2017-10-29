@@ -155,7 +155,7 @@ class Api {
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
       let match = {
         player1Uid: req.user.uid,
-        player2Uid: req.body.uid,
+        player2Uid: req.body.playerUid,
         createdDate: new Date().toISOString()
       }
       let details = Object.assign({
@@ -165,7 +165,7 @@ class Api {
 
       let newDetails = orgRef.child('/open-match-details').push(details)
 
-      return Promise.all([
+      Promise.all([
         orgRef
           .child(`/users/${match.player1Uid}/open-matches/${newDetails.key}`)
           .set(match),
@@ -175,7 +175,9 @@ class Api {
         orgRef
           .child(`/players/${match.player1Uid}/active`)
           .set(true)
-      ])
+      ]).then(() => {
+        return res.sendStatus(200)
+      })
     })
   }
 }
