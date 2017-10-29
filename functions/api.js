@@ -143,8 +143,7 @@ class Api {
             .filter((p) => p.active && p.rated && p.uid !== req.user.uid)
 
           let recommended = all
-            .filter((p) => !p.hasOpenMatch && p.openMatchesCount < 5)
-            .filter((p) => Math.abs(p.rating - playerRating) <= 300)
+            .filter((p) => !p.hasOpenMatch)
             .sort((a, b) => a.matchesCount - b.matchesCount ||
               Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
 
