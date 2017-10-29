@@ -40,15 +40,16 @@
           ".write": false,
           ".indexOn": "finalizedDate"
         },
-        "users": {
+        "player-matches": {
           "$uid": {
             ".read": "auth != null",
-            "matches": {
-              ".write": "false"
-            },
-            "open-matches": {
-              ".write": "false"
-            }
+            ".write": false
+          }
+        },
+        "player-open-matches": {
+          "$uid": {
+            ".read": "$uid === auth.uid",
+            ".write": false
           }
         }
       }
