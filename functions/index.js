@@ -23,8 +23,8 @@ exports.openMatchDetailsCreated = functions.database.ref('/orgs/{org}/open-match
     let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
 
     return Promise.all([
-      orgRef.ref(`/players/${match.player1Uid}`).once('value'),
-      orgRef.ref(`/messaging/${match.player2Uid}`).once('value')
+      orgRef.child(`/players/${match.player1Uid}`).once('value'),
+      orgRef.child(`/messaging/${match.player2Uid}`).once('value')
     ]).then((snaps) => {
       let player1 = snaps[0].val()
       let player2Messaging = snaps[1].val()
@@ -48,7 +48,7 @@ exports.approvalsChanged = functions.database.ref('/orgs/{org}/open-match-detail
     let approvals = event.data.val()
     if (!approvals.player1 || !approvals.player2) { return }
 
-    return orgRef.ref(`/open-match-details/${event.params.matchUid}`)
+    return orgRef.child(`/open-match-details/${event.params.matchUid}`)
       .once('value')
       .then((snap) => {
         let details = snap.val()
@@ -74,12 +74,12 @@ exports.approvalsChanged = functions.database.ref('/orgs/{org}/open-match-detail
           winnerUid: player1Games > player2Games ? details.player1Uid : details.player2Uid
         }
         return Promise.all([
-          orgRef.ref(`/matches/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/player-matches/${details.player1Uid}/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/player-matches/${details.player2Uid}/${event.params.matchUid}`).set(finalMatch),
-          orgRef.ref(`/player-open-matches/${details.player1Uid}/${event.params.matchUid}`).set(null),
-          orgRef.ref(`/player-open-matches/${details.player2Uid}/${event.params.matchUid}`).set(null),
-          orgRef.ref(`/open-match-details/${event.params.matchUid}`).set(null)
+          orgRef.child(`/matches/${event.params.matchUid}`).set(finalMatch),
+          orgRef.child(`/player-matches/${details.player1Uid}/${event.params.matchUid}`).set(finalMatch),
+          orgRef.child(`/player-matches/${details.player2Uid}/${event.params.matchUid}`).set(finalMatch),
+          orgRef.child(`/player-open-matches/${details.player1Uid}/${event.params.matchUid}`).set(null),
+          orgRef.child(`/player-open-matches/${details.player2Uid}/${event.params.matchUid}`).set(null),
+          orgRef.child(`/open-match-details/${event.params.matchUid}`).set(null)
         ])
       })
   })
@@ -88,8 +88,8 @@ exports.updateRating = functions.database.ref('/orgs/{org}/matches/{matchUid}')
     let orgRef = admin.database().ref(`/orgs/${event.params.org}`)
     let match = event.data.val()
     return Promise.all([
-      orgRef.ref(`/players/${match.player1Uid}`).once('value'),
-      orgRef.ref(`/players/${match.player2Uid}`).once('value')
+      orgRef.child(`/players/${match.player1Uid}`).once('value'),
+      orgRef.child(`/players/${match.player2Uid}`).once('value')
     ]).then((playerRefs) => {
       let p1Rating = playerRefs[0].val().rating
       let p2Rating = playerRefs[1].val().rating
@@ -110,19 +110,19 @@ exports.updateRating = functions.database.ref('/orgs/{org}/matches/{matchUid}')
       }
 
       return Promise.all([
-        orgRef.ref(`/players/${match.player1Uid}/rating`)
+        orgRef.child(`/players/${match.player1Uid}/rating`)
           .set(player1NewRating),
-        orgRef.ref(`/players/${match.player2Uid}/rating`)
+        orgRef.child(`/players/${match.player2Uid}/rating`)
           .set(player2NewRating),
-        orgRef.ref(`/matches/${event.params.matchUid}/ratings`)
+        orgRef.child(`/matches/${event.params.matchUid}/ratings`)
           .set(ratings),
-        orgRef.ref(`/player-matches/${match.player1Uid}/${event.params.matchUid}/ratings`)
+        orgRef.child(`/player-matches/${match.player1Uid}/${event.params.matchUid}/ratings`)
           .set(ratings),
-        orgRef.ref(`/player-matches/${match.player2Uid}/${event.params.matchUid}/ratings`)
+        orgRef.child(`/player-matches/${match.player2Uid}/${event.params.matchUid}/ratings`)
           .set(ratings),
-        orgRef.ref(`/players/${match.player1Uid}/rated`)
+        orgRef.child(`/players/${match.player1Uid}/rated`)
           .set(true),
-        orgRef.ref(`/players/${match.player2Uid}/rated`)
+        orgRef.child(`/players/${match.player2Uid}/rated`)
           .set(true)
       ])
     })
