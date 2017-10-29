@@ -61,13 +61,13 @@
     }
     </style>
 
-    <player-avatar big src="https://lh6.googleusercontent.com/-PXIaWZH0bGA/AAAAAAAAAAI/AAAAAAAABH0/9jJpl3Z_8OQ/photo.jpg"></player-avatar>
+    <player-avatar big src="[[player.photoURL]]"></player-avatar>
     <div class="divider"></div>
-    <span>Maciej Gibas</span>
-    <span>1120</span>
+    <span>[[player.displayName]]</span>
+    <span>[[player.rating]]</span>
 
     <div class="fit-actions">
-      <paper-fab icon="done"></paper-fab>
+      <paper-loading-fab icon="done" on-tap="_onSelectTap" loading="[[loading]]"></paper-loading-fab>
     </div>
   </template>
   <script>
@@ -78,8 +78,15 @@
           selected: {
             type: Boolean,
             reflectToAttribute: true
-          }
+          },
+          player: Object
         }
+      }
+      _onSelectTap () {
+        this.dispatchEvent(new CustomEvent('player-selected', {
+          detail: {
+            uid: this.player.uid
+          }}))
       }
     }
 

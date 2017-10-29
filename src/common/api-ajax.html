@@ -13,7 +13,8 @@
       url="https://us-central1-corpopong-dev.cloudfunctions.net/api[[url]]"
       body="[[body]]"
       loading="{{loading}}"
-      last-error="{{lastError}}">
+      last-error="{{lastError}}"
+      last-response="{{lastResponse}}">
     </iron-ajax>
 
   </template>
@@ -27,6 +28,7 @@
           url: String,
           body: Object,
           lastError: {type: Object, notify: true},
+          lastResponse: {type: Object, notify: true},
           loading: {type: Boolean, notify: true}
         }
       }
