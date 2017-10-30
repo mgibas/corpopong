@@ -47,6 +47,10 @@
     <div id="morpher" class="morpher"></div>
   </template>
   <script>
+    /**
+    * @extends {Polymer.Element}
+    * @appliesMixin Polymer.PaperButtonBehavior
+    */
     class PaperLoadingFab extends Polymer.mixinBehaviors([Polymer.PaperButtonBehavior], Polymer.Element) {
       static get is () { return 'paper-loading-fab' }
       static get properties () {
