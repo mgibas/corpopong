@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../layouts/fragment-layout.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-created.html">
 <link rel="import" href="../player/players-history.html">
 
 <dom-module id="players-history-fragment">
@@ -12,7 +13,7 @@
 
   </template>
   <script>
-    class PlayersHistoryFragment extends Polymer.Element {
+    class PlayersHistoryFragment extends OrgElement {
       static get is () { return 'players-history-fragment' }
       static get properties () {
         return {

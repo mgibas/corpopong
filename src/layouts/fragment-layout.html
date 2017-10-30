@@ -9,7 +9,6 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../layouts/user-menu.html">
-<link rel="import" href="../common/corpopong-search-input.html">
 
 <dom-module id="fragment-layout">
   <template>
@@ -77,11 +76,6 @@
             <user-menu org="[[org]]"></user-menu>
           </div>
         </app-toolbar>
-        <template is="dom-if" if="[[searchBar]]">
-          <app-toolbar>
-            <corpopong-search-input class="flex"></corpopong-search-input>
-          </app-toolbar>
-        </template>
       </app-header>
       <div class="content-wrapper">
         <div class="content">
@@ -102,10 +96,6 @@
             value: false
           },
           menuButton: {
-            type: Boolean,
-            value: false
-          },
-          searchBar: {
             type: Boolean,
             value: false
           }

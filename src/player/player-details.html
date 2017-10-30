@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../imports/d3-import.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../common/corpopong-icons.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-matches-summary.html">
@@ -96,7 +97,7 @@
     </section>
   </template>
   <script>
-    class PlayerDetails extends Polymer.Element {
+    class PlayerDetails extends OrgElement {
       static get is () { return 'player-details' }
       static get properties () {
         return {

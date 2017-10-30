@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../common/paper-loading-fab.html">
+<link rel="import" href="../player/player-avatar.html">
 
 <dom-module id="match-create-player-card">
   <template>
@@ -79,7 +81,8 @@
             type: Boolean,
             reflectToAttribute: true
           },
-          player: Object
+          player: Object,
+          loading: Boolean
         }
       }
       _onSelectTap () {

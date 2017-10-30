@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../layouts/fragment-layout.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../match/match-details.html">
 
 <dom-module id="match-fragment">
@@ -9,7 +10,7 @@
     </fragment-layout>
   </template>
   <script>
-    class MatchFragment extends Polymer.Element {
+    class MatchFragment extends OrgElement {
       static get is () { return 'match-fragment' }
       static get properties () {
         return {

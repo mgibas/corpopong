@@ -1,0 +1,12 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<script>
+  class OrgElement extends Polymer.Element {
+    static get is () { return 'org-element' }
+    static get properties () {
+      return {org: String}
+    }
+  }
+
+  window.customElements.define(OrgElement.is, OrgElement)
+</script>

@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../dashboard/trophy-icon.html">
 
@@ -60,7 +61,7 @@
 
   </template>
   <script>
-    class DashboardLeaderboard extends Polymer.Element {
+    class DashboardLeaderboard extends OrgElement {
       static get is () { return 'dashboard-leaderboard' }
       _sort (a, b) {
         return b.rating - a.rating

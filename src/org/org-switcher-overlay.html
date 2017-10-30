@@ -1,12 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../styles/dark-theme.html">
 <link rel="import" href="../styles/overlay-styles.html">
-<link rel="import" href="../common/corpopong-logo.html">
+<link rel="import" href="../common/corpopong-overlay-header.html">
 
 <dom-module id="org-switcher-overlay">
   <template>
@@ -31,7 +32,7 @@
 
     <paper-listbox>
       <template is="dom-repeat" items="[[_availableOrgs]]">
-        <paper-icon-item item="[[item]]" class="layout" on-tap="_switchOrg">
+        <paper-icon-item data-item$="[[item]]" class="layout" on-tap="_switchOrg">
           <iron-icon hidden="[[!currentOrg(item, org)]]" slot="item-icon" icon="done"></iron-icon>
           <div class="layout horizontal flex center">
             <span class="flex">[[item]]</span>
@@ -71,7 +72,7 @@
         return orgs ? Object.keys(orgs) : []
       }
       _switchOrg (e) {
-        let org = e.currentTarget.item
+        let org = e.currentTarget.dataset['item']
         this.switch(org)
         this.close()
       }

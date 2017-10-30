@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
 
@@ -48,7 +49,7 @@
 
   </template>
   <script>
-    class PlayerMatchesSummary extends Polymer.Element {
+    class PlayerMatchesSummary extends OrgElement {
       static get is () { return 'player-matches-summary' }
       static get properties () {
         return {

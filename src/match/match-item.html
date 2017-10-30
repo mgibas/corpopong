@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../match/match-item-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
@@ -70,7 +71,7 @@
     </div>
   </template>
   <script>
-    class MatchItem extends Polymer.Element {
+    class MatchItem extends OrgElement {
       static get is () { return 'match-item' }
       static get properties () {
         return {

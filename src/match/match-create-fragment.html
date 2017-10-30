@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../layouts/fragment-layout.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../match/match-create.html">
 
 <dom-module id="match-create-fragment">
@@ -14,15 +15,13 @@
 
       <match-create
         id="create"
-        user-uid="[[userUid]]"
-        org="[[org]]"
-        search-value="[[searchValue]]">
+        org="[[org]]">
       </match-create>
 
     </fragment-layout>
   </template>
   <script>
-    class MatchCreateFragment extends Polymer.Element {
+    class MatchCreateFragment extends OrgElement {
       static get is () { return 'match-create-fragment' }
       static get properties () {
         return {

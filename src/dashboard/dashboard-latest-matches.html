@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../match/match-item.html">
 <link rel="import" href="../styles/app-styles.html">
 
@@ -35,7 +36,7 @@
     </section>
   </template>
   <script>
-    class DashboardLatestMatches extends Polymer.Element {
+    class DashboardLatestMatches extends OrgElement {
       static get is () { return 'dashboard-latest-matches' }
       static get properties () {
         return {

@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../common/api-ajax.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/match-create-player-card.html">
 
@@ -35,8 +37,13 @@
     </section>
   </template>
   <script>
-    class MatchCreate extends Polymer.Element {
+    class MatchCreate extends OrgElement {
       static get is () { return 'match-create' }
+      static get properties () {
+        return {
+          loading: Boolean
+        }
+      }
       loadData () {
         this.$.get.generateRequest()
       }

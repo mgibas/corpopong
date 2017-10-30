@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/match-item.html">
 
@@ -56,7 +57,7 @@
 
   </template>
   <script>
-    class PlayersHistory extends Polymer.Element {
+    class PlayersHistory extends OrgElement {
       static get is () { return 'players-history' }
       static get properties () {
         return {

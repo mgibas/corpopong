@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
 
 <dom-module id="dashboard-stats">
   <template>
@@ -67,7 +68,7 @@
     </section>
   </template>
   <script>
-    class DashboardStats extends Polymer.Element {
+    class DashboardStats extends OrgElement {
       static get is () { return 'dashboard-stats' }
       _pointsSum (matches) {
         if (!matches) return
