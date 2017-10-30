@@ -63,6 +63,10 @@
             }))
           })
       }
+      reset () {
+        this.body = {}
+        this.createdOrg = null
+      }
       _fixName (name) {
         if (!name || name === name.toLowerCase()) return
         this.set('body.name', name.toLowerCase())

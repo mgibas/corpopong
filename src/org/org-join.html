@@ -92,6 +92,14 @@
             }
           })
       }
+      reset () {
+        this.body = {}
+        this.name = null
+        this.joinedOrg = null
+        this.invitationRequired = false
+        this.showNoOrgMessage = false
+        this.invalidInvitation = false
+      }
       _computeValid (name, invitationRequired, invitation) {
         return !!name && (!invitationRequired || !!invitation)
       }

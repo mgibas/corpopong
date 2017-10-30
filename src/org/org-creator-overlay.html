@@ -22,7 +22,8 @@
     .steps {
       height: 100%;
     }
-    section {
+    section,
+    iron-selector {
       @apply --layout-flex;
       @apply --layout-vertical;
       @apply --layout-center-center;
@@ -37,19 +38,19 @@
     }
     </style>
     <corpopong-overlay-header on-close-tap="close" close-button="[[_hasOrg]]"></corpopong-overlay-header>
-    <iron-selector id="selector" class="steps" selected="[[step]]" attr-for-selected="name" activate-event="" fallback-selection="start">
+    <iron-selector class="steps" selected="[[step]]" attr-for-selected="name" activate-event="" fallback-selection="start">
       <section name="start">
         <paper-button raised on-tap="_join">Join existing corpo</paper-button>
         <a on-tap="_create">or create new one</a>
       </section>
       <section name="create">
-        <org-create created-org="{{createdOrg}}" on-advanced="_advance"></org-create>
+        <org-create id="create" created-org="{{createdOrg}}" on-advanced="_advance"></org-create>
       </section>
       <section name="created">
         <org-created created-org="[[createdOrg]]" on-advanced="_advance"></org-created>
       </section>
       <section name="join">
-        <org-join joined-org="{{joinedOrg}}" on-advanced="_advance"></org-join>
+        <org-join id="join" joined-org="{{joinedOrg}}" on-advanced="_advance"></org-join>
       </section>
       <section name="joined">
         <org-joined  joined-org="[[joinedOrg]]" on-advanced="_advance"></org-joined>
@@ -92,6 +93,13 @@
         super.ready()
         this.noCancelOnEscKey = true
         this.noCancelOnOutsideClick = true
+        this.addEventListener('iron-overlay-closed', () => this.reset())
+      }
+      reset () {
+        this.step = 'start'
+        this._steps = []
+        this.$.create.reset()
+        this.$.join.reset()
       }
       _hasOrgChanged (hasOrg) {
         if (hasOrg) {
@@ -123,8 +131,6 @@
             break
           default:
             this.close()
-            this.step = 'start'
-            this._steps = []
         }
       }
       _decrease () {
