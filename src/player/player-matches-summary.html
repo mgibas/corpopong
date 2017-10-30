@@ -23,14 +23,14 @@
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
 
     <template is="dom-repeat" items="[[summaries]]" sort="_sort">
-      <a href="/players/[[playerUid]]/history/[[item.uid]]">
+      <a href="/players/[[playerUid]]/history/[[item.uid]]" class="block">
         <paper-icon-item>
           <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
           <div class="layout horizontal flex center-center">
             <paper-item-body two-lines class="flex">
               <span>
                 <player-display-name
-                  value=[[item.displayName]]
+                  value="[[item.displayName]]"
                   semi-abbreviate="[[smallMobile]]">
                 </player-display-name>
               </span>

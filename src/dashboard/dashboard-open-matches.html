@@ -22,7 +22,7 @@
       </header>
       <paper-listbox>
         <template is="dom-repeat" items="{{matches}}">
-          <a href="/open-matches/[[item.$key]]" tabindex="-1">
+          <a href="/open-matches/[[item.$key]]" tabindex="-1" class="block">
             <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
           </a>
         </template>

@@ -24,14 +24,14 @@
     <section class="paper-material" elevation="1">
       <div class="layout horizontal center-center">
         <div class="flex">
-          <a href="/players/[[player1Uid]]" class="layout vertical center-center">
+          <a href="/players/[[player1Uid]]" class="block layout vertical center-center">
             <player-avatar big src="[[player1.photoURL]]"></player-avatar>
             <h1>[[player1.displayName]]</h1>
           </a>
         </div>
         <span>VS</span>
         <div class="flex">
-          <a href="/players/[[player2Uid]]" class="layout vertical center-center">
+          <a href="/players/[[player2Uid]]" class="block layout vertical center-center">
             <player-avatar big src="[[player2.photoURL]]"></player-avatar>
             <h1>[[player2.displayName]]</h1>
           </a>
@@ -48,7 +48,7 @@
         <h2>Matches</h2>
       </header>
       <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-        <a href="/matches/[[item.$key]]" tabindex="-1">
+        <a href="/matches/[[item.$key]]" tabindex="-1" class="block">
           <match-item match="[[item]]" flipped="[[_shouldFlip(item)]]" org="[[org]]"></match-item>
         </a>
       </template>

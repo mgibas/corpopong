@@ -33,7 +33,7 @@
       </header>
       <paper-listbox>
         <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
-          <a href="/players/[[item.$key]]">
+          <a href="/players/[[item.$key]]" class="block">
             <paper-icon-item>
               <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
               <div class="layout horizontal flex center-center">

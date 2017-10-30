@@ -27,7 +27,7 @@
       </header>
       <paper-listbox>
         <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-          <a href="/matches/[[item.$key]]" tabindex="-1">
+          <a href="/matches/[[item.$key]]" tabindex="-1" class="block">
             <match-item match="[[item]]" org="[[org]]"></match-item>
           </a>
         </template>
