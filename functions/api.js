@@ -146,6 +146,7 @@ class Api {
             .filter((p) => !p.hasOpenMatch)
             .sort((a, b) => a.matchesCount - b.matchesCount ||
               Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
+            .slice(0, 5)
 
           res.status(200).send({all: all, recommended: recommended})
         })
