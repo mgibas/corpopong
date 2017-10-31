@@ -8,6 +8,7 @@
     "globals": {
       "Polymer": false,
       "CustomEvent": false,
+      "OrgElement": false,
       "self": false
     }
 }
