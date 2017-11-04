@@ -141,6 +141,7 @@ class Api {
           let all = Object.keys(players)
             .map(key => players[key])
             .filter((p) => p.active && p.rated && p.uid !== req.user.uid)
+            .sort((a, b) => a.displayName.localeCompare(b.displayName))
 
           let recommended = all
             .filter((p) => !p.hasOpenMatch)
