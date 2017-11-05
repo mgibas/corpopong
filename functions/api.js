@@ -145,11 +145,12 @@ class Api {
 
           let recommended = all
             .filter((p) => !p.hasOpenMatch)
-            .sort((a, b) => a.matchesCount - b.matchesCount ||
-              Math.abs(a.rating - playerRating) - Math.abs(b.rating - playerRating))
+            .filter((p) => Math.abs(p.rating - playerRating) <= 300)
             .slice(0, 5)
 
-          res.status(200).send({all: all, recommended: recommended})
+          recommended.forEach((r) => { all.find(r).recommended = true })
+
+          res.status(200).send(all)
         })
     })
     this.handler.post('/orgs/:org/matches', (req, res) => {
