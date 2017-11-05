@@ -148,7 +148,7 @@ class Api {
             .filter((p) => Math.abs(p.rating - playerRating) <= 300)
             .slice(0, 5)
 
-          recommended.forEach((r) => { all.find(r).recommended = true })
+          recommended.forEach((r) => { all[all.indexOf(r)].recommended = true })
 
           res.status(200).send(all)
         })
