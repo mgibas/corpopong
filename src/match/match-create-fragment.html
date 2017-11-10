@@ -15,7 +15,8 @@
 
       <match-create
         id="create"
-        org="[[org]]">
+        org="[[org]]"
+        user-uid="[[userUid]]">
       </match-create>
 
     </fragment-layout>
@@ -29,8 +30,15 @@
           active: {type: Boolean, observer: '_activeChanged'}
         }
       }
+      static get observers () {
+        return ['_loadData(active, org)']
+      }
+      _loadData (active, org) {
+        if (!active || !org) return
+        this.$.create.loadData()
+      }
       _activeChanged (active) {
-        if (active) { this.$.create.loadData() }
+        if (!active) this.$.create.reset()
       }
     }
 

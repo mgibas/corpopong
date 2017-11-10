@@ -18,20 +18,17 @@
 
     <api-ajax id="get" url="/orgs/[[org]]/oponents" last-response="{{oponents}}" loading="{{loading}}"></api-ajax>
     <api-ajax id="post" url="/orgs/[[org]]/matches" method="post" loading="{{postLoading}}"></api-ajax>
+    <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
 
     <section>
-      <header>Recomended</header>
-      <iron-selector class="grid" selected-attribute="selected">
-        <template is="dom-repeat" items="[[oponents.recommended]]">
-          <match-create-player-card player="[[item]]" loading="[[postLoading]]" on-player-selected="_onPlayerSelected"></match-create-player-card>
-        </template>
-      </iron-selector>
-    </section>
-    <section>
-      <header>All Players</header>
-      <iron-selector class="grid" selected-attribute="selected">
-        <template is="dom-repeat" items="[[oponents.all]]">
-          <match-create-player-card player="[[item]]" loading="[[postLoading]]" on-player-selected="_onPlayerSelected"></match-create-player-card>
+      <iron-selector id="selector" class="grid" selected-attribute="selected">
+        <template is="dom-repeat" items="[[oponents]]" sort="_sort">
+          <match-create-player-card
+            player="[[item]]"
+            loading="[[postLoading]]"
+            user-rating="[[player.rating]]"
+            on-player-selected="_onPlayerSelected">
+          </match-create-player-card>
         </template>
       </iron-selector>
     </section>
@@ -47,6 +44,9 @@
       loadData () {
         this.$.get.generateRequest()
       }
+      reset () {
+        this.$.selector.selected = null
+      }
       _onPlayerSelected (e, detail) {
         this.$.post.body = { playerUid: detail.uid }
         this.$.post.generateRequest().completes
@@ -54,6 +54,14 @@
             window.history.pushState({}, null, '/')
             window.dispatchEvent(new CustomEvent('location-changed'))
           })
+      }
+      _sort (a, b) {
+        return (
+          (a.recommended === b.recommended)
+            ? (a.recommended ? a.matchesCount - b.matchesCount : 0)
+            : a.recommended ? -1 : 1
+        ) ||
+        a.displayName.localeCompare(b.displayName)
       }
     }
 

@@ -1,76 +1,136 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../common/paper-loading-fab.html">
+<link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../player/player-avatar.html">
 
 <dom-module id="match-create-player-card">
   <template>
+    <style include="app-styles"></style>
     <style>
     :host {
-      position: relative;
+      margin: var(--spacing);
+      perspective: 1000px;
+    }
+  	:host([selected]) .flipper {
+  		transform: rotateY(180deg);
+  	}
+    :host, .front, .back {
+      width: 160px;
+      height: 256px;
+    }
+    .flipper {
+    	transition: 200ms ease-in-out;
+    	transform-style: preserve-3d;
+    	position: relative;
+    }
+    .front, .back {
+    	backface-visibility: hidden;
+      background-color: var(--primary-background-color);
       @apply --paper-material;
       @apply --paper-material-elevation-1;
-      @apply --layout-vertical;
-      @apply --layout-center;
-      margin: var(--spacing);
-      background-color: var(--primary-background-color);
       border-radius: var(--radius);
-      padding: var(--spacing-m);
-      overflow: hidden;
       cursor: pointer;
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+      padding: var(--spacing-m);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .front {
+    	z-index: 2;
+    	transform: rotateY(0deg);
+    }
+    .back {
+    	transform: rotateY(180deg);
     }
 
-    :host .fit-actions {
-      position: absolute;
-      top:0;
-      right:0;
-      bottom:0;
-      left:0;
-      @apply --layout-horizontal;
-      @apply --layout-center-center;
-      background-color: var(--primary-color-transparent);
-      transition: all 200ms ease-in-out;
-    }
-    :host([selected]) .fit-actions {
-      transition-delay: 0ms;
-      opacity: 1;
-    }
-    :host(:not([selected])) .fit-actions {
-      pointer-events: none;
-      transition-delay: 200ms;
-      opacity: 0;
-    }
-    :host([selected]) paper-fab {
-      transform: scale(1, 1);
-      transition-delay: 200ms;
-    }
-    :host(:not([selected])) paper-fab {
-      transform: scale(0, 0);
-      transition-delay: 0ms;
-    }
-    .divider {
-      width: calc(100% + (2 * var(--spacing-m)));
-      border-top: 1px solid var(--divider-color);
-      margin-bottom: var(--spacing-m);
-    }
     span + span {
       margin-top: var(--spacing);
-    }
-    player-avatar {
-      margin-bottom: var(--spacing-m);
     }
     paper-fab {
       transition: all 200ms ease-in-out;
     }
+    .avatar {
+      position: relative;
+      margin-bottom: var(--spacing-m);
+      transition: all 200ms ease-in-out;
+    }
+    .avatar > iron-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: var(--primary-background-color);
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      border-width: 8px;
+      border-color: var(--primary-color);
+      border-style: solid;
+      @apply --shadow-elevation-2dp;
+    }
+    .details {
+      flex:1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .probability{
+      font-size: 3rem;
+      position: relative;
+      margin: var(--spacing-m) 0 var(--spacing-m) 0;
+    }
+
+    .probability label {
+      position: absolute;
+      bottom:0px;
+      right:0;
+      @apply --paper-font-caption;
+      color: var(--secondary-text-color);
+    }
+    .stakes {
+      width: 100%;
+      @apply --layout-horizontal;
+    }
+
     </style>
 
-    <player-avatar big src="[[player.photoURL]]"></player-avatar>
-    <div class="divider"></div>
-    <span>[[player.displayName]]</span>
-    <span>[[player.rating]]</span>
+      <div class="flipper">
+        <div class="front">
+          <div class="avatar">
+            <player-avatar big src="[[player.photoURL]]"></player-avatar>
+            <iron-icon icon="favorite-border" hidden="[[!player.recommended]]" title="Recommended"></iron-icon>
+          </div>
+          <span>[[player.displayName]]</span>
+          <span>[[player.rating]]</span>
+        </div>
+        <div class="back">
+            <div class="details">
+              <span>[[player.matchesCount]] matches</span>
+              <iron-label class="probability">
+                <span>[[_formatPercent(_probability)]]</span>
+                <label>chance of winning</label>
+              </iron-label>
+              <div class="stakes">
+                <div class="flex layout vertical center-center">
+                  <iron-icon icon="trending-up"></iron-icon>
+                  <span>[[_winingStake]]</span>
+                </div>
+                <div class="flex layout vertical center-center">
+                  <iron-icon icon="trending-down"></iron-icon>
+                  <span>[[_loosingStake]]</span>
+                </div>
+              </div>
+            </div>
+            <paper-loading-fab icon="done" on-tap="_onSelectTap" loading="[[loading]]"></paper-loading-fab>
+        </div>
+      </div>
 
-    <div class="fit-actions">
-      <paper-loading-fab icon="done" on-tap="_onSelectTap" loading="[[loading]]"></paper-loading-fab>
-    </div>
   </template>
   <script>
     class MatchCreatePlayerCard extends Polymer.Element {
@@ -79,10 +139,24 @@
         return {
           selected: {
             type: Boolean,
+            value: false,
             reflectToAttribute: true
           },
+          _probability: {
+            type: Number,
+            computed: '_computeProbability(userRating, player.rating)'
+          },
+          _winingStake: {
+            type: Number,
+            computed: '_computeStake(_probability, userRating, 1)'
+          },
+          _loosingStake: {
+            type: Number,
+            computed: '_computeStake(_probability, userRating, 0)'
+          },
           player: Object,
-          loading: Boolean
+          loading: Boolean,
+          recommended: Boolean
         }
       }
       _onSelectTap () {
@@ -90,6 +164,17 @@
           detail: {
             uid: this.player.uid
           }}))
+      }
+      _computeProbability (userRating, oponentRating) {
+        return 1 / (1 + Math.pow(10, ((oponentRating - userRating) / 400)))
+      }
+      _formatPercent (value) {
+        return new Intl.NumberFormat('en-us', {
+          style: 'percent'
+        }).format(value)
+      }
+      _computeStake (probability, rating, result) {
+        return Math.abs(Math.round(50 * (result - probability)))
       }
     }
 
