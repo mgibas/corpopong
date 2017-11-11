@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../styles/overlay-styles.html">
+<link rel="import" href="../styles/light-theme.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../common/api-ajax.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../match/match-create-player-card.html">
+
+<dom-module id="match-create-overlay">
+  <template>
+    <style include="app-styles overlay-styles light-theme"></style>
+    <style>
+    :host {
+      @apply --overlay;
+    }
+    .grid {
+      @apply --layout-horizontal;
+      @apply --layout-wrap;
+    }
+    .wrapper {
+      height: 100%;
+      overflow-y: auto;
+    }
+    corpopong-overlay-header {
+      --corpopong-logo-background-color: var(--primary-background-color);
+    }
+    </style>
+
+    <api-ajax id="get" url="/orgs/[[org]]/oponents" last-response="{{oponents}}" loading="{{loading}}"></api-ajax>
+    <api-ajax id="post" url="/orgs/[[org]]/matches" method="post" loading="{{postLoading}}"></api-ajax>
+    <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
+
+      <corpopong-overlay-header on-close-tap="close" text="Select Oponent!"></corpopong-overlay-header>
+      <div class="wrapper">
+      <section>
+        <iron-selector id="selector" class="grid" selected-attribute="selected">
+          <template is="dom-repeat" items="[[oponents]]" sort="_sort">
+            <match-create-player-card
+              player="[[item]]"
+              loading="[[postLoading]]"
+              user-rating="[[player.rating]]"
+              on-player-selected="_onPlayerSelected">
+            </match-create-player-card>
+          </template>
+        </iron-selector>
+      </section>
+    </div>
+
+  </template>
+  <script>
+    class MatchCreateOverlay extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], OrgElement) {
+      static get is () { return 'match-create-overlay' }
+      static get properties () {
+        return {
+          loading: Boolean
+        }
+      }
+      ready () {
+        super.ready()
+        this.addEventListener('iron-overlay-opened', () => this.loadData())
+        this.addEventListener('iron-overlay-closed', () => this.reset())
+      }
+      loadData () {
+        this.$.get.generateRequest()
+      }
+      reset () {
+        this.$.selector.selected = null
+      }
+      _onPlayerSelected (e, detail) {
+        this.$.post.body = { playerUid: detail.uid }
+        this.$.post.generateRequest().completes
+          .then((req) => {
+            this.close()
+            // window.history.pushState({}, null, '/')
+            // window.dispatchEvent(new CustomEvent('location-changed'))
+          })
+      }
+      _sort (a, b) {
+        return (
+          (a.recommended === b.recommended)
+            ? (a.recommended ? a.matchesCount - b.matchesCount : 0)
+            : a.recommended ? -1 : 1
+        ) ||
+        a.displayName.localeCompare(b.displayName)
+      }
+    }
+
+    window.customElements.define(MatchCreateOverlay.is, MatchCreateOverlay)
+  </script>
+</dom-module>

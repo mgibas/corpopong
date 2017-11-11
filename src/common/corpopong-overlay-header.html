@@ -5,7 +5,7 @@
 
 <dom-module id="corpopong-overlay-header">
   <template>
-    <style include="app-styles dark-theme"></style>
+    <style include="app-styles"></style>
     <style>
     :host {
       display: block;
@@ -19,16 +19,17 @@
     }
     paper-icon-button {
       border-radius: 50%;
-      transition: background-color 100ms ease-in;
+      transition: all 100ms ease-in;
     }
     paper-icon-button:hover {
       background-color: var(--accent-color);
+      color: var(--accent-text-color);
     }
     </style>
 
     <div class="container">
       <corpopong-logo></corpopong-logo>
-      <h1>CorpoPong</h1>
+      <h1>[[text]]</h1>
       <paper-icon-button icon="close" hidden="[[!closeButton]]" on-tap="_handleTap"></paper-icon-button>
     </div>
 
@@ -38,7 +39,11 @@
       static get is () { return 'corpopong-overlay-header' }
       static get properties () {
         return {
-          closeButton: {type: Boolean, value: true}
+          closeButton: {type: Boolean, value: true},
+          text: {
+            type: String,
+            value: 'CorpoPong'
+          }
         }
       }
       _handleTap () {

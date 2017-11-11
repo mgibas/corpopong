@@ -41,9 +41,7 @@
 
     </style>
     <fragment-layout title="CorpoPong" org="[[org]]" fullbleed>
-      <a href="/matches/create">
-        <paper-fab class="fixed-fab" icon="corpopong:paddles"></paper-fab>
-      </a>
+      <paper-fab class="fixed-fab" icon="corpopong:paddles" on-click="_onCreateClick"></paper-fab>
 
       <div class="responsive">
         <dashboard-leaderboard org="[[org]]"></dashboard-leaderboard>
@@ -64,6 +62,9 @@
           org: String,
           userUid: String
         }
+      }
+      _onCreateClick () {
+        this.dispatchEvent(new CustomEvent('create-match-click'))
       }
     }
 
