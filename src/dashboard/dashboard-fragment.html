@@ -39,7 +39,19 @@
       transform-origin: 50% 50%;
       border-radius: 50%;
       z-index: 2;
-      display: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .fab-morpher{
+      transition: right 200ms ease-out, bottom 200ms ease-in, border-radius 200ms ease-in, transform 200ms ease-in 100ms, background-color 200ms ease-in;
+    }
+    .fab-morpher.animating {
+      right: calc(50% - 28px);
+      bottom: calc(50% - 28px);
+      border-radius: 0;
+      transform: scale(40, 40);
+      background-color: var(--primary-background-color);
+      opacity: 1;
     }
 
     @media (min-width: 1100px) {
@@ -79,50 +91,15 @@
         }
       }
       _onCreateClick () {
-        this.$.morpher.style.display = 'block'
         this.$.fab.style.display = 'none'
-        let morpherLeft = this.$.morpher.getBoundingClientRect().left
-        let morpherTop = this.$.morpher.getBoundingClientRect().top
-        let scaleX = document.documentElement.offsetWidth / 56
-        let scaleY = document.documentElement.offsetHeight / 56
-        let morpherColor = window.getComputedStyle(this.$.morpher).backgroundColor
+        this.$.morpher.classList.add('animating')
 
-        this.$.morpher.animate([
-          {right: '1rem', left: `${morpherLeft}px`},
-          {right: `50%`, left: 'calc(50% - 28px)'}
-        ], {
-          duration: 250,
-          easing: 'ease-out'
-        })
-        this.$.morpher.animate([
-          {bottom: '1rem', top: `${morpherTop}px`},
-          {bottom: `50%`, top: 'calc(50% - 28px)'}
-        ], {
-          duration: 250,
-          easing: 'ease-in'
-        }).onfinish = () => {
-          this.$.morpher.style.right = '50%'
-          this.$.morpher.style.left = 'calc(50% - 28px)'
-          this.$.morpher.style.bottom = '50%'
-          this.$.morpher.style.top = 'calc(50% - 28px)'
-        }
-        this.$.morpher.animate([
-          {transform: 'scale(1,1)', borderRadius: '50%', backgroundColor: morpherColor},
-          {transform: `scale(${scaleX}, ${scaleY})`, borderRadius: '0', backgroundColor: '#FFF'}
-        ], {
-          duration: 250,
-          delay: 100,
-          easing: 'ease-in'
-        }).onfinish = () => {
-          this.$.morpher.style.transform = `scale(${scaleX}, ${scaleY})`
-          this.$.morpher.style.borderRadius = '0'
-          this.$.morpher.style.backgroundColor = '#FFF'
-          setTimeout(() => {
-            this.dispatchEvent(new CustomEvent('create-match-click'))
-            this.$.morpher.style = null
-            this.$.fab.style = null
-          }, 50)
-        }
+        setTimeout(() => {
+          this.dispatchEvent(new CustomEvent('create-match-click'))
+          this.$.morpher.style = null
+          this.$.fab.style = null
+          this.$.morpher.classList.remove('animating')
+        }, 300)
       }
     }
 
