@@ -95,7 +95,6 @@
         this.$.morpher.classList.add('animating')
 
         setTimeout(() => {
-          this.dispatchEvent(new CustomEvent('create-match-click'))
           this.$.morpher.style = null
           this.$.fab.style = null
           this.$.morpher.classList.remove('animating')
