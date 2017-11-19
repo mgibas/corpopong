@@ -34,9 +34,9 @@
     <api-ajax id="post" url="/orgs/[[org]]/matches" method="post" loading="{{postLoading}}"></api-ajax>
     <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
 
-      <corpopong-overlay-header on-close-tap="close" text="Select Oponent!"></corpopong-overlay-header>
+      <corpopong-overlay-header id="header" on-close-tap="close" text="Select Oponent!"></corpopong-overlay-header>
       <div class="wrapper">
-      <section>
+      <section id="content">
         <iron-selector id="selector" class="grid" selected-attribute="selected">
           <template is="dom-repeat" items="[[oponents]]" sort="_sort">
             <match-create-player-card
@@ -69,6 +69,43 @@
         super.ready()
         this.addEventListener('iron-overlay-opened', () => this.loadData())
         this.addEventListener('iron-overlay-closed', () => this.reset())
+      }
+      _renderOpened () {
+        let scaleX = document.documentElement.offsetWidth / 10
+        let scaleY = document.documentElement.offsetHeight / 10
+        this.animate([
+          {
+            borderRadius: '50%',
+            borderWidth: '1px',
+            right: '0',
+            bottom: '0',
+            top: 'auto',
+            left: 'auto',
+            width: '0px',
+            height: '0px',
+            transform: `scale(1,1)`
+          }, {
+            borderRadius: '50%',
+            borderWidth: '1px',
+            right: '0',
+            bottom: '0',
+            top: 'auto',
+            left: 'auto',
+            width: '0px',
+            height: '0px',
+            transform: `scale(${scaleX},${scaleY})`
+          }
+        ], {
+          duration: 250,
+          easing: 'ease-in-out'
+        }).onfinish = () => {
+          this.$.header.animate([{opacity: '0'}, {opacity: '1'}], {
+            duration: 100,
+            easing: 'ease-in-out'
+          }).onfinish = () => {
+            this._finishRenderOpened()
+          }
+        }
       }
       loadData () {
         this.$.get.generateRequest()

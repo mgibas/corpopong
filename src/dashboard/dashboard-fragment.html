@@ -29,31 +29,6 @@
           flex-basis: 100%;
     }
 
-    .fab-morpher {
-      position: fixed;
-      width:56px;
-      height: 56px;
-      right:1rem;
-      bottom:1rem;
-      background-color: var(--accent-color);
-      transform-origin: 50% 50%;
-      border-radius: 50%;
-      z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .fab-morpher{
-      transition: right 200ms ease-out, bottom 200ms ease-in, border-radius 200ms ease-in, transform 200ms ease-in 100ms, background-color 200ms ease-in;
-    }
-    .fab-morpher.animating {
-      right: calc(50% - 28px);
-      bottom: calc(50% - 28px);
-      border-radius: 0;
-      transform: scale(40, 40);
-      background-color: var(--primary-background-color);
-      opacity: 1;
-    }
-
     @media (min-width: 1100px) {
         .responsive > * {
             -ms-flex-preferred-size: 45%;
@@ -78,7 +53,6 @@
 
       <paper-fab  id="fab" class="fixed-fab" icon="corpopong:paddles" on-click="_onCreateClick"></paper-fab>
     </fragment-layout>
-    <div id="morpher" class="fab-morpher"></div>
 
   </template>
   <script>
@@ -91,17 +65,7 @@
         }
       }
       _onCreateClick () {
-        this.$.fab.style.display = 'none'
-        this.$.morpher.classList.add('animating')
-
-        setTimeout(() => {
-          this.$.morpher.style = null
-          this.$.fab.style = null
-          this.$.morpher.classList.remove('animating')
-        }, 350)
-        setTimeout(() => {
-          this.dispatchEvent(new CustomEvent('create-match-click'))
-        }, 280)
+        this.dispatchEvent(new CustomEvent('create-match-click'))
       }
     }
 
