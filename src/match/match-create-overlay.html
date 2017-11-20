@@ -18,8 +18,9 @@
       @apply --overlay;
     }
     .grid {
-      @apply --layout-horizontal;
-      @apply --layout-wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-gap: var(--spacing-m);
     }
     .wrapper {
       height: 100%;

@@ -11,14 +11,15 @@
     <style include="app-styles"></style>
     <style>
     :host {
-      margin: var(--spacing);
+      padding: 2px;
       perspective: 1000px;
     }
   	:host([selected]) .flipper {
   		transform: rotateY(180deg);
   	}
     :host, .front, .back {
-      width: 160px;
+      box-sizing: border-box;
+      width: 100%;
       height: 256px;
     }
     .flipper {
@@ -30,7 +31,7 @@
     	backface-visibility: hidden;
       background-color: var(--primary-background-color);
       @apply --paper-material;
-      @apply --paper-material-elevation-3;
+      @apply --paper-material-elevation-1;
       border-radius: var(--radius);
       cursor: pointer;
     	position: absolute;
@@ -75,7 +76,7 @@
       @apply --shadow-elevation-2dp;
     }
     .details {
-      flex:1;
+      width:100%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -111,24 +112,24 @@
           <span>[[player.rating]]</span>
         </div>
         <div class="back">
-            <div class="details">
-              <span>[[player.matchesCount]] matches</span>
-              <iron-label class="probability">
-                <span>[[_formatPercent(_probability)]]</span>
-                <label>chance of winning</label>
-              </iron-label>
-              <div class="stakes">
-                <div class="flex layout vertical center-center">
-                  <iron-icon icon="trending-up"></iron-icon>
-                  <span>[[_winingStake]]</span>
-                </div>
-                <div class="flex layout vertical center-center">
-                  <iron-icon icon="trending-down"></iron-icon>
-                  <span>[[_loosingStake]]</span>
-                </div>
+          <div class="details">
+            <span>[[player.matchesCount]] matches</span>
+            <iron-label class="probability">
+              <span>[[_formatPercent(_probability)]]</span>
+              <label>chance of winning</label>
+            </iron-label>
+            <div class="stakes">
+              <div class="flex layout vertical center-center">
+                <iron-icon icon="trending-up"></iron-icon>
+                <span>[[_winingStake]]</span>
+              </div>
+              <div class="flex layout vertical center-center">
+                <iron-icon icon="trending-down"></iron-icon>
+                <span>[[_loosingStake]]</span>
               </div>
             </div>
-            <paper-loading-fab icon="done" on-tap="_onSelectTap" loading="[[loading]]"></paper-loading-fab>
+          </div>
+          <paper-loading-fab icon="done" on-tap="_onSelectTap" loading="[[loading]]"></paper-loading-fab>
         </div>
       </div>
 
