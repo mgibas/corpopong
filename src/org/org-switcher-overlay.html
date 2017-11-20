@@ -24,7 +24,7 @@
     }
     </style>
 
-    <corpopong-overlay-header on-close-tap="close"></corpopong-overlay-header>
+    <corpopong-overlay-header id="header" on-close-tap="close"></corpopong-overlay-header>
     <h2>
       Available Corpos
       <paper-icon-button icon="add" on-tap="_showOrgWizard"></paper-icon-button>
@@ -85,6 +85,43 @@
       ready () {
         super.ready()
         this.noCancelOnOutsideClick = true
+      }
+      _renderOpened () {
+        let scaleX = document.documentElement.offsetWidth / 10
+        let scaleY = document.documentElement.offsetHeight / 10
+        this.animate([
+          {
+            borderRadius: '50%',
+            borderWidth: '1px',
+            right: '0',
+            top: '0',
+            bottom: 'auto',
+            left: 'auto',
+            width: '0px',
+            height: '0px',
+            transform: `scale(1,1)`
+          }, {
+            borderRadius: '50%',
+            borderWidth: '1px',
+            right: '0',
+            top: '0',
+            bottom: 'auto',
+            left: 'auto',
+            width: '0px',
+            height: '0px',
+            transform: `scale(${scaleX},${scaleY})`
+          }
+        ], {
+          duration: 250,
+          easing: 'ease-in-out'
+        }).onfinish = () => {
+          this.$.header.animate([{opacity: '0'}, {opacity: '1'}], {
+            duration: 100,
+            easing: 'ease-in-out'
+          }).onfinish = () => {
+            this._finishRenderOpened()
+          }
+        }
       }
     }
 
