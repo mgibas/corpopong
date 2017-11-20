@@ -2,42 +2,40 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 
-<dom-module id="api-ajax">
-  <template>
-
-    <firebase-auth user="{{user}}">
-    </firebase-auth>
-    <iron-ajax id="ajax"
-      method="[[method]]"
-      content-type="application/json"
-      url="https://us-central1-corpopong-dev.cloudfunctions.net/api[[url]]"
-      body="[[body]]"
-      loading="{{loading}}"
-      last-error="{{lastError}}"
-      last-response="{{lastResponse}}">
-    </iron-ajax>
-
-  </template>
-  <script>
-    class ApiAjax extends Polymer.Element {
-      static get is () { return 'api-ajax' }
-      static get properties () {
-        return {
-          user: Object,
-          method: String,
-          url: String,
-          body: Object,
-          lastError: {type: Object, notify: true},
-          lastResponse: {type: Object, notify: true},
-          loading: {type: Boolean, notify: true}
-        }
-      }
-      generateRequest () {
-        this.$.ajax.headers.authorization = `Bearer ${this.user.ie}`
-        return this.$.ajax.generateRequest()
+<script>
+  class ApiAjax extends Polymer.Element {
+    static get is () { return 'api-ajax' }
+    static get properties () {
+      return {
+        user: Object,
+        method: String,
+        url: String,
+        body: Object,
+        lastError: {type: Object, notify: true},
+        lastResponse: {type: Object, notify: true},
+        loading: {type: Boolean, notify: true}
       }
     }
+    static get template () {
+      return html`
+        <firebase-auth user="{{user}}">
+        </firebase-auth>
+        <iron-ajax id="ajax"
+          method="[[method]]"
+          content-type="application/json"
+          url="https://us-central1-corpopong-dev.cloudfunctions.net/api[[url]]"
+          body="[[body]]"
+          loading="{{loading}}"
+          last-error="{{lastError}}"
+          last-response="{{lastResponse}}">
+        </iron-ajax>
+      `
+    }
+    generateRequest () {
+      this.$.ajax.headers.authorization = `Bearer ${this.user.ie}`
+      return this.$.ajax.generateRequest()
+    }
+  }
 
-    window.customElements.define(ApiAjax.is, ApiAjax)
-  </script>
-</dom-module>
+  window.customElements.define(ApiAjax.is, ApiAjax)
+</script>

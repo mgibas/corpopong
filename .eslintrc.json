@@ -7,6 +7,7 @@
     ],
     "globals": {
       "Polymer": false,
+      "html": false,
       "CustomEvent": false,
       "OrgElement": false,
       "self": false
