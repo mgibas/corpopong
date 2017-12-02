@@ -49,39 +49,45 @@
     </firebase-query>
     <firebase-query path="/orgs/[[org]]/matches" data="{{matches}}"></firebase-query>
 
-    <dashboard-card>
-      <div slot="content">
-        <div class="flex">
-          <iron-label>
-            <span>[[players.length]]</span>
-            <label>Players</label>
-          </iron-label>
+    <a href="/org" tabindex="-1">
+      <dashboard-card>
+        <div slot="content">
+          <div class="flex">
+            <iron-label>
+              <span>[[players.length]]</span>
+              <label>Players</label>
+            </iron-label>
+          </div>
+          <div class="flex">
+            <iron-label>
+              <span>[[matches.length]]</span>
+              <label>Matches</label>
+            </iron-label>
+          </div>
+          <div class="flex">
+            <iron-label>
+              <span>[[_pointsSum(matches, matches.*)]]</span>
+              <label>Points</label>
+            </iron-label>
+          </div>
         </div>
-        <div class="flex">
-          <iron-label>
-            <span>[[matches.length]]</span>
-            <label>Matches</label>
-          </iron-label>
-        </div>
-        <div class="flex">
-          <iron-label>
-            <span>[[_pointsSum(matches, matches.*)]]</span>
-            <label>Points</label>
-          </iron-label>
-        </div>
-      </div>
-      <div slot="footer">
-        <h2>
-          [[org]]
-        </h2>
-        <paper-icon-button icon="swap-horiz"></paper-icon-button>
-      </div>
-    </dashboard-card>
+        <div slot="footer" class="layout horizontal">
+          <h2 class="flex">
+            [[org]]
+          </h2>
+          <paper-icon-button icon="swap-horiz" on-click="_onSwitchClick"></paper-icon-button>
 
+        </div>
+      </dashboard-card>
+    </a>
   </template>
   <script>
     class OrgCard extends OrgElement {
       static get is () { return 'org-card' }
+      _onSwitchClick (e) {
+        e.preventDefault()
+        this.dispatchEvent(new CustomEvent('org-switch-click', {bubbles: true, composed: true}))
+      }
       _pointsSum (matches) {
         if (!matches) return
         return matches.reduce((sum, match) => {

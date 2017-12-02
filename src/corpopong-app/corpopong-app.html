@@ -17,6 +17,7 @@
 <dom-module id="corpopong-app">
   <link rel="lazy-import" group="lazy" href="../dashboard/dashboard-fragment.html">
   <link rel="lazy-import" group="lazy" href="../leaderboard/leaderboard-details.html">
+  <link rel="lazy-import" group="lazy" href="../org/org-details.html">
   <link rel="lazy-import" group="lazy" href="../match/open-match-details.html">
   <link rel="lazy-import" group="lazy" href="../match/match-create-overlay.html">
   <link rel="lazy-import" group="lazy" href="../match/match-details.html">
@@ -72,7 +73,8 @@
       id="dashboard"
       org="[[org]]"
       user-uid="[[user.uid]]"
-      on-create-match-click="_openCreateOverlay">
+      on-create-match-click="_openCreateOverlay"
+      on-org-switch-click="_openOrgSwitcherOverlay">
     </dashboard-fragment>
 
     <app-location route="{{route}}"></app-location>
@@ -87,7 +89,7 @@
 
     <details-overlay selected="[[activePattern]]">
       <leaderboard-details for-pattern="/leaderboard" org="[[org]]"></leaderboard-details>
-      <!-- <org-overlay for-pattern="/org"></org-overlay> -->
+      <org-details for-pattern="/org" org="[[org]]" user-uid="[[user.uid]]"></org-details>
       <match-details for-pattern="/matches/:id" org="[[org]]" match-uid="[[matchData.id]]"></match-details>
       <player-details for-pattern="/players/:id" org="[[org]]" player-uid="[[playersData.id]]" user-uid="[[user.uid]]"></player-details>
       <open-match-details for-pattern="/open-matches/:id" org="[[org]]" user-uid="[[user.uid]]" match-uid="[[openMatchData.id]]"></open-match-details>
@@ -102,7 +104,6 @@
       ready () {
         super.ready()
         this.addEventListener('sw-updated', () => this._notifyUpdate())
-        this.addEventListener('switch-corpo', () => this._openSwitcher())
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.importLazyGroup('lazy')
         })
@@ -116,7 +117,7 @@
       _openCreateOverlay () {
         this.$.create.open()
       }
-      _openSwitcher () {
+      _openOrgSwitcherOverlay () {
         this.$.switcher.open()
       }
       _openOrgWizard () {

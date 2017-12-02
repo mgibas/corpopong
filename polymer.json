@@ -6,6 +6,7 @@
     "src/match/open-match-details.html",
     "src/match/match-create-overlay.html",
     "src/match/match-details.html",
+    "src/org/org-details.html",
     "src/player/player-details.html",
     "src/player/players-history.html",
     "src/common/notifications-component.html"
