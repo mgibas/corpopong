@@ -5,39 +5,32 @@
 <link rel="import" href="../org/org-element.html">
 <link rel="import" href="../match/match-item.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../dashboard/dashboard-card.html">
 
-<dom-module id="dashboard-latest-matches">
+<dom-module id="matches-latest-card">
   <template>
     <style include="app-styles"></style>
-    <style>
-    @media (max-width: 767px) {
-      paper-listbox > match-item + match-item {
-        border-top: 1px solid var(--divider-color);
-      }
-    }
-    </style>
     <firebase-query
       path="/orgs/[[org]]/matches"
       data="{{matches}}"
       limit-to-last="5"
       order-by-child="finalizedDate">
     </firebase-query>
-    <section class="paper-material" elevation="1">
-      <header>
-        <h2>Latest Matches</h2>
-      </header>
-      <paper-listbox>
+
+    <dashboard-card>
+      <paper-listbox slot="content">
         <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
           <a href="/matches/[[item.$key]]" tabindex="-1" class="block">
             <match-item match="[[item]]" org="[[org]]"></match-item>
           </a>
         </template>
       </paper-listbox>
-    </section>
+      <h2 slot="footer">Latest Matches</h2>
+    </dashboard-card>
   </template>
   <script>
-    class DashboardLatestMatches extends OrgElement {
-      static get is () { return 'dashboard-latest-matches' }
+    class MatchesLatestCard extends OrgElement {
+      static get is () { return 'matches-latest-card' }
       static get properties () {
         return {
           matches: Array
@@ -48,6 +41,6 @@
       }
     }
 
-    window.customElements.define(DashboardLatestMatches.is, DashboardLatestMatches)
+    window.customElements.define(MatchesLatestCard.is, MatchesLatestCard)
   </script>
 </dom-module>

@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="dashboard-card">
+  <template>
+    <style>
+    :host {
+      height:100%;
+      display: flex;
+      flex-direction: column;
+      @apply --shadow-elevation-2dp;
+      background-color: var(--primary-background-color);
+      border-radius: var(--radius);
+    }
+    section {
+      flex: 1;
+    }
+    section,
+    footer {
+      padding: var(--spacing-m);
+    }
+    footer {
+      border-top: 1px solid var(--divider-color);
+    }
+    </style>
+    <section>
+      <slot name="content"></slot>
+    </section>
+    <footer>
+      <slot name="footer"></slot>
+    </footer>
+  </template>
+  <script>
+    class DashboardCard extends Polymer.Element {
+      static get is () { return 'dashboard-card' }
+    }
+
+    window.customElements.define(DashboardCard.is, DashboardCard)
+  </script>
+</dom-module>

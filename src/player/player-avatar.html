@@ -10,12 +10,13 @@
     :host {
       display: block;
       position:relative;
+      --player-avatar-size: 42px;
     }
     :host,
     iron-image,
     .circle-frame {
-      height: 42px;
-      width: 42px;
+      height: var(--player-avatar-size);
+      width: var(--player-avatar-size);
     }
     :host([big]),
     :host([big]) iron-image,

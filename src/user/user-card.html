@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../common/corpopong-auth.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../dashboard/dashboard-card.html">
+
+<dom-module id="user-card">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    [slot="content"] {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+    [slot="footer"] {
+      @apply --layout-horizontal;
+    }
+    iron-label {
+      position: relative;
+      flex: 1;
+      text-align: right;
+    }
+    iron-label span {
+      font-size: 4rem;
+    }
+    iron-label label {
+      position: absolute;
+      bottom:0;
+      right:0;
+      @apply --paper-font-caption;
+      color: var(--secondary-text-color);
+    }
+    </style>
+    <corpopong-auth id="auth" user="{{user}}"></corpopong-auth>
+    <firebase-document path="/orgs/[[org]]/players/[[user.uid]]" data="{{profile}}"></firebase-document>
+
+    <dashboard-card>
+      <div slot="content">
+        <player-avatar big src="[[profile.photoURL]]" ></player-avatar>
+        <iron-label>
+          <span>[[profile.rating]]</span>
+          <label>Your Rating</label>
+        </iron-label>
+      </div>
+      <div slot="footer">
+        <h2 class="flex">[[profile.displayName]]</h2>
+        <paper-button on-click="_signOut">Sign out</paper-button>
+        <!-- <paper-toggle-button checked="{{profile.active}}"></paper-toggle-button> -->
+      </div>
+    </dashboard-card>
+
+  </template>
+  <script>
+    class UserCard extends OrgElement {
+      static get is () { return 'user-card' }
+      _signOut () {
+        this.$.auth.signOut()
+      }
+    }
+
+    window.customElements.define(UserCard.is, UserCard)
+  </script>
+</dom-module>

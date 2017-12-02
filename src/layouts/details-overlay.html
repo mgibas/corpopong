@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../styles/overlay-styles.html">
+<link rel="import" href="../styles/light-theme.html">
+<link rel="import" href="../common/corpopong-overlay-header.html">
+
+<dom-module id="details-overlay">
+  <template>
+    <style include="app-styles overlay-styles light-theme"></style>
+    <style>
+    :host {
+      @apply --overlay;
+      --corpopong-logo-background-color: var(--primary-background-color);
+    }
+
+    </style>
+    <corpopong-overlay-header text="Leaderboard" on-close-click="_back">
+    </corpopong-overlay-header>
+    <iron-pages selected="[[selected]]" attr-for-selected="for-pattern" selected-attribute="active">
+      <slot></slot>
+    </iron-pages>
+
+  </template>
+  <script>
+    class DetailsOverlay extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], OrgElement) {
+      static get is () { return 'details-overlay' }
+      static get properties () {
+        return {
+          selected: {
+            type: String,
+            observer: '_onSelectednChanged'
+          }
+        }
+      }
+      ready () {
+        super.ready()
+        this.alwaysOnTop = true
+        this.noCancelOnEscKey = true
+      }
+      _onSelectednChanged (selected) {
+        this.opened = !!selected
+      }
+      _renderOpened () {
+        let easing = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)'
+        let height = document.documentElement.clientHeight
+        this.animate([
+          {offset: 0.0, opacity: '0', transform: `translate3d(0, ${height}px, 0)`},
+          {offset: 0.6, easing: easing, opacity: '1', transform: 'translate3d(0, -20px, 0)'},
+          {offset: 0.75, easing: easing, opacity: '1', transform: 'translate3d(0, 10px, 0)'},
+          {offset: 0.90, easing: easing, opacity: '1', transform: 'translate3d(0, -5px, 0)'},
+          {offset: 1, easing: easing, opacity: '1', transform: 'translate3d(0, 0, 0)'}
+        ], {
+          duration: 500,
+          easing: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)'
+        }).onfinish = () => {
+          this._finishRenderOpened()
+        }
+      }
+      _renderClosed () {
+        let height = document.documentElement.clientHeight
+        this.animate([
+          {offset: 0, opacity: '1', transform: `translate3d(0, 0, 0)`},
+          {offset: 0.2, opacity: '1', transform: `translate3d(0, 10px, 0)`},
+          {offset: 0.4, opacity: '1', transform: 'translate3d(0, -20px, 0)'},
+          {offset: 0.45, opacity: '1', transform: 'translate3d(0, -20px, 0)'},
+          {offset: 1, opacity: '0', transform: `translate3d(0, ${height}px, 0)`}
+        ], {
+          duration: 500
+        }).onfinish = () => {
+          this._finishRenderClosed()
+        }
+      }
+      _back () {
+        window.history.pushState({}, null, '/')
+        window.dispatchEvent(new CustomEvent('location-changed'))
+      }
+    }
+
+    window.customElements.define(DetailsOverlay.is, DetailsOverlay)
+  </script>
+</dom-module>

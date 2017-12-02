@@ -35,7 +35,7 @@
     <api-ajax id="post" url="/orgs/[[org]]/matches" method="post" loading="{{postLoading}}"></api-ajax>
     <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
 
-      <corpopong-overlay-header id="header" on-close-tap="close" text="Select Oponent!"></corpopong-overlay-header>
+      <corpopong-overlay-header id="header" on-close-click="close" text="Select Oponent!"></corpopong-overlay-header>
       <div class="wrapper">
       <section id="content">
         <iron-selector id="selector" class="grid" selected-attribute="selected">
@@ -79,8 +79,8 @@
             borderRadius: '50%',
             borderWidth: '1px',
             right: '0',
-            bottom: '0',
-            top: 'auto',
+            top: '0',
+            bottom: 'auto',
             left: 'auto',
             width: '0px',
             height: '0px',
@@ -89,8 +89,8 @@
             borderRadius: '50%',
             borderWidth: '1px',
             right: '0',
-            bottom: '0',
-            top: 'auto',
+            top: '0',
+            bottom: 'auto',
             left: 'auto',
             width: '0px',
             height: '0px',
@@ -119,8 +119,6 @@
         this.$.post.generateRequest().completes
           .then((req) => {
             this.close()
-            // window.history.pushState({}, null, '/')
-            // window.dispatchEvent(new CustomEvent('location-changed'))
           })
       }
       _sort (a, b) {

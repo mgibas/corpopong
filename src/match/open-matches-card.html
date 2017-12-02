@@ -3,8 +3,9 @@
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../match/open-match-item.html">
 <link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../dashboard/dashboard-card.html">
 
-<dom-module id="dashboard-open-matches">
+<dom-module id="open-matches-card">
   <template>
     <style include="app-styles"></style>
     <style>
@@ -16,22 +17,20 @@
       path="/orgs/[[org]]/player-open-matches/[[userUid]]"
       data="{{matches}}">
     </firebase-query>
-    <section class="paper-material" elevation="1">
-      <header>
-        <h2>Open Matchesss</h2>
-      </header>
-      <paper-listbox>
+    <dashboard-card >
+      <paper-listbox slot="content">
         <template is="dom-repeat" items="{{matches}}">
           <a href="/open-matches/[[item.$key]]" tabindex="-1" class="block">
             <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
           </a>
         </template>
       </paper-listbox>
-    </section>
+      <h2 slot="footer">Open Matches</h2>
+    </dashboard-card>
   </template>
   <script>
-    class DashboardOpenMatches extends Polymer.Element {
-      static get is () { return 'dashboard-open-matches' }
+    class OpenMatchesCard extends Polymer.Element {
+      static get is () { return 'open-matches-card' }
       static get properties () {
         return {
           userUid: String,
@@ -40,6 +39,6 @@
       }
     }
 
-    window.customElements.define(DashboardOpenMatches.is, DashboardOpenMatches)
+    window.customElements.define(OpenMatchesCard.is, OpenMatchesCard)
   </script>
 </dom-module>

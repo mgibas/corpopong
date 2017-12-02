@@ -1,6 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
@@ -9,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../layouts/user-menu.html">
+<link rel="import" href="../common/corpopong-logo.html">
 
 <dom-module id="fragment-layout">
   <template>
@@ -28,61 +27,60 @@
     [hidden] {
       display: none !important;
     }
-    app-header-layout[has-scrolling-region] {
-      height:100vh;
-    }
-    app-header * {
-      color: var(--text-primary-color);
-    }
-
-    app-header,
-    app-header a {
-      background-color: var(--primary-color)
+    app-toolbar {
+      padding-top: var(--spacing-m);
+      color: var(--dark-theme-primary-text-color);
+      position: relative;
     }
 
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: var(--text-primary-color);
+    .corner-ball {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 250px;
+      opacity: 01;
+      z-index: -1;
+    }
+    .corner-ball path {
+      opacity: 0.2;
+    }
+    .primary-action {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index:1;
     }
 
+    [main-title] {
+      text-align: center;
+    }
     @media (max-width: 479px) {
       .content {
-        padding: 0;
+        padding: var(--spacing-m);
       }
     }
 
-    :host ::slotted([slot=menu-item]) {
-      min-width:120px;
-      color: var(--primary-text-color);
-      cursor: pointer;
-    }
-
-    .org-name {
-      @apply --paper-font-body1;
-    }
     </style>
-    <app-header-layout has-scrolling-region>
-      <app-header slot="header" fixed effects="waterfall">
-        <app-toolbar>
-          <paper-icon-button hidden$="[[!backButton]]" icon="arrow-back" on-tap="_back"></paper-icon-button>
-          <div main-title>[[title]]</div>
-          <paper-menu-button hidden$="[[!menuButton]]" horizontal-align="right">
-            <paper-icon-button icon="more-vert" slot="dropdown-trigger"></paper-icon-button>
-            <paper-listbox slot="dropdown-content">
-              <slot name="menu-item"></slot>
-            </paper-listbox>
-          </paper-menu-button>
-          <div class="layout horizontal center">
-            <span class="org-name">[[org]]</span>
-            <user-menu org="[[org]]"></user-menu>
-          </div>
-        </app-toolbar>
-      </app-header>
-      <div class="content-wrapper">
-        <div class="content">
-          <slot></slot>
-        </div>
+    <app-toolbar>
+      <div main-title class="layout horizontal center-center">
+        <span>Corpo</span>&nbsp;<corpopong-logo></corpopong-logo>&nbsp;Pong
       </div>
-    </app-header-layout>
+      <div class="primary-action">
+        <slot name="primary-action"></slot>
+      </div>
+      <svg class="corner-ball" viewBox="0 0 128 128">
+        <g>
+          <circle style="fill:#fbcc5f;" cx="64" cy="64" r="64"/>
+          <path d="M35.02,84.256 C32.316,84.256 29.732,82.705 28.542,80.083 C26.921,76.508 28.505,72.296 32.08,70.674 L90.05,44.383 C93.623,42.761 97.837,44.345 99.458,47.919 C101.079,51.494 99.496,55.706 95.921,57.328 L37.951,83.619 C36.998,84.051 36.001,84.256 35.02,84.256 z" fill="#607D8B"/>
+          <path d="M57.13,99.891 C54.427,99.891 51.843,98.339 50.653,95.717 C49.033,92.143 50.616,87.93 54.191,86.309 L85.917,71.92 C89.492,70.298 93.704,71.882 95.326,75.456 C96.946,79.031 95.364,83.243 91.788,84.865 L60.062,99.254 C59.109,99.686 58.112,99.891 57.13,99.891 z" fill="#607D8B"/>
+        </g>
+      </svg>
+    </app-toolbar>
+    <div class="content-wrapper">
+      <div class="content">
+        <slot></slot>
+      </div>
+    </div>
   </template>
   <script>
     class FragmentLayout extends Polymer.Element {
@@ -90,19 +88,8 @@
       static get properties () {
         return {
           title: String,
-          org: String,
-          backButton: {
-            type: Boolean,
-            value: false
-          },
-          menuButton: {
-            type: Boolean,
-            value: false
-          }
+          org: String
         }
-      }
-      _back () {
-        window.history.back()
       }
     }
 

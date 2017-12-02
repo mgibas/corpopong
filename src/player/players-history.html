@@ -22,7 +22,7 @@
     <firebase-document path="/orgs/[[org]]/players/[[player2Uid]]" data="{{player2}}"></firebase-document>
     <firebase-query path="/orgs/[[org]]/player-matches/[[player1Uid]]" data="{{_player1Matches}}"></firebase-query>
 
-    <section class="paper-material" elevation="1">
+    <section>
       <div class="layout horizontal center-center">
         <div class="flex">
           <a href="/players/[[player1Uid]]" class="block layout vertical center-center">
@@ -44,7 +44,7 @@
         <span class="flex">[[_getPlayerGames(player2Uid, matches)]]</span>
       </div>
     </section>
-    <section class="paper-material" elevation="1">
+    <section>
       <header>
         <h2>Matches</h2>
       </header>

@@ -3,10 +3,11 @@
   "shell": "src/corpopong-app/corpopong-app.html",
   "fragments": [
     "src/dashboard/dashboard-fragment.html",
-    "src/match/open-match-fragment.html",
+    "src/match/open-match-details.html",
     "src/match/match-create-overlay.html",
-    "src/match/match-fragment.html",
-    "src/player/player-fragment.html",
+    "src/match/match-details.html",
+    "src/player/player-details.html",
+    "src/player/players-history.html",
     "src/common/notifications-component.html"
   ],
   "sources": [

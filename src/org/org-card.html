@@ -1,26 +1,34 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../org/org-element.html">
+<link rel="import" href="../dashboard/dashboard-card.html">
 
-<dom-module id="dashboard-stats">
+<dom-module id="org-card">
   <template>
     <style include="app-styles"></style>
     <style>
-      section div {
+
+      [slot="content"] {
         @apply --layout-horizontal;
         @apply --layout-center-justified;
       }
-      span {
-        font-size: 4rem;
+      [slot="footer"] {
+        @apply --layout-horizontal;
+        @apply --layout-center;
       }
-      iron-label{
+
+      iron-label {
         position: relative;
+      }
+      iron-label span {
+        font-size: 4rem;
       }
       iron-label label {
         position: absolute;
-        bottom:0px;
+        bottom:-1rem;
         right:0;
         @apply --paper-font-caption;
         color: var(--secondary-text-color);
@@ -41,11 +49,8 @@
     </firebase-query>
     <firebase-query path="/orgs/[[org]]/matches" data="{{matches}}"></firebase-query>
 
-    <section class="paper-material" elevation="1">
-      <header>
-        <h2>Numbers</h2>
-      </header>
-      <div>
+    <dashboard-card>
+      <div slot="content">
         <div class="flex">
           <iron-label>
             <span>[[players.length]]</span>
@@ -65,11 +70,18 @@
           </iron-label>
         </div>
       </div>
-    </section>
+      <div slot="footer">
+        <h2>
+          [[org]]
+        </h2>
+        <paper-icon-button icon="swap-horiz"></paper-icon-button>
+      </div>
+    </dashboard-card>
+
   </template>
   <script>
-    class DashboardStats extends OrgElement {
-      static get is () { return 'dashboard-stats' }
+    class OrgCard extends OrgElement {
+      static get is () { return 'org-card' }
       _pointsSum (matches) {
         if (!matches) return
         return matches.reduce((sum, match) => {
@@ -80,6 +92,6 @@
       }
     }
 
-    window.customElements.define(DashboardStats.is, DashboardStats)
+    window.customElements.define(OrgCard.is, OrgCard)
   </script>
 </dom-module>

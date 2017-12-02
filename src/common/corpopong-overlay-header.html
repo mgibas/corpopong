@@ -30,7 +30,7 @@
     <div class="container">
       <corpopong-logo></corpopong-logo>
       <h1>[[text]]</h1>
-      <paper-icon-button icon="close" hidden="[[!closeButton]]" on-tap="_handleTap"></paper-icon-button>
+      <paper-icon-button icon="close" hidden="[[!closeButton]]" on-click="_onClick"></paper-icon-button>
     </div>
 
   </template>
@@ -46,8 +46,8 @@
           }
         }
       }
-      _handleTap () {
-        this.dispatchEvent(new CustomEvent('close-tap'))
+      _onClick () {
+        this.dispatchEvent(new CustomEvent('close-click'))
       }
     }
 

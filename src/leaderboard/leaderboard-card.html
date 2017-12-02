@@ -1,0 +1,107 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../dashboard/dashboard-card.html">
+
+<dom-module id="leaderboard-card">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+
+    .position {
+      font-size: 1.5rem;
+      font-weight: bolder;
+      color: var(--dark-theme-primary-text-color);
+      background-color: var(--dark-theme-primary-alt-color);
+      width: 3rem;
+      height: 3rem;
+      line-height: 3rem;
+      text-align: center;
+      border-radius: 50%;
+      margin-top: -1.5rem;
+      z-index: 1;
+    }
+    .item {
+      @apply --layout-vertical;
+      @apply --layout-center;
+      padding: var(--spacing-s);
+    }
+    [slot="content"] {
+      @apply --layout-horizontal;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+    player-avatar {
+      border: 6px solid var(--dark-theme-primary-alt-color);
+      border-radius: 50%;
+      --player-avatar-size: 90px;
+    }
+    player-avatar[position="1"] {
+      --player-avatar-size: 128px;
+    }
+
+    </style>
+    <firebase-query
+      path="/orgs/[[org]]/players"
+      data="{{players}}"
+      order-by-child="rated"
+      equal-to="true">
+    </firebase-query>
+
+    <a href="/leaderboard" tabindex="-1">
+      <dashboard-card>
+        <div slot="content">
+          <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
+            <div class="item">
+              <player-avatar position$="[[_getPosition(index)]]" src="[[item.photoURL]]" slot="item-icon"></player-avatar>
+              <span class="position">[[_getPosition(index)]]</span>
+              <span>
+                [[item.displayName]]
+              </span>
+            </div>
+          </template>
+        </div>
+        <h2 slot="footer">Leaderboard</h2>
+      </dashboard-card>
+    </a>
+
+  </template>
+  <script>
+    class LeaderboardCard extends OrgElement {
+      static get is () { return 'leaderboard-card' }
+      static get properties () {
+        return {
+          players: Object,
+          _sortedPlayers: {
+            type: Array,
+            computed: '_computeSortedPlayers(players, players.*)'
+          },
+          _topPlayers: {
+            type: Array,
+            computed: '_computeTopPlayers(_sortedPlayers, _sortedPlayers.*)'
+          }
+        }
+      }
+      _getPosition (index) {
+        return index === 2 ? 3 : Math.abs(index - 2)
+      }
+      _medalPosition (index) {
+        return index <= 2
+      }
+      _computeSortedPlayers (players) {
+        return players.sort((a, b) => b.rating - a.rating)
+      }
+      _computeTopPlayers (_sortedPlayers) {
+        return [_sortedPlayers[1], _sortedPlayers[0], _sortedPlayers[2]]
+      }
+    }
+
+    window.customElements.define(LeaderboardCard.is, LeaderboardCard)
+  </script>
+</dom-module>

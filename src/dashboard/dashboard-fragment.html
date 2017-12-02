@@ -1,57 +1,87 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../layouts/fragment-layout.html">
-<link rel="import" href="../dashboard/dashboard-leaderboard.html">
-<link rel="import" href="../dashboard/dashboard-open-matches.html">
-<link rel="import" href="../dashboard/dashboard-latest-matches.html">
-<link rel="import" href="../dashboard/dashboard-stats.html">
+<link rel="import" href="../org/org-card.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../common/corpopong-icons.html">
+<link rel="import" href="../match/open-matches-card.html">
+<link rel="import" href="../match/matches-latest-card.html">
+<link rel="import" href="../leaderboard/leaderboard-card.html">
+<link rel="import" href="../user/user-card.html">
 
 <dom-module id="dashboard-fragment">
   <template>
     <style include="app-styles"></style>
     <style>
-    dashboard-leaderboard, dashboard-open-matches, dashboard-stats {
-      display: block;
-      margin-bottom: 1rem;
+    .grid {
+      display: grid;
+      grid-gap: var(--spacing-l);
+      grid-template-columns: [col] 1fr  [col] 1fr [col];
+      grid-template-rows: repeat(20, auto);
+    }
+    leaderboard-card {
+      grid-column: 1;
+      grid-row: 1 / span 5;
+    }
+    matches-latest-card {
+      grid-column: 1;
+      grid-row: 6 / -1;
+    }
+    user-card {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+    org-card {
+      grid-column: 2;
+      grid-row: 4 / span 3;
+    }
+    open-matches-card {
+      grid-column: 2;
+      grid-row: 7 / -1;
     }
 
-    .responsive {
-      @apply --layout-horizontal;
-      @apply --layout-wrap;
-      @apply --layout-justified;
+    @media (max-width: 799px) {
+      .grid {
+        grid-gap: var(--spacing-m);
+        grid-template-columns: 1fr
+      }
+      user-card {
+        grid-column: 1;
+        grid-row:1
+      }
+      org-card {
+        grid-column: 1;
+        grid-row:2;
+      }
+      leaderboard-card {
+        grid-column: 1;
+        grid-row:3;
+      }
+      open-matches-card {
+        grid-column: 1;
+        grid-row:4;
+      }
+      matches-latest-card {
+        grid-column: 1;
+        grid-row:5
+      }
     }
 
-    .responsive > * {
-      @apply --layout-flex;
-      -ms-flex-preferred-size: 100%;
-          flex-basis: 100%;
-    }
-
-    @media (min-width: 1100px) {
-        .responsive > * {
-            -ms-flex-preferred-size: 45%;
-                flex-basis: 45%;
-        }
-        dashboard-leaderboard {
-          margin-right: 1rem;
-        }
+    paper-fab {
+      color: var(--dark-theme-accent-text-color);
     }
 
     </style>
+
     <fragment-layout title="CorpoPong" org="[[org]]" fullbleed>
-
-      <div class="responsive">
-        <dashboard-leaderboard org="[[org]]"></dashboard-leaderboard>
-        <div>
-          <dashboard-stats org="[[org]]"></dashboard-stats>
-          <dashboard-open-matches user-uid="[[userUid]]" org="[[org]]"></dashboard-open-matches>
-          <dashboard-latest-matches org="[[org]]"></dashboard-latest-matches>
-        </div>
+      <paper-fab slot="primary-action" icon="add" on-click="_onCreateClick"></paper-fab>
+      <div class="grid">
+        <leaderboard-card id="leaderboardCard" org="[[org]]" on-click="_onLeaderboardClick"></leaderboard-card>
+        <matches-latest-card id="matchesLatestCard" org="[[org]]"></matches-latest-card>
+        <user-card id="userCard" org="[[org]]"></user-card>
+        <org-card id="orgCard" org="[[org]]"></org-card>
+        <open-matches-card id="openMatchesCard" user-uid="[[userUid]]" org="[[org]]"></open-matches-card>
       </div>
-
-      <paper-fab  id="fab" class="fixed-fab" icon="corpopong:paddles" on-click="_onCreateClick"></paper-fab>
     </fragment-layout>
 
   </template>
