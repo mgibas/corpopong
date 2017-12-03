@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../org/org-element.html">
+<link rel="import" href="../common/corpopong-auth.html">
 <link rel="import" href="../dashboard/dashboard-card.html">
 
 <dom-module id="org-card">
@@ -40,7 +41,7 @@
         }
       }
     </style>
-
+    <corpopong-auth user="{{user}}"></corpopong-auth>
     <firebase-query
       path="/orgs/[[org]]/players"
       data="{{players}}"
@@ -49,7 +50,7 @@
     </firebase-query>
     <firebase-query path="/orgs/[[org]]/matches" data="{{matches}}"></firebase-query>
 
-    <a href="/org" tabindex="-1">
+    <a href="[[adminHref]]" tabindex="-1">
       <dashboard-card>
         <div slot="content">
           <div class="flex">
@@ -84,6 +85,15 @@
   <script>
     class OrgCard extends OrgElement {
       static get is () { return 'org-card' }
+      static get properties () {
+        return {
+          user: Object,
+          adminHref: {
+            type: String,
+            computed: '_computeAdminHref(org, user.orgs, user.orgs.*)'
+          }
+        }
+      }
       _onSwitchClick (e) {
         e.preventDefault()
         this.dispatchEvent(new CustomEvent('org-switch-click', {bubbles: true, composed: true}))
@@ -95,6 +105,10 @@
             return sum + Number(score.player1) + Number(score.player2)
           }, sum)
         }, 0)
+      }
+      _computeAdminHref (org, userOrgs) {
+        if (org && userOrgs && userOrgs[org]) return '/org'
+        return ''
       }
     }
 

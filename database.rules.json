@@ -51,6 +51,10 @@
             ".read": "$uid === auth.uid",
             ".write": false
           }
+        },
+        "admin" : {
+          ".read": "auth != null && root.child('users').child(auth.uid).child('orgs').child($org).val() === true",
+          ".write": "auth != null && root.child('users').child(auth.uid).child('orgs').child($org).val() === true"
         }
       }
     },

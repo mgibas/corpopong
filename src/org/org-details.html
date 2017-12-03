@@ -1,55 +1,32 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../org/org-element.html">
 
 <dom-module id="org-details">
   <template>
     <style include="app-styles"></style>
-    <firebase-query
-      path="/orgs/[[org]]/players"
-      data="{{players}}"
-      order-by-child="rated"
-      equal-to="true">
-    </firebase-query>
-    <firebase-query path="/orgs/[[org]]/matches" data="{{matches}}"></firebase-query>
 
-    <div>
-      <div class="flex">
-        <iron-label>
-          <span>[[players.length]]</span>
-          <label>Players</label>
-        </iron-label>
-      </div>
-      <div class="flex">
-        <iron-label>
-          <span>[[matches.length]]</span>
-          <label>Matches</label>
-        </iron-label>
-      </div>
-      <div class="flex">
-        <iron-label>
-          <span>[[_pointsSum(matches, matches.*)]]</span>
-          <label>Points</label>
-        </iron-label>
-      </div>
-    </div>
+    <firebase-document path="/orgs/[[org]]/admin" data="{{admin}}"></firebase-document>
+
+    <section>
+      <p>Invite your friends by sharing this link:</p>
+      <code>http://corpopong.com/join/[[org]]?code=[[admin.invitationCode]]</code>
+      <p>You can also automatically accept anyone with an email in given domain</p>
+      <paper-input label="domain" value="{{admin.autoAcceptDomain}}">
+        <div slot="prefix">@</div>
+      </paper-input>
+    </section>
   </template>
   <script>
     class OrgDetails extends OrgElement {
       static get is () { return 'org-details' }
       static get properties () {
         return {
-          userUid: String
+          admin: Object
         }
-      }
-      _pointsSum (matches) {
-        if (!matches) return
-        return matches.reduce((sum, match) => {
-          return match.scores.reduce((sum, score) => {
-            return sum + Number(score.player1) + Number(score.player2)
-          }, sum)
-        }, 0)
       }
     }
 
