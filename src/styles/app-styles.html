@@ -12,7 +12,7 @@
         font-weight: bolder;
         text-decoration: underline;
       }
-      a.block{
+      a[tabindex="-1"]{
         font-weight: inherit;
         text-decoration: none;
         color: inherit;
@@ -25,7 +25,9 @@
         @apply --layout-horizontal;
         @apply --layout-end-justified;
       }
-
+      paper-fab {
+        color: var(--accent-text-color);
+      }
       .fixed-fab {
         position: fixed;
         bottom: 1rem;

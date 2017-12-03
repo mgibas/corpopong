@@ -20,7 +20,7 @@
     <dashboard-card>
       <paper-listbox slot="content">
         <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-          <a href="/matches/[[item.$key]]" tabindex="-1" class="block">
+          <a href="/matches/[[item.$key]]" tabindex="-1">
             <match-item match="[[item]]" org="[[org]]"></match-item>
           </a>
         </template>

@@ -24,7 +24,7 @@
     <iron-media-query query="(max-width: 479px)" query-matches="{{smallMobile}}"></iron-media-query>
 
     <template is="dom-repeat" items="[[summaries]]" sort="_sort">
-      <a href="/players/[[playerUid]]/history/[[item.uid]]" class="block">
+      <a href="/players/[[playerUid]]/history/[[item.uid]]" tabindex="-1">
         <paper-icon-item>
           <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
           <div class="layout horizontal flex center-center">
