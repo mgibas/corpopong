@@ -16,7 +16,7 @@
       }
     }
     static get template () {
-      return html`
+      return `
         <firebase-auth id="auth" user="{{_firebaseUser}}" provider="[[provider]]">
         </firebase-auth>
         <firebase-document path="/users/[[_firebaseUser.uid]]" data="{{user}}"></firebase-document>
