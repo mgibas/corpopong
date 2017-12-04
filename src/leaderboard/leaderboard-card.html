@@ -40,10 +40,18 @@
     player-avatar {
       border: 6px solid var(--dark-theme-primary-alt-color);
       border-radius: 50%;
-      --player-avatar-size: 90px;
+      --player-avatar-size: 96px;
     }
     player-avatar[position="1"] {
       --player-avatar-size: 128px;
+    }
+    @media (max-width: 479px) {
+      player-avatar{
+        --player-avatar-size: 64px;
+      }
+      player-avatar[position="1"] {
+        --player-avatar-size: 96px;
+      }
     }
 
     </style>
