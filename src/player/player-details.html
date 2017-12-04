@@ -67,6 +67,8 @@
     <firebase-document path="/orgs/[[org]]/players/[[playerUid]]" data="{{player}}"></firebase-document>
     <firebase-query path="/orgs/[[org]]/player-matches/[[playerUid]]" data="{{matches}}"></firebase-query>
 
+    <corpopong-overlay-header text="[[player.displayName]]"></corpopong-overlay-header>
+
     <section class="layout vertical">
       <div class="layout horizontal center-center">
         <player-avatar big src="[[player.photoURL]]"></player-avatar>

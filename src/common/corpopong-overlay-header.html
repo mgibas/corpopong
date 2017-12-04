@@ -48,7 +48,7 @@
         }
       }
       _onClick () {
-        this.dispatchEvent(new CustomEvent('close-click'))
+        this.dispatchEvent(new CustomEvent('close-click', {bubbles: true, composed: true}))
       }
     }
 

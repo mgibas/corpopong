@@ -13,11 +13,9 @@
       @apply --overlay;
       --corpopong-logo-background-color: var(--primary-background-color);
     }
-
     </style>
-    <corpopong-overlay-header text="Leaderboard" on-close-click="_back">
-    </corpopong-overlay-header>
-    <iron-pages selected="[[selected]]" attr-for-selected="for-pattern" selected-attribute="active">
+
+    <iron-pages selected="[[selected]]" attr-for-selected="for-pattern">
       <slot></slot>
     </iron-pages>
 
@@ -35,6 +33,7 @@
       }
       ready () {
         super.ready()
+        this.addEventListener('close-click', () => this._back())
         this.alwaysOnTop = true
         this.noCancelOnEscKey = true
       }

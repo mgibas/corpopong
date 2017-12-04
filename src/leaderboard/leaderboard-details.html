@@ -29,7 +29,7 @@
       order-by-child="rated"
       equal-to="true">
     </firebase-query>
-
+    <corpopong-overlay-header text="Leaderboard"></corpopong-overlay-header>
     <paper-listbox>
       <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
         <a href="/players/[[item.$key]]" tabindex="-1">
