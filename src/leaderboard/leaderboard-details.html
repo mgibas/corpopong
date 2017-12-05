@@ -8,13 +8,13 @@
 <link rel="import" href="../common/corpopong-overlay-header.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/match-create-player-card.html">
-<link rel="import" href="../leaderboard/trophy-icon.html">
+<link rel="import" href="../leaderboard/leaderboard-top-3.html">
 
 <dom-module id="leaderboard-details">
   <template>
     <style include="app-styles"></style>
     <style>
-    paper-listbox {
+    paper-listbox, section {
       max-width: 800px;
       margin: 0 auto;
     }
@@ -35,8 +35,11 @@
       equal-to="true">
     </firebase-query>
     <corpopong-overlay-header text="Leaderboard"></corpopong-overlay-header>
+    <section>
+      <leaderboard-top-3 players="[[_sortedPlayers]]"></leaderboard-top-3>
+    </section>
     <paper-listbox>
-      <template is="dom-repeat" items="{{players}}" sort="_sort" observe="rating">
+      <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
         <a href="/players/[[item.$key]]" tabindex="-1">
           <paper-icon-item>
             <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
@@ -50,10 +53,7 @@
                 </span>
               </paper-item-body>
               <span class="position">
-                <div hidden="[[!_medalPosition(index)]]">
-                  <trophy-icon position="[[_getPosition(index)]]"></trophy-icon>
-                </div>
-                <span hidden="[[_medalPosition(index)]]">[[_getPosition(index)]]</span>
+                <span>[[_getPosition(index)]]</span>
               </span>
             </div>
           </paper-icon-item>
@@ -70,14 +70,27 @@
       */
     class LeaderboardDetails extends OrgElement {
       static get is () { return 'leaderboard-details' }
-      _sort (a, b) {
-        return b.rating - a.rating
+      static get properties () {
+        return {
+          players: Object,
+          _sortedPlayers: {
+            type: Array,
+            computed: '_computeSortedPlayers(players, players.*)'
+          },
+          _topPlayers: {
+            type: Array,
+            computed: '_computeRestPlayers(_sortedPlayers, _sortedPlayers.*)'
+          }
+        }
       }
       _getPosition (index) {
-        return index + 1
+        return index + 4
       }
-      _medalPosition (index) {
-        return index <= 2
+      _computeSortedPlayers (players) {
+        return players.sort((a, b) => b.rating - a.rating)
+      }
+      _computeRestPlayers (_sortedPlayers) {
+        return _sortedPlayers.slice(3)
       }
     }
 
