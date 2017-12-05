@@ -9,6 +9,12 @@
 <dom-module id="org-details">
   <template>
     <style include="app-styles"></style>
+    <style>
+    section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    </style>
 
     <firebase-document path="/orgs/[[org]]/admin" data="{{admin}}"></firebase-document>
 
