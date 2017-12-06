@@ -61,16 +61,18 @@
     </style>
 
     <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
-      <div class="item">
-        <player-avatar position$="[[_getPosition(index)]]" src="[[item.photoURL]]" slot="item-icon"></player-avatar>
-        <span class="position">[[_getPosition(index)]]</span>
-        <span>
-          [[item.displayName]]
-        </span>
-        <span class="secondary">
-          [[item.rating]]
-        </span>
-      </div>
+      <a href="/players/[[item.$key]]" tabindex="-1">
+        <div class="item">
+          <player-avatar position$="[[_getPosition(index)]]" src="[[item.photoURL]]" slot="item-icon"></player-avatar>
+          <span class="position">[[_getPosition(index)]]</span>
+          <span>
+            [[item.displayName]]
+          </span>
+          <span class="secondary">
+            [[item.rating]]
+          </span>
+        </div>
+      </a>
     </template>
 
   </template>
