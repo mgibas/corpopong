@@ -7,6 +7,7 @@
 <link rel="import" href="../org/org-element.html">
 <link rel="import" href="../common/api-ajax.html">
 <link rel="import" href="../common/corpopong-overlay-header.html">
+<link rel="import" href="../common/paper-progress-circle.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/match-create-player-card.html">
 
@@ -27,6 +28,13 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
+    paper-progress-circle {
+      position: absolute;
+      top: calc(50% - 28px);
+      left:calc(50% - 28px);
+      z-index:1;
+      --paper-progress-circle-color: var(--accent-color);
+    }
     corpopong-overlay-header {
       --corpopong-logo-background-color: var(--primary-background-color);
     }
@@ -36,8 +44,14 @@
     <api-ajax id="post" url="/orgs/[[org]]/matches" method="post" loading="{{postLoading}}"></api-ajax>
     <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
 
-      <corpopong-overlay-header id="header" on-close-click="close" text="Select Oponent!"></corpopong-overlay-header>
-      <div class="wrapper">
+    <corpopong-overlay-header id="header" on-close-click="close" text="Select Oponent!"></corpopong-overlay-header>
+    <paper-progress-circle
+      size="56"
+      indeterminate
+      fast
+      active="[[loading]]">
+    </paper-progress-circle>
+    <div class="wrapper">
       <section id="content">
         <iron-selector id="selector" class="grid" selected-attribute="selected">
           <template is="dom-repeat" items="[[oponents]]" sort="_sort">
