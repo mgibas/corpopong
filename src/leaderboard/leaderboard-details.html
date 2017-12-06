@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../org/org-element.html">
@@ -20,11 +19,14 @@
     }
     .position {
       width:48px;
-      text-align: center;
+      text-align: right;
       font-size: 2rem;
     }
-    paper-icon-item {
-      padding: 0;
+    paper-item > * + * {
+      margin-left: 1rem;
+    }
+    player-display-name {
+      flex:1;
     }
     </style>
 
@@ -41,22 +43,16 @@
     <paper-listbox>
       <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
         <a href="/players/[[item.$key]]" tabindex="-1">
-          <paper-icon-item>
-            <player-avatar src="[[item.photoURL]]" slot="item-icon"></player-avatar>
-            <div class="layout horizontal flex center-center">
-              <paper-item-body two-lines class="flex">
-                <span>
-                  [[item.displayName]]
-                </span>
-                <span secondary>
-                  [[item.rating]]
-                </span>
-              </paper-item-body>
-              <span class="position">
-                <span>[[_getPosition(index)]]</span>
-              </span>
-            </div>
-          </paper-icon-item>
+          <paper-item>
+            <span class="position">
+              [[_getPosition(index)]]
+            </span>
+            <player-avatar src="[[item.photoURL]]"></player-avatar>
+            <player-display-name value="[[item.displayName]]"></player-display-name>
+            <span class="rating">
+              [[item.rating]]
+            </span>
+          </paper-item>
         </a>
       </template>
     </paper-listbox>
