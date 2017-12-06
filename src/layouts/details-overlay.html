@@ -41,9 +41,10 @@
         this.noCancelOnEscKey = true
       }
       _onSelectedChanged (selected) {
+        clearTimeout(this._closingTimeout)
         this.opened = !!selected
         if (!selected) {
-          setTimeout(() => {
+          this._closingTimeout = setTimeout(() => {
             this._debouncedSelected = selected
           }, 500)
         } else {
@@ -79,7 +80,7 @@
         })
         setTimeout(() => {
           this._finishRenderClosed()
-        }, 450)
+        }, 500)
       }
       _back () {
         window.history.pushState({}, null, '/')
