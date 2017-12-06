@@ -15,7 +15,7 @@
     }
     </style>
 
-    <iron-pages selected="[[selected]]" attr-for-selected="for-pattern">
+    <iron-pages selected="[[_debouncedSelected]]" attr-for-selected="for-pattern">
       <slot></slot>
     </iron-pages>
 
@@ -27,7 +27,10 @@
         return {
           selected: {
             type: String,
-            observer: '_onSelectednChanged'
+            observer: '_onSelectedChanged'
+          },
+          _debouncedSelected: {
+            type: String
           }
         }
       }
@@ -37,8 +40,15 @@
         this.alwaysOnTop = true
         this.noCancelOnEscKey = true
       }
-      _onSelectednChanged (selected) {
+      _onSelectedChanged (selected) {
         this.opened = !!selected
+        if (!selected) {
+          setTimeout(() => {
+            this._debouncedSelected = selected
+          }, 500)
+        } else {
+          this._debouncedSelected = selected
+        }
       }
       _renderOpened () {
         let easing = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)'
@@ -66,9 +76,10 @@
           {offset: 1, opacity: '0', transform: `translate3d(0, ${height}px, 0)`}
         ], {
           duration: 500
-        }).onfinish = () => {
+        })
+        setTimeout(() => {
           this._finishRenderClosed()
-        }
+        }, 450)
       }
       _back () {
         window.history.pushState({}, null, '/')
