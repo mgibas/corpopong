@@ -12,6 +12,35 @@
   <template>
     <style include="app-styles"></style>
     <style>
+    :host {
+      color: #FFF;
+    }
+    .background {
+      position: relative;
+      display: block;
+      width:100%;
+      height:100%;
+    }
+    .background::before {
+      position: absolute;
+      content: ' ';
+      top:0;
+      right:50%;
+      bottom:0;
+      left:-1rem;
+      background-color: var(--accent-color);
+      z-index:-1;
+    }
+    .background::after {
+      position: absolute;
+      content: ' ';
+      top:0;
+      left:50%;
+      bottom:0;
+      right:-1rem;
+      background-color: var(--primary-color);
+      z-index:-1;
+    }
     section {
       max-width: 800px;
       margin: 0 auto;
@@ -28,18 +57,17 @@
       font-size: 3rem;
       margin:0 2rem;
     }
-    .divider {
-      margin: 0 1rem;
-    }
-    .score, .divider {
+    .score {
       font-size: 2.5rem;
     }
     .score[winning] {
       font-weight: bolder;
     }
+    .score + .score {
+      margin-left: 2rem;
+    }
     .ratings {
       @apply --ppaer-font-body1;
-      color: var(--secondary-text-color);
     }
     .info {
       @apply --layout-vertical;
@@ -80,6 +108,7 @@
       data="{{player2}}"
       path="/orgs/[[org]]/players/[[details.player2Uid]]">
     </firebase-document>
+    <div class="background">
 
     <corpopong-overlay-header text="Match Details"></corpopong-overlay-header>
 
@@ -127,12 +156,13 @@
         <template is="dom-repeat" items="{{details.scores}}">
           <div class="layout horizontal center-center">
             <span class="score" winning$="[[_isWinningScore(item.player1, item.player2)]]">[[item.player1]]</span>
-            <span class="divider">-</span>
             <span class="score" winning$="[[_isWinningScore(item.player2, item.player1)]]">[[item.player2]]</span>
           </div>
         </template>
       </div>
     </section>
+    </div>
+
   </template>
   <script>
     class MatchDetails extends OrgElement {

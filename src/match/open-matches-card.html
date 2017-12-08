@@ -12,19 +12,29 @@
     paper-listbox > * {
       display: block;
     }
+    .no-data {
+      color: var(--secondary-text-color);
+      font-size: 1.5rem;
+      text-align: center;
+    }
     </style>
     <firebase-query
       path="/orgs/[[org]]/player-open-matches/[[userUid]]"
       data="{{matches}}">
     </firebase-query>
     <dashboard-card >
-      <paper-listbox slot="content">
-        <template is="dom-repeat" items="{{matches}}">
-          <a href="/open-matches/[[item.$key]]" tabindex="-1">
-            <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
-          </a>
-        </template>
-      </paper-listbox>
+      <div slot="content">
+        <paper-listbox  hidden="[[!matches.length]]">
+          <template is="dom-repeat" items="{{matches}}">
+            <a href="/open-matches/[[item.$key]]" tabindex="-1">
+              <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
+            </a>
+          </template>
+        </paper-listbox>
+        <div class="no-data" hidden="[[matches.length]]">
+          <i>Not much in here :(</i>
+        </div>
+      </div>
       <h2 slot="footer">Open Matches</h2>
     </dashboard-card>
   </template>

@@ -38,6 +38,10 @@
     corpopong-overlay-header {
       --corpopong-logo-background-color: var(--primary-background-color);
     }
+    .no-data {
+      font-size: 1.5rem;
+      text-align: center;
+    }
     </style>
 
     <api-ajax id="get" url="/orgs/[[org]]/oponents" last-response="{{oponents}}" loading="{{loading}}"></api-ajax>
@@ -52,7 +56,7 @@
       active="[[loading]]">
     </paper-progress-circle>
     <div class="wrapper">
-      <section id="content">
+      <section id="content" hidden="[[noData]]">
         <iron-selector id="selector" class="grid" selected-attribute="selected">
           <template is="dom-repeat" items="[[oponents]]" sort="_sort">
             <match-create-player-card
@@ -64,6 +68,9 @@
           </template>
         </iron-selector>
       </section>
+      <div class="no-data" hidden="[[!noData]]">
+        <i>Alone in here - invite some friends and start playing!</i>
+      </div>
     </div>
 
   </template>
@@ -78,13 +85,21 @@
       static get properties () {
         return {
           loading: Boolean,
-          userUid: String
+          userUid: String,
+          noData: {
+            type: Boolean,
+            value: false,
+            computed: '_computeNoData(loading, oponents)'
+          }
         }
       }
       ready () {
         super.ready()
         this.addEventListener('iron-overlay-opened', () => this.loadData())
         this.addEventListener('iron-overlay-closed', () => this.reset())
+      }
+      _computeNoData (loading, oponents) {
+        return !loading && oponents.length === 0
       }
       _renderOpened () {
         let scaleX = document.documentElement.offsetWidth / 10

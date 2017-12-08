@@ -10,6 +10,13 @@
 <dom-module id="matches-latest-card">
   <template>
     <style include="app-styles"></style>
+    <style>
+    .no-data {
+      color: var(--secondary-text-color);
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    </style>
     <firebase-query
       path="/orgs/[[org]]/matches"
       data="{{matches}}"
@@ -18,13 +25,18 @@
     </firebase-query>
 
     <dashboard-card>
-      <paper-listbox slot="content">
-        <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
-          <a href="/matches/[[item.$key]]" tabindex="-1">
-            <match-item match="[[item]]" org="[[org]]"></match-item>
-          </a>
-        </template>
-      </paper-listbox>
+      <div slot="content">
+        <paper-listbox slot="content" hidden="[[!matches.length]]">
+          <template id="domRepeat" is="dom-repeat" items="[[matches]]" sort="_sort">
+            <a href="/matches/[[item.$key]]" tabindex="-1">
+              <match-item match="[[item]]" org="[[org]]"></match-item>
+            </a>
+          </template>
+        </paper-listbox>
+        <div class="no-data" hidden="[[matches.length]]">
+          <i>Not much in here :(</i>
+        </div>
+      </div>
       <h2 slot="footer">Latest Matches</h2>
     </dashboard-card>
   </template>

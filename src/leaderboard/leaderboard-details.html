@@ -6,6 +6,7 @@
 <link rel="import" href="../org/org-element.html">
 <link rel="import" href="../common/corpopong-overlay-header.html">
 <link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../player/player-display-name.html">
 <link rel="import" href="../match/match-create-player-card.html">
 <link rel="import" href="../leaderboard/leaderboard-top-3.html">
 
@@ -28,6 +29,11 @@
     player-display-name {
       flex:1;
     }
+    .no-data {
+      color: var(--secondary-text-color);
+      font-size: 1.5rem;
+      text-align: center;
+    }
     </style>
 
     <firebase-query
@@ -37,10 +43,13 @@
       equal-to="true">
     </firebase-query>
     <corpopong-overlay-header text="Leaderboard"></corpopong-overlay-header>
-    <section>
+    <div class="no-data" hidden="[[players.length]]">
+      <i>Not much in here :(</i>
+    </div>
+    <section hidden="[[!players.length]]">
       <leaderboard-top-3 players="[[_sortedPlayers]]"></leaderboard-top-3>
     </section>
-    <paper-listbox>
+    <paper-listbox hidden="[[!players.length]]">
       <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
         <a href="/players/[[item.$key]]" tabindex="-1">
           <paper-item>
@@ -56,7 +65,6 @@
         </a>
       </template>
     </paper-listbox>
-
   </template>
   <script>
     /**

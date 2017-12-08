@@ -9,6 +9,11 @@
   <template>
     <style include="app-styles"></style>
     <style>
+    .no-data {
+      color: var(--secondary-text-color);
+      font-size: 1.5rem;
+      text-align: center;
+    }
     [slot="content"] {
       height: 100%;
     }
@@ -27,7 +32,10 @@
     <a href="/leaderboard" tabindex="-1">
       <dashboard-card>
         <div slot="content">
-          <leaderboard-top-3 players="[[players]]"></leaderboard-top-3>
+          <leaderboard-top-3 players="[[players]]" hidden="[[!players.length]]"></leaderboard-top-3>
+          <div class="no-data" hidden="[[players.length]]">
+            <i>Not much in here :(</i>
+          </div>
         </div>
         <h2 slot="footer">Leaderboard</h2>
       </dashboard-card>
