@@ -5,6 +5,7 @@
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../org/org-element.html">
 <link rel="import" href="../common/corpopong-overlay-header.html">
+<link rel="import" href="../common/no-data-message.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../player/player-display-name.html">
 <link rel="import" href="../match/match-create-player-card.html">
@@ -29,10 +30,8 @@
     player-display-name {
       flex:1;
     }
-    .no-data {
-      color: var(--secondary-text-color);
-      font-size: 1.5rem;
-      text-align: center;
+    section {
+      position: relative;
     }
     </style>
 
@@ -43,28 +42,27 @@
       equal-to="true">
     </firebase-query>
     <corpopong-overlay-header text="Leaderboard"></corpopong-overlay-header>
-    <div class="no-data" hidden="[[players.length]]">
-      <i>Not much in here :(</i>
-    </div>
-    <section hidden="[[!players.length]]">
+    <section>
       <leaderboard-top-3 players="[[_sortedPlayers]]"></leaderboard-top-3>
+      <paper-listbox>
+        <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
+          <a href="/players/[[item.$key]]" tabindex="-1">
+            <paper-item>
+              <span class="position">
+                [[_getPosition(index)]]
+              </span>
+              <player-avatar src="[[item.photoURL]]"></player-avatar>
+              <player-display-name value="[[item.displayName]]"></player-display-name>
+              <span class="rating">
+                [[item.rating]]
+              </span>
+            </paper-item>
+          </a>
+        </template>
+      </paper-listbox>
+      <no-data-message active="[[!players.length]]"></no-data-message>
     </section>
-    <paper-listbox hidden="[[!players.length]]">
-      <template is="dom-repeat" items="{{_topPlayers}}" observe="rating">
-        <a href="/players/[[item.$key]]" tabindex="-1">
-          <paper-item>
-            <span class="position">
-              [[_getPosition(index)]]
-            </span>
-            <player-avatar src="[[item.photoURL]]"></player-avatar>
-            <player-display-name value="[[item.displayName]]"></player-display-name>
-            <span class="rating">
-              [[item.rating]]
-            </span>
-          </paper-item>
-        </a>
-      </template>
-    </paper-listbox>
+
   </template>
   <script>
     /**

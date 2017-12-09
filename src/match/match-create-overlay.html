@@ -8,6 +8,7 @@
 <link rel="import" href="../common/api-ajax.html">
 <link rel="import" href="../common/corpopong-overlay-header.html">
 <link rel="import" href="../common/paper-progress-circle.html">
+<link rel="import" href="../common/no-data-message.html">
 <link rel="import" href="../player/player-avatar.html">
 <link rel="import" href="../match/match-create-player-card.html">
 
@@ -17,6 +18,7 @@
     <style>
     :host {
       @apply --overlay;
+      --no-data-message-color: var(--accent-text-color);
     }
     .grid {
       display: grid;
@@ -25,6 +27,7 @@
     }
     .wrapper {
       height: 100%;
+      position: relative;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -37,10 +40,6 @@
     }
     corpopong-overlay-header {
       --corpopong-logo-background-color: var(--primary-background-color);
-    }
-    .no-data {
-      font-size: 1.5rem;
-      text-align: center;
     }
     </style>
 
@@ -56,21 +55,20 @@
       active="[[loading]]">
     </paper-progress-circle>
     <div class="wrapper">
-      <section id="content" hidden="[[noData]]">
-        <iron-selector id="selector" class="grid" selected-attribute="selected">
-          <template is="dom-repeat" items="[[oponents]]" sort="_sort">
-            <match-create-player-card
-              player="[[item]]"
-              loading="[[postLoading]]"
-              user-rating="[[player.rating]]"
-              on-player-selected="_onPlayerSelected">
-            </match-create-player-card>
-          </template>
-        </iron-selector>
-      </section>
-      <div class="no-data" hidden="[[!noData]]">
-        <i>Alone in here - invite some friends and start playing!</i>
-      </div>
+      <iron-selector id="selector" class="grid" selected-attribute="selected">
+        <template is="dom-repeat" items="[[oponents]]" sort="_sort">
+          <match-create-player-card
+            player="[[item]]"
+            loading="[[postLoading]]"
+            user-rating="[[player.rating]]"
+            on-player-selected="_onPlayerSelected">
+          </match-create-player-card>
+        </template>
+      </iron-selector>
+      <no-data-message
+        active="[[!oponents.length]]"
+        message="Alone in here - invite some friends and start playing!">
+      </no-data-message>
     </div>
 
   </template>

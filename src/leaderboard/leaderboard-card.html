@@ -4,18 +4,15 @@
 <link rel="import" href="../org/org-element.html">
 <link rel="import" href="../dashboard/dashboard-card.html">
 <link rel="import" href="../leaderboard/leaderboard-top-3.html">
+<link rel="import" href="../common/no-data-message.html">
 
 <dom-module id="leaderboard-card">
   <template>
     <style include="app-styles"></style>
     <style>
-    .no-data {
-      color: var(--secondary-text-color);
-      font-size: 1.5rem;
-      text-align: center;
-    }
     [slot="content"] {
       height: 100%;
+      position: relative;
     }
     leaderboard-top-3 {
       pointer-events: none;
@@ -32,10 +29,8 @@
     <a href="/leaderboard" tabindex="-1">
       <dashboard-card>
         <div slot="content">
-          <leaderboard-top-3 players="[[players]]" hidden="[[!players.length]]"></leaderboard-top-3>
-          <div class="no-data" hidden="[[players.length]]">
-            <i>Not much in here :(</i>
-          </div>
+          <leaderboard-top-3 players="[[players]]"></leaderboard-top-3>
+          <no-data-message active="[[!players.length]]"></no-data-message>
         </div>
         <h2 slot="footer">Leaderboard</h2>
       </dashboard-card>

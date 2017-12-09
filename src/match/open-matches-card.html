@@ -4,6 +4,7 @@
 <link rel="import" href="../match/open-match-item.html">
 <link rel="import" href="../styles/app-styles.html">
 <link rel="import" href="../dashboard/dashboard-card.html">
+<link rel="import" href="../common/no-data-message.html">
 
 <dom-module id="open-matches-card">
   <template>
@@ -12,10 +13,9 @@
     paper-listbox > * {
       display: block;
     }
-    .no-data {
-      color: var(--secondary-text-color);
-      font-size: 1.5rem;
-      text-align: center;
+    [slot="content"] {
+      position: relative;
+      min-height: 10rem;
     }
     </style>
     <firebase-query
@@ -24,16 +24,14 @@
     </firebase-query>
     <dashboard-card >
       <div slot="content">
-        <paper-listbox  hidden="[[!matches.length]]">
+        <paper-listbox>
           <template is="dom-repeat" items="{{matches}}">
             <a href="/open-matches/[[item.$key]]" tabindex="-1">
               <open-match-item match="[[item]]" org="[[org]]"></open-match-item>
             </a>
           </template>
         </paper-listbox>
-        <div class="no-data" hidden="[[matches.length]]">
-          <i>Not much in here :(</i>
-        </div>
+        <no-data-message active="[[!matches.length]]"></no-data-message>
       </div>
       <h2 slot="footer">Open Matches</h2>
     </dashboard-card>

@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../styles/app-styles.html">
+
+<dom-module id="no-data-message">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+    :host {
+      background-color: var(--primary-background-color);
+      color: var(--no-data-message-color ,var(--secondary-text-color));
+      font-size: 1.5rem;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 200ms ease-in-out;
+      z-index: 2;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    :host([active]) {
+      opacity: 1;
+    }
+    :host([fit]) {
+      position: absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+    }
+    </style>
+    <div class="content">
+      <i>[[message]]</i>
+    </div>
+  </template>
+  <script>
+    class NoDataMessage extends Polymer.Element {
+      static get is () { return 'no-data-message' }
+      static get properties () {
+        return {
+          message: {
+            type: String,
+            value: 'Not much in here :('
+          },
+          active: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+          fit: {
+            type: Boolean,
+            value: true,
+            reflectToAttribute: true
+          }
+        }
+      }
+    }
+
+    window.customElements.define(NoDataMessage.is, NoDataMessage)
+  </script>
+</dom-module>
