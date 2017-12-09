@@ -1,0 +1,165 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../imports/d3-import.html">
+<link rel="import" href="../styles/app-styles.html">
+<link rel="import" href="../org/org-element.html">
+<link rel="import" href="../common/corpopong-icons.html">
+<link rel="import" href="../common/corpopong-overlay-header.html">
+<link rel="import" href="../player/player-avatar.html">
+<link rel="import" href="../player/player-matches-summary.html">
+<link rel="import" href="../match/match-item.html">
+
+<dom-module id="user-details">
+  <template>
+    <style include="app-styles"></style>
+    <style>
+      section {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      player-avatar {
+        margin: 2rem;
+      }
+      .ranking {
+        @apply --paper-font-display3;
+        text-align: right;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .totals {
+        @apply --paper-font-display2;
+      }
+      .total {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .total-wins {
+        color: var(--paper-green-900);
+      }
+      .total-losses {
+        color: var(--paper-red-900);
+      }
+      .totals iron-label + iron-label{
+        margin-left: 1.5rem;
+      }
+      .totals iron-label{
+        position: relative;
+      }
+      .totals iron-label label {
+        position: absolute;
+        bottom:-10px;
+        right:0;
+        @apply --paper-font-caption;
+        color: var(--secondary-text-color);
+      }
+      .active-section header {
+        display: flex;
+      }
+      .active-section header h2 {
+        flex:1;
+      }
+      @media (max-width: 479px) {
+        .ranking {
+          font-size: 2rem;
+        }
+        .totals {
+          font-size: 2rem;
+        }
+        player-avatar {
+          margin-left: 0;
+          margin-right: 1rem;
+        }
+      }
+    </style>
+
+    <firebase-document id="fb"></firebase-document>
+    <firebase-document path="/orgs/[[org]]/players/[[userUid]]" data="{{player}}"></firebase-document>
+    <firebase-query path="/orgs/[[org]]/player-matches/[[userUid]]" data="{{matches}}"></firebase-query>
+
+    <corpopong-overlay-header text="[[player.displayName]]"></corpopong-overlay-header>
+
+    <section class="layout vertical">
+      <div class="layout horizontal center-center">
+        <player-avatar big src="[[player.photoURL]]"></player-avatar>
+        <div class="layout vertical">
+          <p class="ranking">[[player.rating]]</p>
+          <div class="layout horizontal center-center totals">
+            <iron-label>
+              <p class="total total-wins">[[wins]]</p>
+              <label>Wins</label>
+            </iron-label>
+            <iron-label>
+              <p class="total total-losses">[[losses]]</p>
+              <label>Losses</label>
+            </iron-label>
+            <iron-label>
+              <p class="total">[[matches.length]]</p>
+              <label>Total</label>
+            </iron-label>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="active-section">
+      <header>
+        <h2>Active</h2>
+        <paper-toggle-button checked="{{player.active}}"></paper-toggle-button>
+      </header>
+      <p>
+        Vacations? Dont feel like playing? Or maybe you are leaving for longer?
+        Just toggle active off so other players will not challange you.
+        You can toggle this setting at any moment in time.
+      </p>
+    </section>
+    <section>
+      <header>
+        <h2>Matches Summary</h2>
+      </header>
+      <player-matches-summary player-uid="[[userUid]]" org="[[org]]"></player-matches-summary>
+    </section>
+  </template>
+  <script>
+    class UserDetails extends OrgElement {
+      static get is () { return 'user-details' }
+      static get properties () {
+        return {
+          userUid: String,
+          matches: Array,
+          player: {
+            type: Object,
+            notify: true
+          },
+          wins: {
+            type: Number,
+            computed: '_computeWins(userUid, matches, matches.*)'
+          },
+          losses: {
+            type: Number,
+            computed: '_computeLosses(wins, matches.length)'
+          },
+          noData: {
+            type: Boolean,
+            computed: '_computeNoData(matches.length)'
+          }
+        }
+      }
+      _sort (a, b) {
+        return a.finalizedDate > b.finalizedDate ? -1 : 1
+      }
+      _computeWins (userUid, matches) {
+        if (!matches || matches.length === 0) return
+        return matches.filter((m) => m.winnerUid === userUid).length
+      }
+      _computeLosses (wins, all) {
+        return all - wins
+      }
+      _computeNoData (length) {
+        return !length
+      }
+    }
+
+    window.customElements.define(UserDetails.is, UserDetails)
+  </script>
+</dom-module>

@@ -37,24 +37,30 @@
       @apply --paper-font-caption;
       color: var(--secondary-text-color);
     }
+    paper-toggle-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
     </style>
     <corpopong-auth id="auth" user="{{user}}"></corpopong-auth>
     <firebase-document path="/orgs/[[org]]/players/[[user.uid]]" data="{{profile}}"></firebase-document>
 
-    <dashboard-card>
-      <div slot="content">
-        <player-avatar big src="[[profile.photoURL]]" ></player-avatar>
-        <iron-label>
-          <span>[[profile.rating]]</span>
-          <label>Your Rating</label>
-        </iron-label>
-      </div>
-      <div slot="footer">
-        <h2 class="flex">[[profile.displayName]]</h2>
-        <paper-button on-click="_signOut">Sign out</paper-button>
-        <!-- <paper-toggle-button checked="{{profile.active}}"></paper-toggle-button> -->
-      </div>
-    </dashboard-card>
+    <a href="/user" tabindex="-1">
+      <dashboard-card>
+        <div slot="content">
+          <player-avatar big src="[[profile.photoURL]]" ></player-avatar>
+          <iron-label>
+            <span>[[profile.rating]]</span>
+            <label>Your Rating</label>
+          </iron-label>
+        </div>
+        <div slot="footer">
+          <h2 class="flex">[[profile.displayName]]</h2>
+          <paper-button on-click="_signOut">Sign out</paper-button>
+        </div>
+      </dashboard-card>
+    </a>
 
   </template>
   <script>

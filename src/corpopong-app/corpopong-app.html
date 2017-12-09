@@ -23,6 +23,7 @@
   <link rel="lazy-import" group="lazy" href="../match/match-details.html">
   <link rel="lazy-import" group="lazy" href="../player/player-details.html">
   <link rel="lazy-import" group="lazy" href="../player/players-history.html">
+  <link rel="lazy-import" group="lazy" href="../user/user-details.html">
   <link rel="lazy-import" group="lazy" href="../common/notifications-component.html">
   <template>
     <style include="app-styles"></style>
@@ -85,15 +86,17 @@
       <app-route route="[[route]]" pattern="/matches/:id" data="{{matchData}}"></app-route>
       <app-route route="[[route]]" pattern="/players/:id1/history/:id2" data="{{historyData}}"></app-route>
       <app-route route="[[route]]" pattern="/players/:id" data="{{playersData}}"></app-route>
+      <app-route route="[[route]]" pattern="/user"></app-route>
     </app-active-route>
 
     <details-overlay selected="[[activePattern]]">
       <leaderboard-details for-pattern="/leaderboard" org="[[org]]"></leaderboard-details>
       <org-details for-pattern="/org" org="[[org]]"></org-details>
       <match-details for-pattern="/matches/:id" org="[[org]]" match-uid="[[matchData.id]]"></match-details>
-      <player-details for-pattern="/players/:id" org="[[org]]" player-uid="[[playersData.id]]" user-uid="[[user.uid]]"></player-details>
+      <player-details for-pattern="/players/:id" org="[[org]]" player-uid="[[playersData.id]]"></player-details>
       <open-match-details for-pattern="/open-matches/:id" org="[[org]]" user-uid="[[user.uid]]" match-uid="[[openMatchData.id]]"></open-match-details>
       <players-history for-pattern="/players/:id1/history/:id2" org="[[org]]" player1-uid="[[historyData.id1]]" player2-uid="[[historyData.id2]]"></players-history>
+      <user-details for-pattern="/user" org="[[org]]" user-uid="[[user.uid]]"></user-details>
     </details-overlay>
 
   </template>
