@@ -8,6 +8,7 @@
       "$org": {
         "players": {
           ".read": "auth != null",
+          ".indexOn": "rated",
           "$uid": {
             "active": {
               ".write": "$uid === auth.uid"
