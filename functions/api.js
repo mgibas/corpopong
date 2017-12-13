@@ -46,6 +46,8 @@ class Api {
       }
     }
     this.handler.post('/orgs', (req, res) => {
+      if (!req.body.name.match(/^[a-zA-Z0-9-]{3,21}$/g)) return res.status(400).send(`invalid org name`)
+
       this._admin.database().ref(`/orgs/${req.body.name}`)
         .once('value')
         .then((snap) => {
