@@ -20,15 +20,11 @@ class Api {
       .verifyIdToken(req.headers.authorization.split('Bearer ')[1])
       .then(user => {
         req.user = user
-        console.log('hey im here')
         this._admin.database()
           .ref(`/users/${user.uid}/orgs`)
           .once('value')
           .then((snap) => {
-            console.log('and here')
-
             req.user.orgs = snap.val()
-            console.log(req.user)
             return next()
           })
       })
@@ -110,6 +106,8 @@ class Api {
         })
     })
     this.handler.get('/orgs/:org/oponents', (req, res) => {
+      if (req.user.orgs[req.params.org] === undefined) return res.status(403).send('Unauthorized')
+
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
       let playersPromise = orgRef.child(`/players`).once('value')
       let matchesPromise = orgRef.child(`/player-matches/${req.user.uid}`).once('value')
@@ -164,6 +162,8 @@ class Api {
         })
     })
     this.handler.post('/orgs/:org/matches', (req, res) => {
+      if (req.user.orgs[req.params.org] === undefined) return res.status(403).send('Unauthorized')
+
       let orgRef = this._admin.database().ref(`/orgs/${req.params.org}`)
       let match = {
         player1Uid: req.user.uid,
