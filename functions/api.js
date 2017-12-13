@@ -20,7 +20,14 @@ class Api {
       .verifyIdToken(req.headers.authorization.split('Bearer ')[1])
       .then(user => {
         req.user = user
-        return next()
+        this._admin.database()
+          .ref(`/users/${user.uid}/orgs`)
+          .once('value')
+          .then((snap) => {
+            req.user.orgs = snap.val()
+            console.log(req.user)
+            return next()
+          })
       })
       .catch(error => {
         console.error('Error while verifying Firebase ID token:', error)
