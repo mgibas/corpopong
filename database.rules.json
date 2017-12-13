@@ -22,7 +22,7 @@
               ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()",
               "$score": {
                 "$player": {
-                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 99"
+                  ".validate": "newData.val() === '' || newData.val().matches(/^([0-9]|[1-9][0-9])$/i)"
                 }
               }
             },
