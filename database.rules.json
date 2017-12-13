@@ -7,7 +7,7 @@
     "orgs":{
       "$org": {
         "players": {
-          ".read": "auth != null",
+          ".read": "auth != null && root.child('users').child(auth.uid).child('orgs').hasChild($org)",
           ".indexOn": "rated",
           "$uid": {
             "active": {
@@ -19,10 +19,12 @@
           "$uid": {
             ".read": "auth.uid === data.child('player1Uid').val() || auth.uid === data.child('player2Uid').val()",
             "scores": {
-              ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
-            },
-            "removed": {
-              ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()"
+              ".write": "auth.uid === data.parent().child('player1Uid').val() || auth.uid === data.parent().child('player2Uid').val()",
+              "$score": {
+                "$player": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 99"
+                }
+              }
             },
             "approvals": {
               "player1": {
@@ -37,19 +39,19 @@
           }
         },
         "matches": {
-          ".read": "auth != null",
+          ".read": "auth != null  && root.child('users').child(auth.uid).child('orgs').hasChild($org)",
           ".write": false,
           ".indexOn": "finalizedDate"
         },
         "player-matches": {
           "$uid": {
-            ".read": "auth != null",
+            ".read": "auth != null && root.child('users').child(auth.uid).child('orgs').hasChild($org)",
             ".write": false
           }
         },
         "player-open-matches": {
           "$uid": {
-            ".read": "$uid === auth.uid",
+            ".read": "$uid === auth.uid && root.child('users').child(auth.uid).child('orgs').hasChild($org)",
             ".write": false
           }
         },
@@ -67,7 +69,8 @@
     },
     "users": {
       "$uid": {
-        ".read": "$uid === auth.uid"
+        ".read": "$uid === auth.uid",
+        ".write": "false"
       }
     }
   }
