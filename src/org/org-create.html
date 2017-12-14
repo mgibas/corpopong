@@ -15,7 +15,7 @@
     </style>
 
     <api-ajax id="post" method="post" url="/orgs" body="[[body]]" loading="{{loading}}"></api-ajax>
-    <firebase-document path="/org-infos/[[body.name]]" data="{{existingOrg}}"></firebase-document>
+    <firebase-document path="/org-infos/[[body.name]]" data="{{_existingOrg}}"></firebase-document>
 
     <h2>Create new organization</h2>
     <paper-input
@@ -50,8 +50,9 @@
           _invalidName: Boolean,
           _uniqueName: {
             type: Boolean,
-            computed: '_computeUniqueName(body.name, existingOrg.name)'
+            computed: '_computeUniqueName(body.name, _existingOrg.name)'
           },
+          _existingOrg: Object,
           createdOrg: {
             type: Object,
             notify: true
