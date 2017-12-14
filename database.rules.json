@@ -2,10 +2,14 @@
   "rules": {
     "org-infos": {
       ".read": "auth != null",
-      ".write": "false"
+      ".write": "false",
+      "$org": {
+        ".validate": "$org.matches(/^[a-zA-Z0-9-]{3,21}$/g)"
+      }
     },
     "orgs":{
       "$org": {
+        ".validate": "$org.matches(/^[a-zA-Z0-9-]{3,21}$/g)",
         "players": {
           ".read": "auth != null && root.child('users').child(auth.uid).child('orgs').hasChild($org)",
           ".indexOn": "rated",
