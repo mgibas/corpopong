@@ -8,6 +8,11 @@
 <dom-module id="org-create">
   <template>
     <style include="org-wizard-shared-styles"></style>
+    <style>
+    paper-input {
+      --paper-input-container-invalid-color: #FFF;
+    }
+    </style>
 
     <api-ajax id="post" method="post" url="/orgs" body="[[body]]" loading="{{loading}}"></api-ajax>
     <firebase-document path="/org-infos/[[body.name]]" data="{{existingOrg}}"></firebase-document>
@@ -18,18 +23,20 @@
       type="text"
       value="{{body.name}}"
       required
+      invalid="{{_invalidName}}"
       auto-validate
-      error-message="Provide a name">
+      prevent-invalid-input
+      pattern="^[a-zA-Z0-9-]{3,21}$"
+      allowed-pattern="[a-zA-Z0-9-]">
     </paper-input>
-    <span class="error-message" hidden="[[!existingOrg.name]]">[[body.name]] already exisits.</span>
+    <span class="error-message" hidden="[[!_errorMessage]]">[[_errorMessage]]</span>
     <paper-loading-fab
       class="advance-button"
       icon="arrow-forward"
       on-tap="submit"
       loading="[[loading]]"
-      disabled="[[!valid]]">
+      disabled="[[_errorMessage]]">
     </paper-loading-fab>
-
   </template>
   <script>
     class OrgCreate extends Polymer.Element {
@@ -40,13 +47,18 @@
             type: Boolean,
             value: {}
           },
-          valid: {
+          _invalidName: Boolean,
+          _uniqueName: {
             type: Boolean,
-            computed: '_computeValid(body.name, existingOrg.name)'
+            computed: '_computeUniqueName(body.name, existingOrg.name)'
           },
           createdOrg: {
             type: Object,
             notify: true
+          },
+          _errorMessage: {
+            type: String,
+            computed: '_computeErrorMessage(body.name, _uniqueName, _invalidName)'
           }
         }
       }
@@ -71,8 +83,12 @@
         if (!name || name === name.toLowerCase()) return
         this.set('body.name', name.toLowerCase())
       }
-      _computeValid (name, existingName) {
-        return !!name && !existingName
+      _computeErrorMessage (name, unique, invalid) {
+        if (!unique) return `${name} already exisits.`
+        if (invalid) return '3 to 21 characters (letters, digits and -)'
+      }
+      _computeUniqueName (name, existingName) {
+        return !existingName
       }
     }
 
