@@ -6,6 +6,7 @@
     <style include="app-styles"></style>
     <style>
     :host {
+      position: relative;
       background-color: var(--primary-background-color);
       color: var(--no-data-message-color ,var(--secondary-text-color));
       font-size: 1.5rem;
@@ -14,6 +15,7 @@
       transition: opacity 200ms ease-in-out;
       z-index: 2;
       pointer-events: none;
+      overflow: hidden;
     }
     .content {
       display: flex;
@@ -32,9 +34,26 @@
       bottom:0;
       left:0;
     }
+    .bacground-image {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      width:100%;
+      opacity: 0.05;
+    }
+    :host([image-only]) .bacground-image {
+      opacity: 0.2;
+    }
     </style>
     <div class="content">
-      <i>[[message]]</i>
+      <i hidden="[[imageOnly]]">[[message]]</i>
+    </div>
+    <div class="bacground-image">
+      <slot name="background-image"></slot>
     </div>
   </template>
   <script>
@@ -45,6 +64,11 @@
           message: {
             type: String,
             value: 'Not much in here :('
+          },
+          imageOnly: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           },
           active: {
             type: Boolean,

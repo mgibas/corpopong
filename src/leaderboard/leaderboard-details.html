@@ -60,7 +60,9 @@
           </a>
         </template>
       </paper-listbox>
-      <no-data-message active="[[!players.length]]"></no-data-message>
+      <no-data-message active="[[!players.length]]">
+        <img slot="background-image" src="[[rootPath]]images/podium.svg" />
+      </no-data-message>
     </section>
 
   </template>

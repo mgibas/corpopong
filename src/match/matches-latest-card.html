@@ -33,7 +33,9 @@
             </a>
           </template>
         </paper-listbox>
-        <no-data-message active="[[!matches.length]]"></no-data-message>
+        <no-data-message active="[[!matches.length]]" image-only>
+          <img slot="background-image" src="[[rootPath]]images/table.svg" />
+        </no-data-message>
       </div>
       <h2 slot="footer">Latest Matches</h2>
     </dashboard-card>

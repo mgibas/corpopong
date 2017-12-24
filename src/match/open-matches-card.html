@@ -15,7 +15,7 @@
     }
     [slot="content"] {
       position: relative;
-      min-height: 10rem;
+      min-height: 15rem;
     }
     </style>
     <firebase-query
@@ -31,7 +31,9 @@
             </a>
           </template>
         </paper-listbox>
-        <no-data-message active="[[!matches.length]]"></no-data-message>
+        <no-data-message active="[[!matches.length]]" image-only>
+          <img slot="background-image" src="[[rootPath]]images/balls.svg" />
+        </no-data-message>
       </div>
       <h2 slot="footer">Open Matches</h2>
     </dashboard-card>
